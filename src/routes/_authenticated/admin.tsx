@@ -147,12 +147,13 @@ function Requests({ table }: { table: "deposits" | "withdrawals" }) {
 
 function Submissions() {
   const setStatus = useSetStatus("job_submissions");
+  const profiles = useProfileMap();
   const { data } = useQuery({
     queryKey: ["admin", "subs"],
     queryFn: async () => {
       const { data } = await supabase
         .from("job_submissions")
-        .select("*, profiles!inner(username), jobs(title)")
+        .select("*, jobs(title)")
         .order("created_at", { ascending: false });
       return data ?? [];
     },
@@ -164,7 +165,7 @@ function Submissions() {
         <div key={s.id} className="surface-card flex items-center justify-between gap-3 p-4">
           <div className="min-w-0">
             <p className="truncate text-sm font-bold">
-              {(s.profiles as { username: string } | null)?.username} · {taka(s.reward)}
+              {profiles[s.user_id]?.username} · {taka(s.reward)}
             </p>
             <p className="truncate text-xs text-muted-foreground">
               {(s.jobs as { title?: string } | null)?.title} {s.proof ? `· ${s.proof}` : ""}
