@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      app_settings: {
+        Row: {
+          bkash_number: string
+          created_at: string
+          id: string
+          min_deposit: number
+          min_withdraw: number
+          nagad_number: string
+          updated_at: string
+        }
+        Insert: {
+          bkash_number?: string
+          created_at?: string
+          id: string
+          min_deposit?: number
+          min_withdraw?: number
+          nagad_number?: string
+          updated_at?: string
+        }
+        Update: {
+          bkash_number?: string
+          created_at?: string
+          id?: string
+          min_deposit?: number
+          min_withdraw?: number
+          nagad_number?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       deposits: {
         Row: {
           amount: number
