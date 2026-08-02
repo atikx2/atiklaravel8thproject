@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedDepositRouteImport } from './routes/_authenticated/deposit'
+import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticated/history'
 import { Route as AuthenticatedJobsRouteImport } from './routes/_authenticated/jobs'
 import { Route as AuthenticatedWithdrawRouteImport } from './routes/_authenticated/withdraw'
 
@@ -41,6 +42,11 @@ const AuthenticatedDepositRoute = AuthenticatedDepositRouteImport.update({
   path: '/deposit',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedHistoryRoute = AuthenticatedHistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedJobsRoute = AuthenticatedJobsRouteImport.update({
   id: '/jobs',
   path: '/jobs',
@@ -57,6 +63,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/deposit': typeof AuthenticatedDepositRoute
+  '/history': typeof AuthenticatedHistoryRoute
   '/jobs': typeof AuthenticatedJobsRoute
   '/withdraw': typeof AuthenticatedWithdrawRoute
 }
@@ -65,6 +72,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/deposit': typeof AuthenticatedDepositRoute
+  '/history': typeof AuthenticatedHistoryRoute
   '/jobs': typeof AuthenticatedJobsRoute
   '/withdraw': typeof AuthenticatedWithdrawRoute
 }
@@ -75,14 +83,29 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/deposit': typeof AuthenticatedDepositRoute
+  '/_authenticated/history': typeof AuthenticatedHistoryRoute
   '/_authenticated/jobs': typeof AuthenticatedJobsRoute
   '/_authenticated/withdraw': typeof AuthenticatedWithdrawRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/dashboard' | '/deposit' | '/jobs' | '/withdraw'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/deposit'
+    | '/history'
+    | '/jobs'
+    | '/withdraw'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/dashboard' | '/deposit' | '/jobs' | '/withdraw'
+  to:
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/deposit'
+    | '/history'
+    | '/jobs'
+    | '/withdraw'
   id:
     | '__root__'
     | '/'
@@ -90,6 +113,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/_authenticated/dashboard'
     | '/_authenticated/deposit'
+    | '/_authenticated/history'
     | '/_authenticated/jobs'
     | '/_authenticated/withdraw'
   fileRoutesById: FileRoutesById
@@ -137,6 +161,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDepositRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/history': {
+      id: '/_authenticated/history'
+      path: '/history'
+      fullPath: '/history'
+      preLoaderRoute: typeof AuthenticatedHistoryRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/jobs': {
       id: '/_authenticated/jobs'
       path: '/jobs'
@@ -157,6 +188,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedDepositRoute: typeof AuthenticatedDepositRoute
+  AuthenticatedHistoryRoute: typeof AuthenticatedHistoryRoute
   AuthenticatedJobsRoute: typeof AuthenticatedJobsRoute
   AuthenticatedWithdrawRoute: typeof AuthenticatedWithdrawRoute
 }
@@ -164,6 +196,7 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedDepositRoute: AuthenticatedDepositRoute,
+  AuthenticatedHistoryRoute: AuthenticatedHistoryRoute,
   AuthenticatedJobsRoute: AuthenticatedJobsRoute,
   AuthenticatedWithdrawRoute: AuthenticatedWithdrawRoute,
 }
