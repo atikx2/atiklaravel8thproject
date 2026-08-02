@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth, taka } from "@/lib/auth";
-import { useSettings } from "@/lib/settings";
+import { useSettings, usePaymentNumbers } from "@/lib/settings";
 import { StatusChip } from "./dashboard";
 import { Field } from "../auth";
 import { Loader2, Smartphone, Copy, Check } from "lucide-react";
@@ -23,6 +23,7 @@ export const Route = createFileRoute("/_authenticated/deposit")({
 function DepositPage() {
   const { user } = useAuth();
   const settings = useSettings();
+  const numbers = usePaymentNumbers();
   const qc = useQueryClient();
   const [method, setMethod] = useState<"bkash" | "nagad">("bkash");
   const [amount, setAmount] = useState("");
@@ -31,14 +32,18 @@ function DepositPage() {
   const [msg, setMsg] = useState("");
   const [err, setErr] = useState("");
   const [busy, setBusy] = useState(false);
-  const [copied, setCopied] = useState(false);
-  const payNumber = method === "bkash" ? settings.bkash_number : settings.nagad_number;
+  const [copied, setCopied] = useState<string | null>(null);
+  const active = numbers.filter((n) => n.method === method);
+  const fallback = method === "bkash" ? settings.bkash_number : settings.nagad_number;
+  const shown = active.length
+    ? active
+    : [{ id: "fallback", method, number: fallback, label: "পার্সোনাল", is_active: true }];
 
-  const copyNumber = async () => {
+  const copyNumber = async (value: string) => {
     try {
-      await navigator.clipboard.writeText(payNumber);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1800);
+      await navigator.clipboard.writeText(value);
+      setCopied(value);
+      setTimeout(() => setCopied(null), 1800);
     } catch {
       setErr("কপি করা যায়নি, নাম্বারটি হাতে লিখুন");
     }
@@ -98,30 +103,32 @@ function DepositPage() {
           ))}
         </div>
 
-        <div className="mb-4 rounded-2xl border border-border bg-secondary/60 p-3">
-          <div className="flex items-center justify-between gap-3">
-            <div className="flex min-w-0 items-center gap-2.5">
-              <Smartphone className="h-5 w-5 shrink-0 text-primary" />
-              <div className="min-w-0">
-                <p className="text-xs font-bold text-muted-foreground">
-                  {method === "bkash" ? "বিকাশ" : "নগদ"} পার্সোনাল নাম্বার
-                </p>
-                <p className="truncate font-mono text-base font-bold">{payNumber}</p>
+        <div className="mb-4 space-y-2">
+          {shown.map((n) => (
+            <div key={n.id} className="rounded-2xl border border-border bg-secondary/60 p-3">
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex min-w-0 items-center gap-2.5">
+                  <Smartphone className="h-5 w-5 shrink-0 text-primary" />
+                  <div className="min-w-0">
+                    <p className="text-xs font-bold text-muted-foreground">
+                      {method === "bkash" ? "বিকাশ" : "নগদ"} {n.label} নাম্বার
+                    </p>
+                    <p className="truncate font-mono text-base font-bold">{n.number}</p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => copyNumber(n.number)}
+                  aria-label="নাম্বার কপি করুন"
+                  className="flex shrink-0 items-center gap-1.5 rounded-xl bg-primary/10 px-3 py-2 text-xs font-bold text-primary"
+                >
+                  {copied === n.number ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                  {copied === n.number ? "কপি হয়েছে" : "কপি"}
+                </button>
               </div>
             </div>
-            <button
-              type="button"
-              onClick={copyNumber}
-              aria-label="নাম্বার কপি করুন"
-              className="flex shrink-0 items-center gap-1.5 rounded-xl bg-primary/10 px-3 py-2 text-xs font-bold text-primary"
-            >
-              {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-              {copied ? "কপি হয়েছে" : "কপি"}
-            </button>
-          </div>
-          <p className="mt-2 text-xs text-muted-foreground">
-            উপরের নাম্বারে সেন্ড মানি করে নিচের ফর্মটি পূরণ করুন।
-          </p>
+          ))}
+          <p className="text-xs text-muted-foreground">উপরের নাম্বারে সেন্ড মানি করে নিচের ফর্মটি পূরণ করুন।</p>
         </div>
 
         <form onSubmit={submit} className="space-y-3">
