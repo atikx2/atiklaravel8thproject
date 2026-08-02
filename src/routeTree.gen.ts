@@ -21,6 +21,7 @@ import { Route as AuthenticatedJobsRouteImport } from './routes/_authenticated/j
 import { Route as AuthenticatedWithdrawRouteImport } from './routes/_authenticated/withdraw'
 import { Route as AdminAdminIndexRouteImport } from './routes/_admin/admin.index'
 import { Route as AdminAdminDepositsRouteImport } from './routes/_admin/admin.deposits'
+import { Route as AdminAdminTasksRouteImport } from './routes/_admin/admin.tasks'
 import { Route as AdminAdminWithdrawalsRouteImport } from './routes/_admin/admin.withdrawals'
 
 const IndexRoute = IndexRouteImport.update({
@@ -81,6 +82,11 @@ const AdminAdminDepositsRoute = AdminAdminDepositsRouteImport.update({
   path: '/admin/deposits',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminAdminTasksRoute = AdminAdminTasksRouteImport.update({
+  id: '/admin/tasks',
+  path: '/admin/tasks',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminAdminWithdrawalsRoute = AdminAdminWithdrawalsRouteImport.update({
   id: '/admin/withdrawals',
   path: '/admin/withdrawals',
@@ -97,6 +103,7 @@ export interface FileRoutesByFullPath {
   '/jobs': typeof AuthenticatedJobsRoute
   '/withdraw': typeof AuthenticatedWithdrawRoute
   '/admin/deposits': typeof AdminAdminDepositsRoute
+  '/admin/tasks': typeof AdminAdminTasksRoute
   '/admin/withdrawals': typeof AdminAdminWithdrawalsRoute
   '/admin/': typeof AdminAdminIndexRoute
 }
@@ -110,6 +117,7 @@ export interface FileRoutesByTo {
   '/jobs': typeof AuthenticatedJobsRoute
   '/withdraw': typeof AuthenticatedWithdrawRoute
   '/admin/deposits': typeof AdminAdminDepositsRoute
+  '/admin/tasks': typeof AdminAdminTasksRoute
   '/admin/withdrawals': typeof AdminAdminWithdrawalsRoute
   '/admin': typeof AdminAdminIndexRoute
 }
@@ -126,6 +134,7 @@ export interface FileRoutesById {
   '/_authenticated/jobs': typeof AuthenticatedJobsRoute
   '/_authenticated/withdraw': typeof AuthenticatedWithdrawRoute
   '/_admin/admin/deposits': typeof AdminAdminDepositsRoute
+  '/_admin/admin/tasks': typeof AdminAdminTasksRoute
   '/_admin/admin/withdrawals': typeof AdminAdminWithdrawalsRoute
   '/_admin/admin/': typeof AdminAdminIndexRoute
 }
@@ -141,6 +150,7 @@ export interface FileRouteTypes {
     | '/jobs'
     | '/withdraw'
     | '/admin/deposits'
+    | '/admin/tasks'
     | '/admin/withdrawals'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
@@ -154,6 +164,7 @@ export interface FileRouteTypes {
     | '/jobs'
     | '/withdraw'
     | '/admin/deposits'
+    | '/admin/tasks'
     | '/admin/withdrawals'
     | '/admin'
   id:
@@ -169,6 +180,7 @@ export interface FileRouteTypes {
     | '/_authenticated/jobs'
     | '/_authenticated/withdraw'
     | '/_admin/admin/deposits'
+    | '/_admin/admin/tasks'
     | '/_admin/admin/withdrawals'
     | '/_admin/admin/'
   fileRoutesById: FileRoutesById
@@ -267,6 +279,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAdminDepositsRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/_admin/admin/tasks': {
+      id: '/_admin/admin/tasks'
+      path: '/admin/tasks'
+      fullPath: '/admin/tasks'
+      preLoaderRoute: typeof AdminAdminTasksRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/_admin/admin/withdrawals': {
       id: '/_admin/admin/withdrawals'
       path: '/admin/withdrawals'
@@ -279,12 +298,14 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteRouteChildren {
   AdminAdminDepositsRoute: typeof AdminAdminDepositsRoute
+  AdminAdminTasksRoute: typeof AdminAdminTasksRoute
   AdminAdminWithdrawalsRoute: typeof AdminAdminWithdrawalsRoute
   AdminAdminIndexRoute: typeof AdminAdminIndexRoute
 }
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminAdminDepositsRoute: AdminAdminDepositsRoute,
+  AdminAdminTasksRoute: AdminAdminTasksRoute,
   AdminAdminWithdrawalsRoute: AdminAdminWithdrawalsRoute,
   AdminAdminIndexRoute: AdminAdminIndexRoute,
 }
