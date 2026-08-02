@@ -23,6 +23,7 @@ import { Route as AdminAdminIndexRouteImport } from './routes/_admin/admin.index
 import { Route as AdminAdminDepositsRouteImport } from './routes/_admin/admin.deposits'
 import { Route as AdminAdminJobsRouteImport } from './routes/_admin/admin.jobs'
 import { Route as AdminAdminTasksRouteImport } from './routes/_admin/admin.tasks'
+import { Route as AdminAdminUsersRouteImport } from './routes/_admin/admin.users'
 import { Route as AdminAdminWithdrawalsRouteImport } from './routes/_admin/admin.withdrawals'
 
 const IndexRoute = IndexRouteImport.update({
@@ -93,6 +94,11 @@ const AdminAdminTasksRoute = AdminAdminTasksRouteImport.update({
   path: '/admin/tasks',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminAdminUsersRoute = AdminAdminUsersRouteImport.update({
+  id: '/admin/users',
+  path: '/admin/users',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminAdminWithdrawalsRoute = AdminAdminWithdrawalsRouteImport.update({
   id: '/admin/withdrawals',
   path: '/admin/withdrawals',
@@ -111,6 +117,7 @@ export interface FileRoutesByFullPath {
   '/admin/deposits': typeof AdminAdminDepositsRoute
   '/admin/jobs': typeof AdminAdminJobsRoute
   '/admin/tasks': typeof AdminAdminTasksRoute
+  '/admin/users': typeof AdminAdminUsersRoute
   '/admin/withdrawals': typeof AdminAdminWithdrawalsRoute
   '/admin/': typeof AdminAdminIndexRoute
 }
@@ -126,6 +133,7 @@ export interface FileRoutesByTo {
   '/admin/deposits': typeof AdminAdminDepositsRoute
   '/admin/jobs': typeof AdminAdminJobsRoute
   '/admin/tasks': typeof AdminAdminTasksRoute
+  '/admin/users': typeof AdminAdminUsersRoute
   '/admin/withdrawals': typeof AdminAdminWithdrawalsRoute
   '/admin': typeof AdminAdminIndexRoute
 }
@@ -144,6 +152,7 @@ export interface FileRoutesById {
   '/_admin/admin/deposits': typeof AdminAdminDepositsRoute
   '/_admin/admin/jobs': typeof AdminAdminJobsRoute
   '/_admin/admin/tasks': typeof AdminAdminTasksRoute
+  '/_admin/admin/users': typeof AdminAdminUsersRoute
   '/_admin/admin/withdrawals': typeof AdminAdminWithdrawalsRoute
   '/_admin/admin/': typeof AdminAdminIndexRoute
 }
@@ -161,6 +170,7 @@ export interface FileRouteTypes {
     | '/admin/deposits'
     | '/admin/jobs'
     | '/admin/tasks'
+    | '/admin/users'
     | '/admin/withdrawals'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
@@ -176,6 +186,7 @@ export interface FileRouteTypes {
     | '/admin/deposits'
     | '/admin/jobs'
     | '/admin/tasks'
+    | '/admin/users'
     | '/admin/withdrawals'
     | '/admin'
   id:
@@ -193,6 +204,7 @@ export interface FileRouteTypes {
     | '/_admin/admin/deposits'
     | '/_admin/admin/jobs'
     | '/_admin/admin/tasks'
+    | '/_admin/admin/users'
     | '/_admin/admin/withdrawals'
     | '/_admin/admin/'
   fileRoutesById: FileRoutesById
@@ -305,6 +317,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAdminTasksRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/_admin/admin/users': {
+      id: '/_admin/admin/users'
+      path: '/admin/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminAdminUsersRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/_admin/admin/withdrawals': {
       id: '/_admin/admin/withdrawals'
       path: '/admin/withdrawals'
@@ -319,6 +338,7 @@ interface AdminRouteRouteChildren {
   AdminAdminDepositsRoute: typeof AdminAdminDepositsRoute
   AdminAdminJobsRoute: typeof AdminAdminJobsRoute
   AdminAdminTasksRoute: typeof AdminAdminTasksRoute
+  AdminAdminUsersRoute: typeof AdminAdminUsersRoute
   AdminAdminWithdrawalsRoute: typeof AdminAdminWithdrawalsRoute
   AdminAdminIndexRoute: typeof AdminAdminIndexRoute
 }
@@ -327,6 +347,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminAdminDepositsRoute: AdminAdminDepositsRoute,
   AdminAdminJobsRoute: AdminAdminJobsRoute,
   AdminAdminTasksRoute: AdminAdminTasksRoute,
+  AdminAdminUsersRoute: AdminAdminUsersRoute,
   AdminAdminWithdrawalsRoute: AdminAdminWithdrawalsRoute,
   AdminAdminIndexRoute: AdminAdminIndexRoute,
 }
