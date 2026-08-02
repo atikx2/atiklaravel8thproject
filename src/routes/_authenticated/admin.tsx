@@ -3,9 +3,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth, taka, bn } from "@/lib/auth";
+import { useSettings } from "@/lib/settings";
 import { StatusChip } from "./dashboard";
 import { Field } from "../auth";
-import { ShieldAlert, Trash2, Plus } from "lucide-react";
+import { ShieldAlert, Trash2, Plus, Shield, ShieldOff, Loader2, Settings2 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
@@ -26,6 +27,7 @@ const TABS = [
   { k: "subs", t: "কাজ যাচাই" },
   { k: "jobs", t: "জব পোস্ট" },
   { k: "users", t: "ইউজার" },
+  { k: "settings", t: "সেটিংস" },
 ] as const;
 type TabKey = (typeof TABS)[number]["k"];
 
@@ -64,6 +66,7 @@ function AdminPanel() {
       {tab === "subs" && <Submissions />}
       {tab === "jobs" && <JobsAdmin />}
       {tab === "users" && <Users />}
+      {tab === "settings" && <SettingsAdmin />}
     </div>
   );
 }
