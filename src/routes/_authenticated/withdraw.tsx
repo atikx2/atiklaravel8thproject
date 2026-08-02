@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth, taka } from "@/lib/auth";
+import { useSettings } from "@/lib/settings";
 import { StatusChip } from "./dashboard";
 import { Field } from "../auth";
 import { Loader2 } from "lucide-react";
@@ -19,10 +20,10 @@ export const Route = createFileRoute("/_authenticated/withdraw")({
   component: WithdrawPage,
 });
 
-const MIN = 300;
-
 function WithdrawPage() {
   const { user, profile, refresh } = useAuth();
+  const settings = useSettings();
+  const MIN = settings.min_withdraw;
   const qc = useQueryClient();
   const [method, setMethod] = useState<"bkash" | "nagad">("bkash");
   const [amount, setAmount] = useState("");
