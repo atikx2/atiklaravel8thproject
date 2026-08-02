@@ -14,16 +14,245 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      deposits: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          method: Database["public"]["Enums"]["pay_method"]
+          sender_number: string
+          status: Database["public"]["Enums"]["req_status"]
+          trx_id: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          id?: string
+          method: Database["public"]["Enums"]["pay_method"]
+          sender_number: string
+          status?: Database["public"]["Enums"]["req_status"]
+          trx_id: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          method?: Database["public"]["Enums"]["pay_method"]
+          sender_number?: string
+          status?: Database["public"]["Enums"]["req_status"]
+          trx_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      job_submissions: {
+        Row: {
+          created_at: string
+          id: string
+          job_id: string
+          proof: string | null
+          reward: number
+          status: Database["public"]["Enums"]["req_status"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          job_id: string
+          proof?: string | null
+          reward?: number
+          status?: Database["public"]["Enums"]["req_status"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          job_id?: string
+          proof?: string | null
+          reward?: number
+          status?: Database["public"]["Enums"]["req_status"]
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_submissions_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      jobs: {
+        Row: {
+          created_at: string
+          description: string
+          duration_seconds: number
+          id: string
+          is_active: boolean
+          job_type: Database["public"]["Enums"]["job_type"]
+          link: string | null
+          proof_required: boolean
+          reward: number
+          slots: number
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          duration_seconds?: number
+          id?: string
+          is_active?: boolean
+          job_type?: Database["public"]["Enums"]["job_type"]
+          link?: string | null
+          proof_required?: boolean
+          reward?: number
+          slots?: number
+          title: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          duration_seconds?: number
+          id?: string
+          is_active?: boolean
+          job_type?: Database["public"]["Enums"]["job_type"]
+          link?: string | null
+          proof_required?: boolean
+          reward?: number
+          slots?: number
+          title?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          balance: number
+          created_at: string
+          has_deposited: boolean
+          id: string
+          is_blocked: boolean
+          phone: string
+          total_earned: number
+          username: string
+        }
+        Insert: {
+          balance?: number
+          created_at?: string
+          has_deposited?: boolean
+          id: string
+          is_blocked?: boolean
+          phone: string
+          total_earned?: number
+          username: string
+        }
+        Update: {
+          balance?: number
+          created_at?: string
+          has_deposited?: boolean
+          id?: string
+          is_blocked?: boolean
+          phone?: string
+          total_earned?: number
+          username?: string
+        }
+        Relationships: []
+      }
+      transactions: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          kind: string
+          note: string | null
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          id?: string
+          kind: string
+          note?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          kind?: string
+          note?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      withdrawals: {
+        Row: {
+          account_number: string
+          amount: number
+          created_at: string
+          id: string
+          method: Database["public"]["Enums"]["pay_method"]
+          status: Database["public"]["Enums"]["req_status"]
+          user_id: string
+        }
+        Insert: {
+          account_number: string
+          amount: number
+          created_at?: string
+          id?: string
+          method: Database["public"]["Enums"]["pay_method"]
+          status?: Database["public"]["Enums"]["req_status"]
+          user_id: string
+        }
+        Update: {
+          account_number?: string
+          amount?: number
+          created_at?: string
+          id?: string
+          method?: Database["public"]["Enums"]["pay_method"]
+          status?: Database["public"]["Enums"]["req_status"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
+      job_type: "ad" | "video" | "microtask"
+      pay_method: "bkash" | "nagad"
+      req_status: "pending" | "approved" | "rejected"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +379,11 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+      job_type: ["ad", "video", "microtask"],
+      pay_method: ["bkash", "nagad"],
+      req_status: ["pending", "approved", "rejected"],
+    },
   },
 } as const
