@@ -55,7 +55,7 @@ function Dashboard() {
         </div>
       )}
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <Stat icon={TrendingUp} label="মোট আয়" value={taka(profile?.total_earned ?? 0)} />
         <Stat icon={Gift} label="সাইনআপ বোনাস" value={taka(200)} />
         <Stat icon={CheckCircle2} label="সফল কাজ" value={bn(count("approved"))} tone="text-success" />
@@ -87,7 +87,7 @@ function Dashboard() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <Link to="/deposit" className="surface-card flex items-center gap-2 p-4 text-sm font-bold">
           <Wallet className="h-5 w-5 text-primary" /> ডিপোজিট
         </Link>
