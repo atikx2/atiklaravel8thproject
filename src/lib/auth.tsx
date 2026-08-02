@@ -91,8 +91,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
 export const useAuth = () => useContext(Ctx);
 
+const BN_DIGITS = ["০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯"];
+
 export const bn = (n: number | string) =>
-  String(n).replace(/[0-9]/g, (d) => "০১২৩৪৫৬৭৮৯"[Number(d)]);
+  String(n).replace(/[0-9]/g, (d) => BN_DIGITS[Number(d)] ?? d);
 
 export const taka = (n: number) =>
   `৳${bn(Number(n ?? 0).toLocaleString("en-US", { maximumFractionDigits: 2 }))}`;
