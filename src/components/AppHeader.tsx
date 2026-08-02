@@ -34,9 +34,23 @@ export function AppHeader() {
   return (
     <>
       <header className="sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur-xl">
-        <div className="mx-auto grid max-w-5xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 px-3 py-2.5">
-          <Logo to="/dashboard" />
-          <div className="flex items-center justify-center gap-1.5">
+        <div className="mx-auto grid max-w-6xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 px-3 py-2.5 lg:px-6 lg:py-3">
+          <div className="flex min-w-0 items-center gap-6">
+            <Logo to="/dashboard" />
+            <nav className="hidden items-center gap-1 lg:flex">
+              {links.map((l) => (
+                <Link
+                  key={l.to}
+                  to={l.to}
+                  className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-muted-foreground hover:bg-secondary"
+                  activeProps={{ className: "bg-primary/10 text-primary" }}
+                >
+                  <l.icon className="h-4 w-4" /> {l.label}
+                </Link>
+              ))}
+            </nav>
+          </div>
+          <div className="flex items-center justify-center gap-1.5 lg:justify-end">
             <button
               onClick={() => setShow((s) => !s)}
               className="flex items-center gap-1.5 rounded-full border border-border bg-secondary px-3 py-1.5 text-sm font-semibold"
@@ -57,7 +71,7 @@ export function AppHeader() {
           <button
             aria-label="মেনু"
             onClick={() => setOpen(true)}
-            className="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-border bg-secondary"
+            className="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-border bg-secondary lg:h-10 lg:w-10"
           >
             <Menu className="h-5 w-5" />
           </button>
@@ -119,7 +133,7 @@ export function AppHeader() {
 
 export function BottomNav() {
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-border/70 bg-background/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl">
+    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-border/70 bg-background/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl lg:hidden">
       <div className="mx-auto flex max-w-5xl items-center justify-around px-2 py-2">
         {links.map((l) => (
           <Link
