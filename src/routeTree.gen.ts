@@ -21,6 +21,7 @@ import { Route as AuthenticatedJobsRouteImport } from './routes/_authenticated/j
 import { Route as AuthenticatedWithdrawRouteImport } from './routes/_authenticated/withdraw'
 import { Route as AdminAdminIndexRouteImport } from './routes/_admin/admin.index'
 import { Route as AdminAdminDepositsRouteImport } from './routes/_admin/admin.deposits'
+import { Route as AdminAdminJobsRouteImport } from './routes/_admin/admin.jobs'
 import { Route as AdminAdminTasksRouteImport } from './routes/_admin/admin.tasks'
 import { Route as AdminAdminWithdrawalsRouteImport } from './routes/_admin/admin.withdrawals'
 
@@ -82,6 +83,11 @@ const AdminAdminDepositsRoute = AdminAdminDepositsRouteImport.update({
   path: '/admin/deposits',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminAdminJobsRoute = AdminAdminJobsRouteImport.update({
+  id: '/admin/jobs',
+  path: '/admin/jobs',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminAdminTasksRoute = AdminAdminTasksRouteImport.update({
   id: '/admin/tasks',
   path: '/admin/tasks',
@@ -103,6 +109,7 @@ export interface FileRoutesByFullPath {
   '/jobs': typeof AuthenticatedJobsRoute
   '/withdraw': typeof AuthenticatedWithdrawRoute
   '/admin/deposits': typeof AdminAdminDepositsRoute
+  '/admin/jobs': typeof AdminAdminJobsRoute
   '/admin/tasks': typeof AdminAdminTasksRoute
   '/admin/withdrawals': typeof AdminAdminWithdrawalsRoute
   '/admin/': typeof AdminAdminIndexRoute
@@ -117,6 +124,7 @@ export interface FileRoutesByTo {
   '/jobs': typeof AuthenticatedJobsRoute
   '/withdraw': typeof AuthenticatedWithdrawRoute
   '/admin/deposits': typeof AdminAdminDepositsRoute
+  '/admin/jobs': typeof AdminAdminJobsRoute
   '/admin/tasks': typeof AdminAdminTasksRoute
   '/admin/withdrawals': typeof AdminAdminWithdrawalsRoute
   '/admin': typeof AdminAdminIndexRoute
@@ -134,6 +142,7 @@ export interface FileRoutesById {
   '/_authenticated/jobs': typeof AuthenticatedJobsRoute
   '/_authenticated/withdraw': typeof AuthenticatedWithdrawRoute
   '/_admin/admin/deposits': typeof AdminAdminDepositsRoute
+  '/_admin/admin/jobs': typeof AdminAdminJobsRoute
   '/_admin/admin/tasks': typeof AdminAdminTasksRoute
   '/_admin/admin/withdrawals': typeof AdminAdminWithdrawalsRoute
   '/_admin/admin/': typeof AdminAdminIndexRoute
@@ -150,6 +159,7 @@ export interface FileRouteTypes {
     | '/jobs'
     | '/withdraw'
     | '/admin/deposits'
+    | '/admin/jobs'
     | '/admin/tasks'
     | '/admin/withdrawals'
     | '/admin/'
@@ -164,6 +174,7 @@ export interface FileRouteTypes {
     | '/jobs'
     | '/withdraw'
     | '/admin/deposits'
+    | '/admin/jobs'
     | '/admin/tasks'
     | '/admin/withdrawals'
     | '/admin'
@@ -180,6 +191,7 @@ export interface FileRouteTypes {
     | '/_authenticated/jobs'
     | '/_authenticated/withdraw'
     | '/_admin/admin/deposits'
+    | '/_admin/admin/jobs'
     | '/_admin/admin/tasks'
     | '/_admin/admin/withdrawals'
     | '/_admin/admin/'
@@ -279,6 +291,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAdminDepositsRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/_admin/admin/jobs': {
+      id: '/_admin/admin/jobs'
+      path: '/admin/jobs'
+      fullPath: '/admin/jobs'
+      preLoaderRoute: typeof AdminAdminJobsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/_admin/admin/tasks': {
       id: '/_admin/admin/tasks'
       path: '/admin/tasks'
@@ -298,6 +317,7 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteRouteChildren {
   AdminAdminDepositsRoute: typeof AdminAdminDepositsRoute
+  AdminAdminJobsRoute: typeof AdminAdminJobsRoute
   AdminAdminTasksRoute: typeof AdminAdminTasksRoute
   AdminAdminWithdrawalsRoute: typeof AdminAdminWithdrawalsRoute
   AdminAdminIndexRoute: typeof AdminAdminIndexRoute
@@ -305,6 +325,7 @@ interface AdminRouteRouteChildren {
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminAdminDepositsRoute: AdminAdminDepositsRoute,
+  AdminAdminJobsRoute: AdminAdminJobsRoute,
   AdminAdminTasksRoute: AdminAdminTasksRoute,
   AdminAdminWithdrawalsRoute: AdminAdminWithdrawalsRoute,
   AdminAdminIndexRoute: AdminAdminIndexRoute,
