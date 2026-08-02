@@ -88,6 +88,7 @@ function JobsPage() {
             <h2 className="flex items-center gap-2 text-sm font-bold text-muted-foreground">
               <Icon className="h-4 w-4 text-primary" /> {label}
             </h2>
+            <div className="grid grid-cols-1 gap-2 lg:grid-cols-2 xl:grid-cols-3">
             {list.map((j) => {
               const already = done?.includes(j.id);
               return (
@@ -106,7 +107,8 @@ function JobsPage() {
                   </button>
                 </div>
               );
-            })}
+             })}
+            </div>
           </section>
         );
       })}

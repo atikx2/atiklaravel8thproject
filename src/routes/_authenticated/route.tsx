@@ -11,9 +11,9 @@ export const Route = createFileRoute("/_authenticated")({
     return { user: data.user };
   },
   component: () => (
-    <div className="min-h-screen pb-24">
+    <div className="min-h-screen pb-24 lg:pb-10">
       <AppHeader />
-      <main className="mx-auto max-w-5xl px-3 py-4">
+      <main className="mx-auto max-w-6xl px-3 py-4 lg:px-6 lg:py-8">
         <Outlet />
       </main>
       <LiveNotifications />
