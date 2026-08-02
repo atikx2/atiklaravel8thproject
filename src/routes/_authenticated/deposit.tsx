@@ -3,9 +3,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth, taka } from "@/lib/auth";
+import { useSettings } from "@/lib/settings";
 import { StatusChip } from "./dashboard";
 import { Field } from "../auth";
-import { Loader2, Smartphone } from "lucide-react";
+import { Loader2, Smartphone, Copy, Check } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/deposit")({
   head: () => ({
@@ -19,10 +20,9 @@ export const Route = createFileRoute("/_authenticated/deposit")({
   component: DepositPage,
 });
 
-const NUMBERS = { bkash: "01700000000", nagad: "01800000000" } as const;
-
 function DepositPage() {
   const { user } = useAuth();
+  const settings = useSettings();
   const qc = useQueryClient();
   const [method, setMethod] = useState<"bkash" | "nagad">("bkash");
   const [amount, setAmount] = useState("");
@@ -31,6 +31,18 @@ function DepositPage() {
   const [msg, setMsg] = useState("");
   const [err, setErr] = useState("");
   const [busy, setBusy] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const payNumber = method === "bkash" ? settings.bkash_number : settings.nagad_number;
+
+  const copyNumber = async () => {
+    try {
+      await navigator.clipboard.writeText(payNumber);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    } catch {
+      setErr("কপি করা যায়নি, নাম্বারটি হাতে লিখুন");
+    }
+  };
 
   const { data: list } = useQuery({
     queryKey: ["deposits", user?.id],
@@ -47,7 +59,7 @@ function DepositPage() {
     setMsg("");
     if (!user) return;
     const amt = Number(amount);
-    if (!amt || amt < 100) return setErr("সর্বনিম্ন ডিপোজিট ১০০ টাকা");
+    if (!amt || amt < settings.min_deposit) return setErr(`সর্বনিম্ন ডিপোজিট ${settings.min_deposit} টাকা`);
     if (!/^01[0-9]{9}$/.test(sender.trim())) return setErr("সঠিক সেন্ডার নাম্বার দিন");
     if (trx.trim().length < 5) return setErr("সঠিক ট্রানজেকশন আইডি দিন");
     setBusy(true);
@@ -86,16 +98,39 @@ function DepositPage() {
           ))}
         </div>
 
-        <div className="mb-4 flex items-center gap-3 rounded-2xl bg-secondary/60 p-3 text-sm">
-          <Smartphone className="h-5 w-5 shrink-0 text-primary" />
-          <p>
-            <span className="font-bold">{method === "bkash" ? "বিকাশ" : "নগদ"} পার্সোনাল:</span>{" "}
-            <span className="font-mono">{NUMBERS[method]}</span> — টাকা পাঠিয়ে নিচের ফর্মটি পূরণ করুন।
+        <div className="mb-4 rounded-2xl border border-border bg-secondary/60 p-3">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex min-w-0 items-center gap-2.5">
+              <Smartphone className="h-5 w-5 shrink-0 text-primary" />
+              <div className="min-w-0">
+                <p className="text-xs font-bold text-muted-foreground">
+                  {method === "bkash" ? "বিকাশ" : "নগদ"} পার্সোনাল নাম্বার
+                </p>
+                <p className="truncate font-mono text-base font-bold">{payNumber}</p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={copyNumber}
+              aria-label="নাম্বার কপি করুন"
+              className="flex shrink-0 items-center gap-1.5 rounded-xl bg-primary/10 px-3 py-2 text-xs font-bold text-primary"
+            >
+              {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+              {copied ? "কপি হয়েছে" : "কপি"}
+            </button>
+          </div>
+          <p className="mt-2 text-xs text-muted-foreground">
+            উপরের নাম্বারে সেন্ড মানি করে নিচের ফর্মটি পূরণ করুন।
           </p>
         </div>
 
         <form onSubmit={submit} className="space-y-3">
-          <Field label="টাকার পরিমাণ" value={amount} onChange={setAmount} placeholder="১০০ বা তার বেশি" />
+          <Field
+            label="টাকার পরিমাণ"
+            value={amount}
+            onChange={setAmount}
+            placeholder={`${settings.min_deposit} বা তার বেশি`}
+          />
           <Field label="যে নাম্বার থেকে পাঠিয়েছেন" value={sender} onChange={setSender} placeholder="01XXXXXXXXX" />
           <Field label="ট্রানজেকশন আইডি" value={trx} onChange={setTrx} placeholder="TRX ID" />
           {err && <p className="text-sm text-destructive">{err}</p>}

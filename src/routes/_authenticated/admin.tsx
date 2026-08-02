@@ -3,9 +3,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth, taka, bn } from "@/lib/auth";
+import { useSettings } from "@/lib/settings";
 import { StatusChip } from "./dashboard";
 import { Field } from "../auth";
-import { ShieldAlert, Trash2, Plus } from "lucide-react";
+import { ShieldAlert, Trash2, Plus, Shield, ShieldOff, Loader2, Settings2 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
@@ -26,6 +27,7 @@ const TABS = [
   { k: "subs", t: "কাজ যাচাই" },
   { k: "jobs", t: "জব পোস্ট" },
   { k: "users", t: "ইউজার" },
+  { k: "settings", t: "সেটিংস" },
 ] as const;
 type TabKey = (typeof TABS)[number]["k"];
 
@@ -64,6 +66,7 @@ function AdminPanel() {
       {tab === "subs" && <Submissions />}
       {tab === "jobs" && <JobsAdmin />}
       {tab === "users" && <Users />}
+      {tab === "settings" && <SettingsAdmin />}
     </div>
   );
 }
@@ -292,6 +295,7 @@ function JobsAdmin() {
 
 function Users() {
   const qc = useQueryClient();
+  const { user } = useAuth();
   const { data } = useQuery({
     queryKey: ["admin", "users"],
     queryFn: async () => {
@@ -299,30 +303,133 @@ function Users() {
       return data ?? [];
     },
   });
+  const { data: admins } = useQuery({
+    queryKey: ["admin", "admin-ids"],
+    queryFn: async () => {
+      const { data } = await supabase.from("user_roles").select("user_id").eq("role", "admin");
+      return (data ?? []).map((r) => r.user_id);
+    },
+  });
+  const adminIds = admins ?? [];
+
+  const toggleAdmin = async (uid: string, isAdminNow: boolean) => {
+    if (isAdminNow) {
+      await supabase.from("user_roles").delete().eq("user_id", uid).eq("role", "admin");
+    } else {
+      await supabase.from("user_roles").insert({ user_id: uid, role: "admin" });
+    }
+    void qc.invalidateQueries();
+  };
 
   return (
     <div className="space-y-2">
-      {(data ?? []).map((u) => (
-        <div key={u.id} className="surface-card flex items-center justify-between gap-3 p-4">
-          <div className="min-w-0">
-            <p className="truncate text-sm font-bold">{u.username}</p>
-            <p className="truncate text-xs text-muted-foreground">
-              {bn(u.phone)} · ব্যালেন্স {taka(u.balance)} · {u.has_deposited ? "ডিপোজিট আছে" : "ডিপোজিট নেই"}
-            </p>
+      {(data ?? []).map((u) => {
+        const isUserAdmin = adminIds.includes(u.id);
+        return (
+          <div key={u.id} className="surface-card flex items-center justify-between gap-3 p-4">
+            <div className="min-w-0">
+              <p className="flex items-center gap-1.5 truncate text-sm font-bold">
+                {u.username}
+                {isUserAdmin && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-bold text-primary">
+                    <Shield className="h-3 w-3" /> অ্যাডমিন
+                  </span>
+                )}
+              </p>
+              <p className="truncate text-xs text-muted-foreground">
+                {bn(u.phone)} · ব্যালেন্স {taka(u.balance)} · {u.has_deposited ? "ডিপোজিট আছে" : "ডিপোজিট নেই"}
+              </p>
+            </div>
+            <div className="flex shrink-0 items-center gap-1.5">
+              {u.id !== user?.id && (
+                <button
+                  onClick={() => toggleAdmin(u.id, isUserAdmin)}
+                  aria-label={isUserAdmin ? "অ্যাডমিন সরান" : "অ্যাডমিন বানান"}
+                  className={`rounded-lg p-2 ${
+                    isUserAdmin ? "bg-destructive/15 text-destructive" : "bg-primary/10 text-primary"
+                  }`}
+                >
+                  {isUserAdmin ? <ShieldOff className="h-4 w-4" /> : <Shield className="h-4 w-4" />}
+                </button>
+              )}
+              <button
+                onClick={async () => {
+                  await supabase.from("profiles").update({ is_blocked: !u.is_blocked }).eq("id", u.id);
+                  void qc.invalidateQueries();
+                }}
+                className={`rounded-lg px-3 py-1.5 text-xs font-bold ${
+                  u.is_blocked ? "bg-destructive/15 text-destructive" : "bg-secondary text-muted-foreground"
+                }`}
+              >
+                {u.is_blocked ? "ব্লকড" : "ব্লক করুন"}
+              </button>
+            </div>
           </div>
-          <button
-            onClick={async () => {
-              await supabase.from("profiles").update({ is_blocked: !u.is_blocked }).eq("id", u.id);
-              void qc.invalidateQueries();
-            }}
-            className={`shrink-0 rounded-lg px-3 py-1.5 text-xs font-bold ${
-              u.is_blocked ? "bg-destructive/15 text-destructive" : "bg-secondary text-muted-foreground"
-            }`}
-          >
-            {u.is_blocked ? "ব্লকড" : "ব্লক করুন"}
-          </button>
-        </div>
-      ))}
+        );
+      })}
     </div>
+  );
+}
+
+function SettingsAdmin() {
+  const qc = useQueryClient();
+  const settings = useSettings();
+  const [bkash, setBkash] = useState(settings.bkash_number);
+  const [nagad, setNagad] = useState(settings.nagad_number);
+  const [minW, setMinW] = useState(String(settings.min_withdraw));
+  const [minD, setMinD] = useState(String(settings.min_deposit));
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState("");
+  const [err, setErr] = useState("");
+  const [loaded, setLoaded] = useState(false);
+
+  if (!loaded && settings.bkash_number) {
+    setLoaded(true);
+    setBkash(settings.bkash_number);
+    setNagad(settings.nagad_number);
+    setMinW(String(settings.min_withdraw));
+    setMinD(String(settings.min_deposit));
+  }
+
+  const save = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErr("");
+    setMsg("");
+    if (!/^01[0-9]{9}$/.test(bkash.trim()) || !/^01[0-9]{9}$/.test(nagad.trim()))
+      return setErr("সঠিক বিকাশ ও নগদ নাম্বার দিন");
+    setBusy(true);
+    const { error } = await supabase
+      .from("app_settings")
+      .update({
+        bkash_number: bkash.trim(),
+        nagad_number: nagad.trim(),
+        min_withdraw: Number(minW) || 500,
+        min_deposit: Number(minD) || 100,
+      })
+      .eq("id", "main");
+    setBusy(false);
+    if (error) return setErr("সেভ করা যায়নি");
+    setMsg("সেটিংস সেভ হয়েছে");
+    void qc.invalidateQueries();
+  };
+
+  return (
+    <form onSubmit={save} className="surface-card space-y-3 p-4">
+      <h2 className="font-display flex items-center gap-2 text-base font-bold">
+        <Settings2 className="h-4 w-4 text-primary" /> পেমেন্ট সেটিংস
+      </h2>
+      <Field label="বিকাশ পার্সোনাল নাম্বার" value={bkash} onChange={setBkash} placeholder="01XXXXXXXXX" />
+      <Field label="নগদ পার্সোনাল নাম্বার" value={nagad} onChange={setNagad} placeholder="01XXXXXXXXX" />
+      <Field label="সর্বনিম্ন উইথড্র (টাকা)" value={minW} onChange={setMinW} />
+      <Field label="সর্বনিম্ন ডিপোজিট (টাকা)" value={minD} onChange={setMinD} />
+      {err && <p className="text-sm text-destructive">{err}</p>}
+      {msg && <p className="text-sm text-success">{msg}</p>}
+      <button
+        disabled={busy}
+        className="bg-brand flex w-full items-center justify-center gap-2 rounded-2xl py-3 text-sm font-bold text-primary-foreground disabled:opacity-60"
+      >
+        {busy && <Loader2 className="h-4 w-4 animate-spin" />} সেভ করুন
+      </button>
+    </form>
   );
 }
