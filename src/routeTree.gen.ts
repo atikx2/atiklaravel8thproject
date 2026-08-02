@@ -20,6 +20,7 @@ import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedJobsRouteImport } from './routes/_authenticated/jobs'
 import { Route as AuthenticatedWithdrawRouteImport } from './routes/_authenticated/withdraw'
 import { Route as AdminAdminIndexRouteImport } from './routes/_admin/admin.index'
+import { Route as AdminAdminAdminsRouteImport } from './routes/_admin/admin.admins'
 import { Route as AdminAdminDepositsRouteImport } from './routes/_admin/admin.deposits'
 import { Route as AdminAdminJobsRouteImport } from './routes/_admin/admin.jobs'
 import { Route as AdminAdminPaymentsRouteImport } from './routes/_admin/admin.payments'
@@ -80,6 +81,11 @@ const AdminAdminIndexRoute = AdminAdminIndexRouteImport.update({
   path: '/admin/',
   getParentRoute: () => AdminRouteRoute,
 } as any)
+const AdminAdminAdminsRoute = AdminAdminAdminsRouteImport.update({
+  id: '/admin/admins',
+  path: '/admin/admins',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const AdminAdminDepositsRoute = AdminAdminDepositsRouteImport.update({
   id: '/admin/deposits',
   path: '/admin/deposits',
@@ -120,6 +126,7 @@ export interface FileRoutesByFullPath {
   '/history': typeof AuthenticatedHistoryRoute
   '/jobs': typeof AuthenticatedJobsRoute
   '/withdraw': typeof AuthenticatedWithdrawRoute
+  '/admin/admins': typeof AdminAdminAdminsRoute
   '/admin/deposits': typeof AdminAdminDepositsRoute
   '/admin/jobs': typeof AdminAdminJobsRoute
   '/admin/payments': typeof AdminAdminPaymentsRoute
@@ -137,6 +144,7 @@ export interface FileRoutesByTo {
   '/history': typeof AuthenticatedHistoryRoute
   '/jobs': typeof AuthenticatedJobsRoute
   '/withdraw': typeof AuthenticatedWithdrawRoute
+  '/admin/admins': typeof AdminAdminAdminsRoute
   '/admin/deposits': typeof AdminAdminDepositsRoute
   '/admin/jobs': typeof AdminAdminJobsRoute
   '/admin/payments': typeof AdminAdminPaymentsRoute
@@ -157,6 +165,7 @@ export interface FileRoutesById {
   '/_authenticated/history': typeof AuthenticatedHistoryRoute
   '/_authenticated/jobs': typeof AuthenticatedJobsRoute
   '/_authenticated/withdraw': typeof AuthenticatedWithdrawRoute
+  '/_admin/admin/admins': typeof AdminAdminAdminsRoute
   '/_admin/admin/deposits': typeof AdminAdminDepositsRoute
   '/_admin/admin/jobs': typeof AdminAdminJobsRoute
   '/_admin/admin/payments': typeof AdminAdminPaymentsRoute
@@ -176,6 +185,7 @@ export interface FileRouteTypes {
     | '/history'
     | '/jobs'
     | '/withdraw'
+    | '/admin/admins'
     | '/admin/deposits'
     | '/admin/jobs'
     | '/admin/payments'
@@ -193,6 +203,7 @@ export interface FileRouteTypes {
     | '/history'
     | '/jobs'
     | '/withdraw'
+    | '/admin/admins'
     | '/admin/deposits'
     | '/admin/jobs'
     | '/admin/payments'
@@ -212,6 +223,7 @@ export interface FileRouteTypes {
     | '/_authenticated/history'
     | '/_authenticated/jobs'
     | '/_authenticated/withdraw'
+    | '/_admin/admin/admins'
     | '/_admin/admin/deposits'
     | '/_admin/admin/jobs'
     | '/_admin/admin/payments'
@@ -308,6 +320,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAdminIndexRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/_admin/admin/admins': {
+      id: '/_admin/admin/admins'
+      path: '/admin/admins'
+      fullPath: '/admin/admins'
+      preLoaderRoute: typeof AdminAdminAdminsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/_admin/admin/deposits': {
       id: '/_admin/admin/deposits'
       path: '/admin/deposits'
@@ -354,6 +373,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteRouteChildren {
+  AdminAdminAdminsRoute: typeof AdminAdminAdminsRoute
   AdminAdminDepositsRoute: typeof AdminAdminDepositsRoute
   AdminAdminJobsRoute: typeof AdminAdminJobsRoute
   AdminAdminPaymentsRoute: typeof AdminAdminPaymentsRoute
@@ -364,6 +384,7 @@ interface AdminRouteRouteChildren {
 }
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
+  AdminAdminAdminsRoute: AdminAdminAdminsRoute,
   AdminAdminDepositsRoute: AdminAdminDepositsRoute,
   AdminAdminJobsRoute: AdminAdminJobsRoute,
   AdminAdminPaymentsRoute: AdminAdminPaymentsRoute,

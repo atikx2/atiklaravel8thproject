@@ -27,3 +27,26 @@ export function useSettings() {
   });
   return data ?? DEFAULT_SETTINGS;
 }
+
+export type PaymentNumber = {
+  id: string;
+  method: "bkash" | "nagad";
+  number: string;
+  label: string;
+  is_active: boolean;
+};
+
+export function usePaymentNumbers() {
+  const { data } = useQuery({
+    queryKey: ["payment_numbers"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("payment_numbers")
+        .select("*")
+        .eq("is_active", true)
+        .order("created_at");
+      return (data ?? []) as PaymentNumber[];
+    },
+  });
+  return data ?? [];
+}
