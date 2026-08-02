@@ -107,7 +107,8 @@ function JobsPage() {
                   </button>
                 </div>
               );
-            })}
+             })}
+            </div>
           </section>
         );
       })}
