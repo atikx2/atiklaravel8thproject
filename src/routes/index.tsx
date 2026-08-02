@@ -22,7 +22,7 @@ import {
   Landmark,
   Lock,
   Clock3,
-  HeadphonesIcon,
+  Headphones,
   Sparkles,
   UserPlus,
   Gift,
@@ -119,7 +119,7 @@ const WHY = [
 const TRUST = [
   { icon: Lock, t: "SSL সুরক্ষিত" },
   { icon: Clock3, t: "২৪ ঘণ্টায় পেমেন্ট" },
-  { icon: HeadphonesIcon, t: "বাংলা সাপোর্ট" },
+  { icon: Headphones, t: "বাংলা সাপোর্ট" },
   { icon: Sparkles, t: "কোনো হিডেন চার্জ নেই" },
 ];
 
@@ -331,7 +331,7 @@ function Landing() {
 
             <div className="surface-card p-6">
               <h2 className="font-display flex items-center gap-2 text-lg font-bold">
-                <HeadphonesIcon className="h-5 w-5 text-primary" /> সাধারণ প্রশ্ন
+                <Headphones className="h-5 w-5 text-primary" /> সাধারণ প্রশ্ন
               </h2>
               <div className="mt-4 space-y-3">
                 {FAQS.map((f) => (
