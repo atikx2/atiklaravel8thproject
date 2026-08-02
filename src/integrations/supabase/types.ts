@@ -157,6 +157,36 @@ export type Database = {
         }
         Relationships: []
       }
+      payment_numbers: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          label: string
+          method: Database["public"]["Enums"]["pay_method"]
+          number: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          label?: string
+          method: Database["public"]["Enums"]["pay_method"]
+          number: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          label?: string
+          method?: Database["public"]["Enums"]["pay_method"]
+          number?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           balance: number
