@@ -90,14 +90,28 @@ function ActionRow({ onOk, onNo, status }: { onOk: () => void; onNo: () => void;
   );
 }
 
+function useProfileMap() {
+  const { data } = useQuery({
+    queryKey: ["admin", "profile-map"],
+    queryFn: async () => {
+      const { data } = await supabase.from("profiles").select("id,username,phone");
+      const map: Record<string, { username: string; phone: string }> = {};
+      for (const p of data ?? []) map[p.id] = { username: p.username, phone: p.phone };
+      return map;
+    },
+  });
+  return data ?? {};
+}
+
 function Requests({ table }: { table: "deposits" | "withdrawals" }) {
   const setStatus = useSetStatus(table);
+  const profiles = useProfileMap();
   const { data } = useQuery({
     queryKey: ["admin", table],
     queryFn: async () => {
       const { data } = await supabase
         .from(table)
-        .select("*, profiles!inner(username, phone)")
+        .select("*")
         .order("created_at", { ascending: false });
       return data ?? [];
     },
@@ -106,7 +120,7 @@ function Requests({ table }: { table: "deposits" | "withdrawals" }) {
   return (
     <div className="space-y-2">
       {(data ?? []).map((r) => {
-        const p = r.profiles as { username: string; phone: string } | null;
+        const p = profiles[r.user_id];
         return (
           <div key={r.id} className="surface-card flex items-center justify-between gap-3 p-4">
             <div className="min-w-0">
