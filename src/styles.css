@@ -165,6 +165,8 @@
 @theme inline {
   --color-success: var(--success);
   --color-warning: var(--warning);
+  --color-info: var(--info);
+  --color-pink: var(--pink);
 }
 
 @utility bg-brand {
@@ -186,4 +188,30 @@
 
 @utility glow {
   box-shadow: var(--shadow-glow);
+}
+
+@utility text-gradient {
+  background-image: var(--gradient-brand);
+  background-clip: text;
+  color: transparent;
+}
+
+@keyframes float-in {
+  0% {
+    opacity: 0;
+    transform: translateY(14px) scale(0.96);
+  }
+  12%,
+  88% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+  }
+}
+
+@utility animate-float-in {
+  animation: float-in 5s ease-in-out forwards;
 }
