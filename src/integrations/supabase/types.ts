@@ -16,6 +16,7 @@ export type Database = {
     Tables: {
       app_settings: {
         Row: {
+          banner_image_url: string
           bkash_number: string
           created_at: string
           id: string
@@ -25,6 +26,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          banner_image_url?: string
           bkash_number?: string
           created_at?: string
           id: string
@@ -34,6 +36,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          banner_image_url?: string
           bkash_number?: string
           created_at?: string
           id?: string
