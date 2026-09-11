@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Logo } from "@/components/Logo";
 import { LiveNotifications } from "@/components/LiveNotifications";
+import { CountUp } from "@/components/CountUp";
+
 import { taka, bn } from "@/lib/auth";
 import { useSettings } from "@/lib/settings";
 import {
