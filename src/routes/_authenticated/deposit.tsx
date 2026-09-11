@@ -64,13 +64,18 @@ function DepositPage() {
     },
   });
 
+  useEffect(() => {
+    if (pkg) setAmount(String(pkg.price));
+  }, [pkg?.id, pkg?.price]);
+
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErr("");
     setMsg("");
     if (!user) return;
-    const amt = Number(amount);
-    if (!amt || amt < settings.min_deposit) return setErr(`সর্বনিম্ন ডিপোজিট ${settings.min_deposit} টাকা`);
+    const amt = pkg ? pkg.price : Number(amount);
+    if (!amt || (!pkg && amt < settings.min_deposit))
+      return setErr(`সর্বনিম্ন ডিপোজিট ${settings.min_deposit} টাকা`);
     if (!/^01[0-9]{9}$/.test(sender.trim())) return setErr("সঠিক সেন্ডার নাম্বার দিন");
     if (trx.trim().length < 5) return setErr("সঠিক ট্রানজেকশন আইডি দিন");
     setBusy(true);
@@ -80,19 +85,39 @@ function DepositPage() {
       amount: amt,
       sender_number: sender.trim(),
       trx_id: trx.trim(),
+      package_id: pkg?.id ?? null,
     });
     setBusy(false);
     if (error) return setErr("অনুরোধ পাঠানো যায়নি");
-    setAmount("");
+    if (!pkg) setAmount("");
     setSender("");
     setTrx("");
-    setMsg("অনুরোধ পাঠানো হয়েছে। অ্যাডমিন অনুমোদন দিলে ব্যালেন্স যোগ হবে।");
+    setMsg(
+      pkg
+        ? "প্যাকেজ কেনার অনুরোধ পাঠানো হয়েছে। অ্যাডমিন অনুমোদন দিলে প্যাকেজ চালু হবে।"
+        : "অনুরোধ পাঠানো হয়েছে। অ্যাডমিন অনুমোদন দিলে ব্যালেন্স যোগ হবে।",
+    );
     void qc.invalidateQueries();
   };
 
   return (
     <div className="space-y-4">
-      <h1 className="font-display text-xl font-bold">ডিপোজিট করুন</h1>
+      <h1 className="font-display text-xl font-bold">{pkg ? "প্যাকেজ চেকআউট" : "ডিপোজিট করুন"}</h1>
+
+      {pkg && (
+        <div className="surface-card flex items-center gap-3 p-4">
+          <div className="bg-brand grid h-10 w-10 shrink-0 place-items-center rounded-2xl">
+            <PackageIcon className="h-5 w-5 text-primary-foreground" />
+          </div>
+          <div className="min-w-0">
+            <p className="truncate text-sm font-bold">{pkg.name}</p>
+            <p className="text-xs text-muted-foreground">
+              {taka(pkg.price)} · দৈনিক {taka(pkg.daily_income)} · {bn(pkg.validity_days)} দিন
+            </p>
+          </div>
+        </div>
+      )}
+
 
       <div className="surface-card p-4">
         <div className="mb-4 grid grid-cols-2 gap-2">
