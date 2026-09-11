@@ -27,6 +27,9 @@ function DepositPage() {
   const { user } = useAuth();
   const settings = useSettings();
   const numbers = usePaymentNumbers();
+  const { pkg: pkgId } = Route.useSearch();
+  const packages = usePackages();
+  const pkg = packages.find((p) => p.id === pkgId);
   const qc = useQueryClient();
   const [method, setMethod] = useState<"bkash" | "nagad">("bkash");
   const [amount, setAmount] = useState("");
