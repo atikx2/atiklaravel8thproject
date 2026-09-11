@@ -127,6 +127,7 @@ function LimitsForm() {
   const settings = useSettings();
   const [minW, setMinW] = useState(String(settings.min_withdraw));
   const [minD, setMinD] = useState(String(settings.min_deposit));
+  const [banner, setBanner] = useState(settings.banner_image_url ?? "");
   const [loaded, setLoaded] = useState(false);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState("");
@@ -135,6 +136,7 @@ function LimitsForm() {
     setLoaded(true);
     setMinW(String(settings.min_withdraw));
     setMinD(String(settings.min_deposit));
+    setBanner(settings.banner_image_url ?? "");
   }
 
   const save = async (e: React.FormEvent) => {
@@ -143,7 +145,11 @@ function LimitsForm() {
     setMsg("");
     const { error } = await supabase
       .from("app_settings")
-      .update({ min_withdraw: Number(minW) || 500, min_deposit: Number(minD) || 100 })
+      .update({
+        min_withdraw: Number(minW) || 500,
+        min_deposit: Number(minD) || 100,
+        banner_image_url: banner.trim(),
+      })
       .eq("id", "main");
     setBusy(false);
     setMsg(error ? "সেভ করা যায়নি" : "সেভ হয়েছে");
@@ -153,10 +159,19 @@ function LimitsForm() {
   return (
     <form onSubmit={save} className="surface-card space-y-3 p-4">
       <h2 className="font-display flex items-center gap-2 text-base font-bold">
-        <Settings2 className="h-4 w-4 text-primary" /> লিমিট সেটিংস
+        <Settings2 className="h-4 w-4 text-primary" /> সাইট সেটিংস
       </h2>
       <AdminField label="সর্বনিম্ন উইথড্র (টাকা)" value={minW} onChange={setMinW} />
       <AdminField label="সর্বনিম্ন ডিপোজিট (টাকা)" value={minD} onChange={setMinD} />
+      <AdminField
+        label="ড্যাশবোর্ড ব্যানার ইমেজ লিঙ্ক"
+        value={banner}
+        onChange={setBanner}
+        placeholder="https://example.com/banner.jpg"
+      />
+      {banner.trim() && (
+        <img src={banner.trim()} alt="ব্যানার প্রিভিউ" className="h-28 w-full rounded-xl object-cover" />
+      )}
       {msg && <p className="text-sm text-success">{msg}</p>}
       <button
         disabled={busy}

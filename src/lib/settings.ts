@@ -7,6 +7,7 @@ export type AppSettings = {
   nagad_number: string;
   min_withdraw: number;
   min_deposit: number;
+  banner_image_url: string;
 };
 
 export const DEFAULT_SETTINGS: AppSettings = {
@@ -15,6 +16,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   nagad_number: "01800000000",
   min_withdraw: 500,
   min_deposit: 100,
+  banner_image_url: "",
 };
 
 export function useSettings() {

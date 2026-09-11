@@ -1,0 +1,1 @@
+ALTER TABLE public.app_settings ADD COLUMN IF NOT EXISTS banner_image_url text NOT NULL DEFAULT '';
