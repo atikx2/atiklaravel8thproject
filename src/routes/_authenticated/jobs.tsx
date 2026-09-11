@@ -3,7 +3,21 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth, taka, bn } from "@/lib/auth";
-import { MonitorPlay, Youtube, ClipboardList, AlertTriangle, Loader2, ExternalLink, X } from "lucide-react";
+import {
+  MonitorPlay,
+  Youtube,
+  ClipboardList,
+  AlertTriangle,
+  Loader2,
+  ExternalLink,
+  X,
+  Megaphone,
+  RefreshCw,
+  Clock,
+  ShoppingCart,
+  Inbox,
+} from "lucide-react";
+
 
 export const Route = createFileRoute("/_authenticated/jobs")({
   head: () => ({
