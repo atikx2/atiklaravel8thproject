@@ -7,7 +7,17 @@ import { useSettings, usePaymentNumbers } from "@/lib/settings";
 import { usePackages } from "@/lib/packages";
 import { StatusChip } from "./dashboard";
 import { Field } from "../auth";
-import { Loader2, Smartphone, Copy, Check, Package as PackageIcon } from "lucide-react";
+import {
+  Loader2,
+  Copy,
+  Check,
+  Package as PackageIcon,
+  WalletCards,
+  Gift,
+  CreditCard,
+} from "lucide-react";
+import { PAY_METHODS, payLogo } from "@/lib/pay-logos";
+
 
 export const Route = createFileRoute("/_authenticated/deposit")({
   validateSearch: (search: Record<string, unknown>): { pkg?: string } =>
@@ -24,7 +34,7 @@ export const Route = createFileRoute("/_authenticated/deposit")({
 });
 
 function DepositPage() {
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const settings = useSettings();
   const numbers = usePaymentNumbers();
   const { pkg: pkgId } = Route.useSearch();
