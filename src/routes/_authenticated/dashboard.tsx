@@ -13,7 +13,7 @@ import {
   Wallet,
   TrendingUp,
   Gift,
-  AlertTriangle,
+  Megaphone,
   Sparkles,
   Rocket,
   Briefcase,
