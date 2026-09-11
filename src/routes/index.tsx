@@ -101,11 +101,19 @@ const REVIEWS = [
 ];
 
 const STATS = [
-  { icon: Users, v: "১৫,০০০+", l: "নিবন্ধিত সদস্য", tone: "text-primary bg-primary/10" },
-  { icon: CheckCircle2, v: "১,২০,০০০+", l: "সফল টাস্ক", tone: "text-success bg-success/10" },
-  { icon: BadgeDollarSign, v: "৳১২,৫০,০০০+", l: "মোট পেমেন্ট", tone: "text-info bg-info/10" },
-  { icon: Star, v: "৪.৯/৫", l: "ব্যবহারকারী রেটিং", tone: "text-warning bg-warning/10" },
+  { icon: Users, to: 15000, suffix: "+", l: "নিবন্ধিত সদস্য", tone: "text-primary bg-primary/10" },
+  { icon: CheckCircle2, to: 120000, suffix: "+", l: "সফল টাস্ক", tone: "text-success bg-success/10" },
+  {
+    icon: BadgeDollarSign,
+    to: 1250000,
+    prefix: "৳",
+    suffix: "+",
+    l: "মোট পেমেন্ট",
+    tone: "text-info bg-info/10",
+  },
+  { icon: Star, to: 4.9, decimals: 1, suffix: "/৫", l: "ব্যবহারকারী রেটিং", tone: "text-warning bg-warning/10" },
 ];
+
 
 const WHY = [
   { icon: ShieldCheck, t: "নিরাপদ প্ল্যাটফর্ম", d: "প্রতিটি একাউন্ট ও পেমেন্ট সুরক্ষিত ও যাচাইকৃত।", tone: "from-emerald-500 to-green-500" },
