@@ -92,7 +92,7 @@ function PackageCard({ p, index }: { p: import("@/lib/packages").Package; index:
         </p>
         <p className="mt-1 text-center text-sm font-semibold text-primary-foreground/85">বিনিয়োগ প্যাকেজ</p>
         {popular && (
-          <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-warning px-3 py-0.5 text-[11px] font-extrabold text-warning-foreground shadow">
+          <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-warning px-3 py-0.5 text-[11px] font-extrabold text-primary-foreground shadow">
             জনপ্রিয়
           </span>
         )}
@@ -102,7 +102,7 @@ function PackageCard({ p, index }: { p: import("@/lib/packages").Package; index:
         {/* Price */}
         <div className="text-center">
           <p className="font-display text-4xl font-extrabold text-foreground drop-shadow-sm">{taka(p.price)}</p>
-          <span className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-warning px-4 py-1.5 text-xs font-extrabold text-warning-foreground shadow-md shadow-warning/40">
+          <span className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-warning px-4 py-1.5 text-xs font-extrabold text-primary-foreground shadow-md shadow-warning/40">
             <Tag className="h-3.5 w-3.5" /> এককালীন বিনিয়োগ
           </span>
         </div>
