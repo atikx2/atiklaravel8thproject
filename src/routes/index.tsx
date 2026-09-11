@@ -205,11 +205,19 @@ function Landing() {
                 <span className={`grid h-11 w-11 place-items-center rounded-2xl ${s.tone}`}>
                   <s.icon className="h-5 w-5" />
                 </span>
-                <p className="font-display text-lg font-extrabold sm:text-xl">{s.v}</p>
+                <p className="font-display text-lg font-extrabold sm:text-xl">
+                  <CountUp
+                    to={s.to}
+                    decimals={s.decimals ?? 0}
+                    prefix={s.prefix ?? ""}
+                    suffix={s.suffix ?? ""}
+                  />
+                </p>
                 <p className="text-muted-foreground -mt-1.5 text-[11px] font-medium sm:text-xs">{s.l}</p>
               </div>
             ))}
           </div>
+
         </section>
 
         {/* How to earn */}
