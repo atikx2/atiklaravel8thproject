@@ -49,48 +49,74 @@ function PackagesPage() {
         </p>
       </header>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {packages.map((p) => (
-          <div key={p.id} className="surface-card flex flex-col gap-4 p-5">
-            <div>
-              <p className="text-xs font-bold text-muted-foreground">বিনিয়োগ প্যাকেজ</p>
-              <p className="font-display text-3xl font-extrabold text-primary">{taka(p.price)}</p>
-              <p className="text-xs text-muted-foreground">এককালীন বিনিয়োগ</p>
-            </div>
-
-            <div className="flex flex-wrap gap-1.5">
-              <Badge icon={Zap} text="দ্রুত আয়" />
-              <Badge icon={ShieldCheck} text="নিরাপদ" />
-              <Badge icon={Gift} text="বোনাস" />
-            </div>
-
-            <ul className="space-y-2.5">
-              <Row
-                icon={Tv}
-                title={`${bn(p.daily_ads)} দৈনিক বিজ্ঞাপন`}
-                sub="টাকা আয় করতে বিজ্ঞাপন দেখুন"
-              />
-              <Row
-                icon={TrendingUp}
-                title={`${taka(p.daily_income)} দৈনিক আয়`}
-                sub={`${bn(p.validity_days)} দিনে মোট ${taka(p.daily_income * p.validity_days)}`}
-              />
-              <Row
-                icon={CalendarClock}
-                title={`${bn(p.validity_days)} দিনের বৈধতা`}
-                sub={`${bn(p.validity_days)} দিন পর প্যাকেজ মেয়াদ শেষ`}
-              />
-            </ul>
-
-            <Link
-              to="/deposit"
-              search={{ pkg: p.id }}
-              className="bg-brand mt-auto grid place-items-center rounded-2xl py-3 text-sm font-bold text-primary-foreground"
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+        {packages.map((p, i) => {
+          const popular = i === 1;
+          return (
+            <div
+              key={p.id}
+              className={`surface-card relative flex flex-col gap-4 overflow-hidden p-5 transition-transform duration-300 hover:-translate-y-1 ${
+                popular ? "glow ring-2 ring-primary/60" : "ring-1 ring-border"
+              }`}
             >
-              প্যাকেজ কিনুন
-            </Link>
-          </div>
-        ))}
+              <div
+                className="pointer-events-none absolute -top-16 -right-16 h-40 w-40 rounded-full opacity-20 blur-2xl"
+                style={{ backgroundImage: "var(--gradient-brand)" }}
+              />
+              {popular && (
+                <span className="bg-brand absolute top-4 right-4 rounded-full px-2.5 py-1 text-[10px] font-extrabold text-primary-foreground">
+                  জনপ্রিয়
+                </span>
+              )}
+
+              <div className="relative">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-1 text-[11px] font-bold text-primary">
+                  <Sparkles className="h-3.5 w-3.5" /> {p.name}
+                </span>
+                <p className="font-display mt-2 text-4xl font-extrabold text-primary">{taka(p.price)}</p>
+                <p className="text-xs text-muted-foreground">এককালীন বিনিয়োগ</p>
+              </div>
+
+              <div className="flex flex-wrap gap-1.5">
+                <Badge icon={Zap} text="দ্রুত আয়" />
+                <Badge icon={ShieldCheck} text="নিরাপদ" />
+                <Badge icon={Gift} text="বোনাস" />
+              </div>
+
+              <div
+                className="rounded-2xl p-4 text-primary-foreground"
+                style={{ backgroundImage: "var(--gradient-brand)" }}
+              >
+                <p className="text-[11px] font-semibold text-primary-foreground/80">
+                  {bn(p.validity_days)} দিনে সম্ভাব্য মোট আয়
+                </p>
+                <p className="font-display text-2xl font-extrabold">{taka(p.daily_income * p.validity_days)}</p>
+              </div>
+
+              <ul className="space-y-2.5">
+                <Row icon={Tv} title={`${bn(p.daily_ads)} দৈনিক বিজ্ঞাপন`} sub="টাকা আয় করতে বিজ্ঞাপন দেখুন" />
+                <Row
+                  icon={TrendingUp}
+                  title={`${taka(p.daily_income)} দৈনিক আয়`}
+                  sub={`${bn(p.validity_days)} দিনে মোট ${taka(p.daily_income * p.validity_days)}`}
+                />
+                <Row
+                  icon={CalendarClock}
+                  title={`${bn(p.validity_days)} দিনের বৈধতা`}
+                  sub={`${bn(p.validity_days)} দিন পর প্যাকেজ মেয়াদ শেষ`}
+                />
+              </ul>
+
+              <Link
+                to="/deposit"
+                search={{ pkg: p.id }}
+                className="bg-brand mt-auto grid place-items-center rounded-2xl py-3.5 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/25"
+              >
+                প্যাকেজ কিনুন
+              </Link>
+            </div>
+          );
+        })}
         {packages.length === 0 && (
           <p className="surface-card p-8 text-center text-sm text-muted-foreground">এখন কোনো প্যাকেজ নেই।</p>
         )}
