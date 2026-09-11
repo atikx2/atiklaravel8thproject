@@ -16,6 +16,8 @@ import {
   Clock,
   ShoppingCart,
   Inbox,
+  Lightbulb,
+
 } from "lucide-react";
 
 
@@ -177,10 +179,34 @@ function JobsPage() {
       })}
 
       {(jobs?.length ?? 0) === 0 && (
-        <p className="surface-card p-8 text-center text-sm text-muted-foreground">
-          এই মুহূর্তে কোনো কাজ নেই। একটু পরে আবার দেখুন।
-        </p>
+        <div className="surface-card p-8 text-center">
+          <span className="mx-auto grid h-20 w-20 place-items-center rounded-full bg-secondary">
+            <Inbox className="h-9 w-9 text-muted-foreground" />
+          </span>
+          <h3 className="font-display text-gradient mt-4 text-lg font-extrabold">কোনো কাজ নেই</h3>
+          <p className="mt-1.5 text-sm text-muted-foreground">
+            এই মুহূর্তে কোনো কাজ নেই। প্যাকেজ কিনে প্রতিদিন কাজ পান।
+          </p>
+          <Link
+            to="/packages"
+            className="bg-brand mt-4 inline-flex items-center gap-2 rounded-2xl px-5 py-3 text-sm font-bold text-primary-foreground shadow-glow"
+          >
+            <ShoppingCart className="h-4 w-4" /> প্যাকেজ কিনুন
+          </Link>
+        </div>
       )}
+
+      <div className="rounded-3xl bg-gradient-to-br from-amber-400 to-orange-500 p-4 text-white shadow-glow">
+        <p className="font-display mb-2 flex items-center gap-2 text-base font-extrabold">
+          <Lightbulb className="h-5 w-5" /> টিপস
+        </p>
+        <ul className="list-inside list-disc space-y-1 text-sm font-medium">
+          <li>প্রতিটি বিজ্ঞাপন সম্পূর্ণ দেখুন</li>
+          <li>নিয়মিত কাজ করুন বেশি আয়ের জন্য</li>
+          <li>বন্ধুদের আমন্ত্রণ জানিয়ে কমিশন পান</li>
+        </ul>
+      </div>
+
 
       {active && (
         <JobModal
