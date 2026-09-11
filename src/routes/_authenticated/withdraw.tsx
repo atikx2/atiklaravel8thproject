@@ -2,11 +2,12 @@ import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth, taka } from "@/lib/auth";
+import { useAuth, taka, bn } from "@/lib/auth";
 import { useSettings } from "@/lib/settings";
+import { PAY_METHODS } from "@/lib/pay-logos";
 import { StatusChip } from "./dashboard";
 import { Field } from "../auth";
-import { Loader2 } from "lucide-react";
+import { Loader2, Send, HandCoins, Info, Wallet } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/withdraw")({
   head: () => ({
