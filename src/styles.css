@@ -215,3 +215,23 @@
 @utility animate-float-in {
   animation: float-in 5s ease-in-out forwards;
 }
+
+@keyframes marquee-x {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@utility animate-marquee {
+  animation: marquee-x 18s linear infinite;
+}
+
+@utility page-header {
+  background-image: var(--gradient-brand);
+  border-radius: var(--radius-3xl);
+  box-shadow: var(--shadow-glow);
+}
+
