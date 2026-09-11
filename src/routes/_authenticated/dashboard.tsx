@@ -34,6 +34,23 @@ function Dashboard() {
 
   return (
     <div className="space-y-4">
+      <Link
+        to="/packages"
+        className="surface-card glow relative block overflow-hidden p-5"
+        style={{ backgroundImage: "var(--gradient-brand)" }}
+      >
+        <Sparkles className="absolute -top-4 -right-4 h-24 w-24 text-primary-foreground/15" />
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-foreground/20 px-2.5 py-1 text-[11px] font-bold text-primary-foreground">
+          <Rocket className="h-3.5 w-3.5" /> বিনিয়োগ প্যাকেজ
+        </span>
+        <h2 className="font-display mt-2 text-xl font-extrabold text-primary-foreground">
+          ৳৫০০ থেকে শুরু করে দৈনিক আয় করুন
+        </h2>
+        <p className="mt-1 text-xs text-primary-foreground/85">
+          প্যাকেজ কিনে প্রতিদিন বিজ্ঞাপন দেখুন — ৬০ দিনের বৈধতা। এখনই দেখুন →
+        </p>
+      </Link>
+
       <div className="surface-card glow p-5" style={{ backgroundImage: "var(--gradient-brand)" }}>
         <p className="text-sm font-medium text-primary-foreground/80">মোট ব্যালেন্স</p>
         <p className="font-display text-4xl font-extrabold text-primary-foreground">{taka(profile?.balance ?? 0)}</p>
