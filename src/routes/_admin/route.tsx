@@ -16,6 +16,7 @@ import {
   Menu,
   X,
   ExternalLink,
+  Package as PackageIcon,
 } from "lucide-react";
 
 export const Route = createFileRoute("/_admin")({
