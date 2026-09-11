@@ -13,13 +13,15 @@ import {
   LogOut,
   Shield,
   X,
+  Package,
 } from "lucide-react";
 import { Logo } from "./Logo";
 import { useAuth, taka } from "@/lib/auth";
 
 const links = [
   { to: "/dashboard", label: "ড্যাশবোর্ড", icon: LayoutDashboard },
-  { to: "/jobs", label: "কাজ করুন", icon: Briefcase },
+  { to: "/jobs", label: "কাজ", icon: Briefcase },
+  { to: "/packages", label: "প্যাকেজ", icon: Package },
   { to: "/deposit", label: "ডিপোজিট", icon: Wallet },
   { to: "/withdraw", label: "উইথড্র", icon: BanknoteArrowDown },
   { to: "/history", label: "হিস্টোরি", icon: History },
