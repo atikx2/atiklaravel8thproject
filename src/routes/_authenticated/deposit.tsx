@@ -7,7 +7,17 @@ import { useSettings, usePaymentNumbers } from "@/lib/settings";
 import { usePackages } from "@/lib/packages";
 import { StatusChip } from "./dashboard";
 import { Field } from "../auth";
-import { Loader2, Smartphone, Copy, Check, Package as PackageIcon } from "lucide-react";
+import {
+  Loader2,
+  Copy,
+  Check,
+  Package as PackageIcon,
+  WalletCards,
+  Gift,
+  CreditCard,
+} from "lucide-react";
+import { PAY_METHODS, payLogo } from "@/lib/pay-logos";
+
 
 export const Route = createFileRoute("/_authenticated/deposit")({
   validateSearch: (search: Record<string, unknown>): { pkg?: string } =>
@@ -24,7 +34,7 @@ export const Route = createFileRoute("/_authenticated/deposit")({
 });
 
 function DepositPage() {
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const settings = useSettings();
   const numbers = usePaymentNumbers();
   const { pkg: pkgId } = Route.useSearch();
@@ -100,9 +110,18 @@ function DepositPage() {
     void qc.invalidateQueries();
   };
 
+  const quick = [500, 1000, 2000, 5000, 10000, 20000];
+
   return (
     <div className="space-y-4">
-      <h1 className="font-display text-xl font-bold">{pkg ? "প্যাকেজ চেকআউট" : "ডিপোজিট করুন"}</h1>
+      <div className="page-header flex items-center gap-3 px-4 py-3.5">
+        <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-primary-foreground/20">
+          <WalletCards className="h-5 w-5 text-primary-foreground" />
+        </span>
+        <h1 className="font-display text-lg font-extrabold text-primary-foreground">
+          {pkg ? "প্যাকেজ চেকআউট" : "জমা করুন"}
+        </h1>
+      </div>
 
       {pkg && (
         <div className="surface-card flex items-center gap-3 p-4">
@@ -118,20 +137,36 @@ function DepositPage() {
         </div>
       )}
 
-
       <div className="surface-card p-4">
-        <div className="mb-4 grid grid-cols-2 gap-2">
-          {(["bkash", "nagad"] as const).map((m) => (
+        <p className="font-display text-gradient mb-3 text-base font-extrabold">পেমেন্ট পদ্ধতি</p>
+        <div className="mb-4 grid grid-cols-2 gap-3">
+          {PAY_METHODS.map((m) => (
             <button
-              key={m}
-              onClick={() => setMethod(m)}
-              className={`rounded-2xl border px-3 py-3 text-sm font-bold ${
-                method === m ? "border-primary bg-primary/10 text-primary" : "border-border bg-secondary/60"
+              key={m.id}
+              type="button"
+              onClick={() => setMethod(m.id)}
+              className={`flex flex-col items-center gap-2 rounded-2xl border-2 bg-card p-3 transition ${
+                method === m.id ? "border-primary shadow-glow" : "border-border"
               }`}
             >
-              {m === "bkash" ? "বিকাশ" : "নগদ"}
+              <img src={m.logo} alt={`${m.name} লোগো`} className="h-10 w-10 object-contain" loading="lazy" />
+              <span className={`text-xs font-bold ${method === m.id ? "text-primary" : "text-muted-foreground"}`}>
+                {m.name}
+              </span>
             </button>
           ))}
+        </div>
+
+        <div className="mb-3 flex items-center justify-between rounded-2xl bg-gradient-to-r from-emerald-500 to-green-600 px-4 py-3.5 text-white shadow-glow">
+          <span className="text-sm font-semibold">বর্তমান ব্যালেন্স:</span>
+          <span className="font-display text-xl font-extrabold">{taka(profile?.balance ?? 0)}</span>
+        </div>
+
+        <div className="mb-4 flex items-start gap-2.5 rounded-2xl bg-gradient-to-r from-amber-400 to-orange-500 px-4 py-3 text-white shadow-glow">
+          <Gift className="mt-0.5 h-5 w-5 shrink-0" />
+          <p className="text-sm font-bold leading-snug">
+            ধামাকা অফার: দুই হাজার টাকার উপরে জমা করলে এক্সট্রা ৩০% বোনাস
+          </p>
         </div>
 
         <div className="mb-4 space-y-2">
@@ -139,7 +174,7 @@ function DepositPage() {
             <div key={n.id} className="rounded-2xl border border-border bg-secondary/60 p-3">
               <div className="flex items-center justify-between gap-3">
                 <div className="flex min-w-0 items-center gap-2.5">
-                  <Smartphone className="h-5 w-5 shrink-0 text-primary" />
+                  <img src={payLogo(method)} alt="" className="h-8 w-8 shrink-0 object-contain" />
                   <div className="min-w-0">
                     <p className="text-xs font-bold text-muted-foreground">
                       {method === "bkash" ? "বিকাশ" : "নগদ"} {n.label} নাম্বার
@@ -164,23 +199,43 @@ function DepositPage() {
 
         <form onSubmit={submit} className="space-y-3">
           <Field
-            label="টাকার পরিমাণ"
+            label="জমার পরিমাণ"
             value={amount}
             onChange={setAmount}
             placeholder={`${settings.min_deposit} বা তার বেশি`}
           />
+          {!pkg && (
+            <div>
+              <p className="mb-2 text-sm font-bold text-muted-foreground">দ্রুত নির্বাচন</p>
+              <div className="grid grid-cols-3 gap-2">
+                {quick.map((q) => (
+                  <button
+                    key={q}
+                    type="button"
+                    onClick={() => setAmount(String(q))}
+                    className={`rounded-xl border px-2 py-2.5 text-xs font-bold ${
+                      amount === String(q) ? "border-primary bg-primary/10 text-primary" : "border-border bg-card"
+                    }`}
+                  >
+                    {bn(q.toLocaleString("en-US"))}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
           <Field label="যে নাম্বার থেকে পাঠিয়েছেন" value={sender} onChange={setSender} placeholder="01XXXXXXXXX" />
           <Field label="ট্রানজেকশন আইডি" value={trx} onChange={setTrx} placeholder="TRX ID" />
           {err && <p className="text-sm text-destructive">{err}</p>}
           {msg && <p className="text-sm text-success">{msg}</p>}
           <button
             disabled={busy}
-            className="bg-brand flex w-full items-center justify-center gap-2 rounded-2xl py-3 text-sm font-bold text-primary-foreground disabled:opacity-60"
+            className="bg-brand flex w-full items-center justify-center gap-2 rounded-2xl py-3.5 text-sm font-bold text-primary-foreground shadow-glow disabled:opacity-60"
           >
-            {busy && <Loader2 className="h-4 w-4 animate-spin" />} অনুরোধ পাঠান
+            {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <CreditCard className="h-4 w-4" />} জমা করুন
           </button>
         </form>
       </div>
+
 
       <div className="surface-card p-4">
         <h2 className="mb-3 font-display text-base font-bold">আপনার ডিপোজিট</h2>

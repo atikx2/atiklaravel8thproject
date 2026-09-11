@@ -3,7 +3,23 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth, taka, bn } from "@/lib/auth";
-import { MonitorPlay, Youtube, ClipboardList, AlertTriangle, Loader2, ExternalLink, X } from "lucide-react";
+import {
+  MonitorPlay,
+  Youtube,
+  ClipboardList,
+  AlertTriangle,
+  Loader2,
+  ExternalLink,
+  X,
+  Megaphone,
+  RefreshCw,
+  Clock,
+  ShoppingCart,
+  Inbox,
+  Lightbulb,
+
+} from "lucide-react";
+
 
 export const Route = createFileRoute("/_authenticated/jobs")({
   head: () => ({
@@ -60,9 +76,57 @@ function JobsPage() {
     },
   });
 
+  const total = jobs?.length ?? 0;
+  const doneCount = (done ?? []).length;
+  const pct = total ? Math.min(100, Math.round((doneCount / total) * 100)) : 0;
+
   return (
     <div className="space-y-4">
-      <h1 className="font-display text-xl font-bold">আজকের কাজ</h1>
+      <div className="page-header flex items-center gap-3 px-4 py-3.5">
+        <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-primary-foreground/20">
+          <Megaphone className="h-5 w-5 text-primary-foreground" />
+        </span>
+        <h1 className="font-display text-lg font-extrabold text-primary-foreground">আমার কাজ</h1>
+      </div>
+
+      <section className="surface-card p-5 text-center">
+        <span
+          className="mx-auto grid h-20 w-20 place-items-center rounded-full"
+          style={{ backgroundImage: "var(--gradient-brand)" }}
+        >
+          <Megaphone className="h-9 w-9 text-primary-foreground" />
+        </span>
+        <h2 className="font-display text-gradient mt-4 text-xl font-extrabold">বিজ্ঞাপন দেখে ইনকাম করুন</h2>
+        <p className="mt-1.5 text-sm text-muted-foreground">নিচের কাজগুলো সম্পন্ন করুন এবং টাকা আয় করুন</p>
+
+        <div className="mt-4 h-2 w-full overflow-hidden rounded-full bg-secondary">
+          <div className="h-full rounded-full transition-all" style={{ width: `${pct}%`, backgroundImage: "var(--gradient-brand)" }} />
+        </div>
+        <p className="mt-2 text-sm text-muted-foreground">
+          আজকের কাজ: <span className="font-extrabold text-foreground">{bn(doneCount)} / {bn(total)}</span>
+        </p>
+
+        <div className="mt-4 grid grid-cols-3 gap-2.5">
+          <button
+            onClick={() => void qc.invalidateQueries()}
+            className="flex items-center justify-center gap-1.5 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-600 px-2 py-3 text-xs font-bold text-white shadow-glow"
+          >
+            <RefreshCw className="h-4 w-4" /> রিফ্রেশ
+          </button>
+          <Link
+            to="/history"
+            className="flex items-center justify-center gap-1.5 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 px-2 py-3 text-xs font-bold text-white shadow-glow"
+          >
+            <Clock className="h-4 w-4" /> অপেক্ষমান
+          </Link>
+          <Link
+            to="/packages"
+            className="flex items-center justify-center gap-1.5 rounded-2xl bg-gradient-to-br from-emerald-500 to-green-600 px-2 py-3 text-xs font-bold text-white shadow-glow"
+          >
+            <ShoppingCart className="h-4 w-4" /> প্যাকেজ
+          </Link>
+        </div>
+      </section>
 
       {!profile?.has_deposited && (
         <div className="flex items-start gap-3 rounded-2xl border border-warning/40 bg-warning/10 p-4 text-sm">
@@ -78,6 +142,7 @@ function JobsPage() {
           </div>
         </div>
       )}
+
 
       {(["ad", "video", "microtask"] as const).map((t) => {
         const list = (jobs ?? []).filter((j) => j.job_type === t);
@@ -114,10 +179,34 @@ function JobsPage() {
       })}
 
       {(jobs?.length ?? 0) === 0 && (
-        <p className="surface-card p-8 text-center text-sm text-muted-foreground">
-          এই মুহূর্তে কোনো কাজ নেই। একটু পরে আবার দেখুন।
-        </p>
+        <div className="surface-card p-8 text-center">
+          <span className="mx-auto grid h-20 w-20 place-items-center rounded-full bg-secondary">
+            <Inbox className="h-9 w-9 text-muted-foreground" />
+          </span>
+          <h3 className="font-display text-gradient mt-4 text-lg font-extrabold">কোনো কাজ নেই</h3>
+          <p className="mt-1.5 text-sm text-muted-foreground">
+            এই মুহূর্তে কোনো কাজ নেই। প্যাকেজ কিনে প্রতিদিন কাজ পান।
+          </p>
+          <Link
+            to="/packages"
+            className="bg-brand mt-4 inline-flex items-center gap-2 rounded-2xl px-5 py-3 text-sm font-bold text-primary-foreground shadow-glow"
+          >
+            <ShoppingCart className="h-4 w-4" /> প্যাকেজ কিনুন
+          </Link>
+        </div>
       )}
+
+      <div className="rounded-3xl bg-gradient-to-br from-amber-400 to-orange-500 p-4 text-white shadow-glow">
+        <p className="font-display mb-2 flex items-center gap-2 text-base font-extrabold">
+          <Lightbulb className="h-5 w-5" /> টিপস
+        </p>
+        <ul className="list-inside list-disc space-y-1 text-sm font-medium">
+          <li>প্রতিটি বিজ্ঞাপন সম্পূর্ণ দেখুন</li>
+          <li>নিয়মিত কাজ করুন বেশি আয়ের জন্য</li>
+          <li>বন্ধুদের আমন্ত্রণ জানিয়ে কমিশন পান</li>
+        </ul>
+      </div>
+
 
       {active && (
         <JobModal

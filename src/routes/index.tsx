@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Logo } from "@/components/Logo";
 import { LiveNotifications } from "@/components/LiveNotifications";
+import { CountUp } from "@/components/CountUp";
+
 import { taka, bn } from "@/lib/auth";
 import { useSettings } from "@/lib/settings";
 import {
@@ -101,11 +103,19 @@ const REVIEWS = [
 ];
 
 const STATS = [
-  { icon: Users, v: "১৫,০০০+", l: "নিবন্ধিত সদস্য", tone: "text-primary bg-primary/10" },
-  { icon: CheckCircle2, v: "১,২০,০০০+", l: "সফল টাস্ক", tone: "text-success bg-success/10" },
-  { icon: BadgeDollarSign, v: "৳১২,৫০,০০০+", l: "মোট পেমেন্ট", tone: "text-info bg-info/10" },
-  { icon: Star, v: "৪.৯/৫", l: "ব্যবহারকারী রেটিং", tone: "text-warning bg-warning/10" },
+  { icon: Users, to: 15000, suffix: "+", l: "নিবন্ধিত সদস্য", tone: "text-primary bg-primary/10" },
+  { icon: CheckCircle2, to: 120000, suffix: "+", l: "সফল টাস্ক", tone: "text-success bg-success/10" },
+  {
+    icon: BadgeDollarSign,
+    to: 1250000,
+    prefix: "৳",
+    suffix: "+",
+    l: "মোট পেমেন্ট",
+    tone: "text-info bg-info/10",
+  },
+  { icon: Star, to: 4.9, decimals: 1, suffix: "/৫", l: "ব্যবহারকারী রেটিং", tone: "text-warning bg-warning/10" },
 ];
+
 
 const WHY = [
   { icon: ShieldCheck, t: "নিরাপদ প্ল্যাটফর্ম", d: "প্রতিটি একাউন্ট ও পেমেন্ট সুরক্ষিত ও যাচাইকৃত।", tone: "from-emerald-500 to-green-500" },
@@ -197,11 +207,19 @@ function Landing() {
                 <span className={`grid h-11 w-11 place-items-center rounded-2xl ${s.tone}`}>
                   <s.icon className="h-5 w-5" />
                 </span>
-                <p className="font-display text-lg font-extrabold sm:text-xl">{s.v}</p>
+                <p className="font-display text-lg font-extrabold sm:text-xl">
+                  <CountUp
+                    to={s.to}
+                    decimals={s.decimals ?? 0}
+                    prefix={s.prefix ?? ""}
+                    suffix={s.suffix ?? ""}
+                  />
+                </p>
                 <p className="text-muted-foreground -mt-1.5 text-[11px] font-medium sm:text-xs">{s.l}</p>
               </div>
             ))}
           </div>
+
         </section>
 
         {/* How to earn */}
