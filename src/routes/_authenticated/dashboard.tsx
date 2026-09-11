@@ -2,7 +2,17 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth, taka, bn } from "@/lib/auth";
-import { CheckCircle2, Clock, XCircle, Wallet, TrendingUp, Gift, AlertTriangle } from "lucide-react";
+import {
+  CheckCircle2,
+  Clock,
+  XCircle,
+  Wallet,
+  TrendingUp,
+  Gift,
+  AlertTriangle,
+  Sparkles,
+  Rocket,
+} from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({

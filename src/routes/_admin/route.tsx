@@ -38,6 +38,7 @@ export const ADMIN_LINKS = [
   { to: "/admin", label: "ড্যাশবোর্ড", icon: LayoutDashboard, exact: true },
   { to: "/admin/users", label: "ইউজার ম্যানেজমেন্ট", icon: Users },
   { to: "/admin/jobs", label: "জব ম্যানেজমেন্ট", icon: Briefcase },
+  { to: "/admin/packages", label: "প্যাকেজ", icon: PackageIcon },
   { to: "/admin/tasks", label: "টাস্ক যাচাই", icon: ClipboardCheck },
   { to: "/admin/deposits", label: "ডিপোজিট", icon: Wallet },
   { to: "/admin/withdrawals", label: "উইথড্র", icon: BanknoteArrowDown },
