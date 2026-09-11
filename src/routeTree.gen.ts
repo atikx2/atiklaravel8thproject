@@ -18,11 +18,13 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedDepositRouteImport } from './routes/_authenticated/deposit'
 import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticated/history'
 import { Route as AuthenticatedJobsRouteImport } from './routes/_authenticated/jobs'
+import { Route as AuthenticatedPackagesRouteImport } from './routes/_authenticated/packages'
 import { Route as AuthenticatedWithdrawRouteImport } from './routes/_authenticated/withdraw'
 import { Route as AdminAdminIndexRouteImport } from './routes/_admin/admin.index'
 import { Route as AdminAdminAdminsRouteImport } from './routes/_admin/admin.admins'
 import { Route as AdminAdminDepositsRouteImport } from './routes/_admin/admin.deposits'
 import { Route as AdminAdminJobsRouteImport } from './routes/_admin/admin.jobs'
+import { Route as AdminAdminPackagesRouteImport } from './routes/_admin/admin.packages'
 import { Route as AdminAdminPaymentsRouteImport } from './routes/_admin/admin.payments'
 import { Route as AdminAdminTasksRouteImport } from './routes/_admin/admin.tasks'
 import { Route as AdminAdminUsersRouteImport } from './routes/_admin/admin.users'
@@ -71,6 +73,11 @@ const AuthenticatedJobsRoute = AuthenticatedJobsRouteImport.update({
   path: '/jobs',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedPackagesRoute = AuthenticatedPackagesRouteImport.update({
+  id: '/packages',
+  path: '/packages',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedWithdrawRoute = AuthenticatedWithdrawRouteImport.update({
   id: '/withdraw',
   path: '/withdraw',
@@ -94,6 +101,11 @@ const AdminAdminDepositsRoute = AdminAdminDepositsRouteImport.update({
 const AdminAdminJobsRoute = AdminAdminJobsRouteImport.update({
   id: '/admin/jobs',
   path: '/admin/jobs',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminAdminPackagesRoute = AdminAdminPackagesRouteImport.update({
+  id: '/admin/packages',
+  path: '/admin/packages',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 const AdminAdminPaymentsRoute = AdminAdminPaymentsRouteImport.update({
@@ -125,10 +137,12 @@ export interface FileRoutesByFullPath {
   '/deposit': typeof AuthenticatedDepositRoute
   '/history': typeof AuthenticatedHistoryRoute
   '/jobs': typeof AuthenticatedJobsRoute
+  '/packages': typeof AuthenticatedPackagesRoute
   '/withdraw': typeof AuthenticatedWithdrawRoute
   '/admin/admins': typeof AdminAdminAdminsRoute
   '/admin/deposits': typeof AdminAdminDepositsRoute
   '/admin/jobs': typeof AdminAdminJobsRoute
+  '/admin/packages': typeof AdminAdminPackagesRoute
   '/admin/payments': typeof AdminAdminPaymentsRoute
   '/admin/tasks': typeof AdminAdminTasksRoute
   '/admin/users': typeof AdminAdminUsersRoute
@@ -143,10 +157,12 @@ export interface FileRoutesByTo {
   '/deposit': typeof AuthenticatedDepositRoute
   '/history': typeof AuthenticatedHistoryRoute
   '/jobs': typeof AuthenticatedJobsRoute
+  '/packages': typeof AuthenticatedPackagesRoute
   '/withdraw': typeof AuthenticatedWithdrawRoute
   '/admin/admins': typeof AdminAdminAdminsRoute
   '/admin/deposits': typeof AdminAdminDepositsRoute
   '/admin/jobs': typeof AdminAdminJobsRoute
+  '/admin/packages': typeof AdminAdminPackagesRoute
   '/admin/payments': typeof AdminAdminPaymentsRoute
   '/admin/tasks': typeof AdminAdminTasksRoute
   '/admin/users': typeof AdminAdminUsersRoute
@@ -164,10 +180,12 @@ export interface FileRoutesById {
   '/_authenticated/deposit': typeof AuthenticatedDepositRoute
   '/_authenticated/history': typeof AuthenticatedHistoryRoute
   '/_authenticated/jobs': typeof AuthenticatedJobsRoute
+  '/_authenticated/packages': typeof AuthenticatedPackagesRoute
   '/_authenticated/withdraw': typeof AuthenticatedWithdrawRoute
   '/_admin/admin/admins': typeof AdminAdminAdminsRoute
   '/_admin/admin/deposits': typeof AdminAdminDepositsRoute
   '/_admin/admin/jobs': typeof AdminAdminJobsRoute
+  '/_admin/admin/packages': typeof AdminAdminPackagesRoute
   '/_admin/admin/payments': typeof AdminAdminPaymentsRoute
   '/_admin/admin/tasks': typeof AdminAdminTasksRoute
   '/_admin/admin/users': typeof AdminAdminUsersRoute
@@ -184,10 +202,12 @@ export interface FileRouteTypes {
     | '/deposit'
     | '/history'
     | '/jobs'
+    | '/packages'
     | '/withdraw'
     | '/admin/admins'
     | '/admin/deposits'
     | '/admin/jobs'
+    | '/admin/packages'
     | '/admin/payments'
     | '/admin/tasks'
     | '/admin/users'
@@ -202,10 +222,12 @@ export interface FileRouteTypes {
     | '/deposit'
     | '/history'
     | '/jobs'
+    | '/packages'
     | '/withdraw'
     | '/admin/admins'
     | '/admin/deposits'
     | '/admin/jobs'
+    | '/admin/packages'
     | '/admin/payments'
     | '/admin/tasks'
     | '/admin/users'
@@ -222,10 +244,12 @@ export interface FileRouteTypes {
     | '/_authenticated/deposit'
     | '/_authenticated/history'
     | '/_authenticated/jobs'
+    | '/_authenticated/packages'
     | '/_authenticated/withdraw'
     | '/_admin/admin/admins'
     | '/_admin/admin/deposits'
     | '/_admin/admin/jobs'
+    | '/_admin/admin/packages'
     | '/_admin/admin/payments'
     | '/_admin/admin/tasks'
     | '/_admin/admin/users'
@@ -306,6 +330,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedJobsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/packages': {
+      id: '/_authenticated/packages'
+      path: '/packages'
+      fullPath: '/packages'
+      preLoaderRoute: typeof AuthenticatedPackagesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/withdraw': {
       id: '/_authenticated/withdraw'
       path: '/withdraw'
@@ -339,6 +370,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/jobs'
       fullPath: '/admin/jobs'
       preLoaderRoute: typeof AdminAdminJobsRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/_admin/admin/packages': {
+      id: '/_admin/admin/packages'
+      path: '/admin/packages'
+      fullPath: '/admin/packages'
+      preLoaderRoute: typeof AdminAdminPackagesRouteImport
       parentRoute: typeof AdminRouteRoute
     }
     '/_admin/admin/payments': {
@@ -376,6 +414,7 @@ interface AdminRouteRouteChildren {
   AdminAdminAdminsRoute: typeof AdminAdminAdminsRoute
   AdminAdminDepositsRoute: typeof AdminAdminDepositsRoute
   AdminAdminJobsRoute: typeof AdminAdminJobsRoute
+  AdminAdminPackagesRoute: typeof AdminAdminPackagesRoute
   AdminAdminPaymentsRoute: typeof AdminAdminPaymentsRoute
   AdminAdminTasksRoute: typeof AdminAdminTasksRoute
   AdminAdminUsersRoute: typeof AdminAdminUsersRoute
@@ -387,6 +426,7 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminAdminAdminsRoute: AdminAdminAdminsRoute,
   AdminAdminDepositsRoute: AdminAdminDepositsRoute,
   AdminAdminJobsRoute: AdminAdminJobsRoute,
+  AdminAdminPackagesRoute: AdminAdminPackagesRoute,
   AdminAdminPaymentsRoute: AdminAdminPaymentsRoute,
   AdminAdminTasksRoute: AdminAdminTasksRoute,
   AdminAdminUsersRoute: AdminAdminUsersRoute,
@@ -403,6 +443,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDepositRoute: typeof AuthenticatedDepositRoute
   AuthenticatedHistoryRoute: typeof AuthenticatedHistoryRoute
   AuthenticatedJobsRoute: typeof AuthenticatedJobsRoute
+  AuthenticatedPackagesRoute: typeof AuthenticatedPackagesRoute
   AuthenticatedWithdrawRoute: typeof AuthenticatedWithdrawRoute
 }
 
@@ -411,6 +452,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDepositRoute: AuthenticatedDepositRoute,
   AuthenticatedHistoryRoute: AuthenticatedHistoryRoute,
   AuthenticatedJobsRoute: AuthenticatedJobsRoute,
+  AuthenticatedPackagesRoute: AuthenticatedPackagesRoute,
   AuthenticatedWithdrawRoute: AuthenticatedWithdrawRoute,
 }
 

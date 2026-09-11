@@ -1,14 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth, taka } from "@/lib/auth";
+import { useAuth, taka, bn } from "@/lib/auth";
 import { useSettings, usePaymentNumbers } from "@/lib/settings";
+import { usePackages } from "@/lib/packages";
 import { StatusChip } from "./dashboard";
 import { Field } from "../auth";
-import { Loader2, Smartphone, Copy, Check } from "lucide-react";
+import { Loader2, Smartphone, Copy, Check, Package as PackageIcon } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/deposit")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    pkg: typeof search["pkg"] === "string" ? (search["pkg"] as string) : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "ডিপোজিট | Smartjobbd26" },
