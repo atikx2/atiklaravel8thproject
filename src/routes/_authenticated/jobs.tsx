@@ -60,9 +60,57 @@ function JobsPage() {
     },
   });
 
+  const total = jobs?.length ?? 0;
+  const doneCount = (done ?? []).length;
+  const pct = total ? Math.min(100, Math.round((doneCount / total) * 100)) : 0;
+
   return (
     <div className="space-y-4">
-      <h1 className="font-display text-xl font-bold">আজকের কাজ</h1>
+      <div className="page-header flex items-center gap-3 px-4 py-3.5">
+        <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-primary-foreground/20">
+          <Megaphone className="h-5 w-5 text-primary-foreground" />
+        </span>
+        <h1 className="font-display text-lg font-extrabold text-primary-foreground">আমার কাজ</h1>
+      </div>
+
+      <section className="surface-card p-5 text-center">
+        <span
+          className="mx-auto grid h-20 w-20 place-items-center rounded-full"
+          style={{ backgroundImage: "var(--gradient-brand)" }}
+        >
+          <Megaphone className="h-9 w-9 text-primary-foreground" />
+        </span>
+        <h2 className="font-display text-gradient mt-4 text-xl font-extrabold">বিজ্ঞাপন দেখে ইনকাম করুন</h2>
+        <p className="mt-1.5 text-sm text-muted-foreground">নিচের কাজগুলো সম্পন্ন করুন এবং টাকা আয় করুন</p>
+
+        <div className="mt-4 h-2 w-full overflow-hidden rounded-full bg-secondary">
+          <div className="h-full rounded-full transition-all" style={{ width: `${pct}%`, backgroundImage: "var(--gradient-brand)" }} />
+        </div>
+        <p className="mt-2 text-sm text-muted-foreground">
+          আজকের কাজ: <span className="font-extrabold text-foreground">{bn(doneCount)} / {bn(total)}</span>
+        </p>
+
+        <div className="mt-4 grid grid-cols-3 gap-2.5">
+          <button
+            onClick={() => void qc.invalidateQueries()}
+            className="flex items-center justify-center gap-1.5 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-600 px-2 py-3 text-xs font-bold text-white shadow-glow"
+          >
+            <RefreshCw className="h-4 w-4" /> রিফ্রেশ
+          </button>
+          <Link
+            to="/history"
+            className="flex items-center justify-center gap-1.5 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 px-2 py-3 text-xs font-bold text-white shadow-glow"
+          >
+            <Clock className="h-4 w-4" /> অপেক্ষমান
+          </Link>
+          <Link
+            to="/packages"
+            className="flex items-center justify-center gap-1.5 rounded-2xl bg-gradient-to-br from-emerald-500 to-green-600 px-2 py-3 text-xs font-bold text-white shadow-glow"
+          >
+            <ShoppingCart className="h-4 w-4" /> প্যাকেজ
+          </Link>
+        </div>
+      </section>
 
       {!profile?.has_deposited && (
         <div className="flex items-start gap-3 rounded-2xl border border-warning/40 bg-warning/10 p-4 text-sm">
@@ -78,6 +126,7 @@ function JobsPage() {
           </div>
         </div>
       )}
+
 
       {(["ad", "video", "microtask"] as const).map((t) => {
         const list = (jobs ?? []).filter((j) => j.job_type === t);
