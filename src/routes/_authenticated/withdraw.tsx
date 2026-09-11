@@ -64,40 +64,101 @@ function WithdrawPage() {
     void qc.invalidateQueries();
   };
 
+  const quick = [500, 1000, 2000, 5000];
+
   return (
     <div className="space-y-4">
-      <h1 className="font-display text-xl font-bold">উইথড্র করুন</h1>
+      <div className="page-header flex items-center gap-3 px-4 py-3.5">
+        <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-primary-foreground/20">
+          <Send className="h-5 w-5 text-primary-foreground" />
+        </span>
+        <h1 className="font-display text-lg font-extrabold text-primary-foreground">উত্তোলন করুন</h1>
+      </div>
 
       <div className="surface-card p-4">
-        <p className="mb-3 text-sm text-muted-foreground">
-          বর্তমান ব্যালেন্স: <span className="font-bold text-primary">{taka(profile?.balance ?? 0)}</span>
-        </p>
-        <div className="mb-4 grid grid-cols-2 gap-2">
-          {(["bkash", "nagad"] as const).map((m) => (
+        <div className="text-center">
+          <span
+            className="mx-auto grid h-20 w-20 place-items-center rounded-full"
+            style={{ backgroundImage: "var(--gradient-brand)" }}
+          >
+            <HandCoins className="h-9 w-9 text-primary-foreground" />
+          </span>
+          <h2 className="font-display text-gradient mt-3 text-xl font-extrabold">উত্তোলন করুন</h2>
+          <p className="mt-1 text-sm text-muted-foreground">আপনার অ্যাকাউন্ট থেকে টাকা উত্তোলন করুন</p>
+        </div>
+
+        <div className="mt-4 flex items-start gap-2.5 rounded-2xl bg-gradient-to-r from-amber-400 to-orange-500 px-4 py-3 text-white shadow-glow">
+          <Info className="mt-0.5 h-5 w-5 shrink-0" />
+          <div>
+            <p className="text-sm font-extrabold">উত্তোলন নোটিশ</p>
+            <p className="text-xs font-medium leading-snug">
+              সর্বনিম্ন উত্তোলন {bn(MIN)} টাকা। অনুরোধ ২৪ ঘণ্টার মধ্যে প্রক্রিয়া করা হয়।
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-3 flex items-center justify-between rounded-2xl bg-gradient-to-r from-emerald-500 to-green-600 px-4 py-3.5 text-white shadow-glow">
+          <div>
+            <p className="text-sm font-semibold">উপলব্ধ ব্যালেন্স</p>
+            <p className="font-display text-2xl font-extrabold">{taka(profile?.balance ?? 0)}</p>
+          </div>
+          <span className="grid h-11 w-11 place-items-center rounded-full bg-white/20">
+            <Wallet className="h-5 w-5" />
+          </span>
+        </div>
+
+        <p className="mt-4 mb-2 font-display text-base font-extrabold text-gradient">পেমেন্ট পদ্ধতি নির্বাচন করুন</p>
+        <div className="mb-4 grid grid-cols-2 gap-3">
+          {PAY_METHODS.map((m) => (
             <button
-              key={m}
-              onClick={() => setMethod(m)}
-              className={`rounded-2xl border px-3 py-3 text-sm font-bold ${
-                method === m ? "border-primary bg-primary/10 text-primary" : "border-border bg-secondary/60"
+              key={m.id}
+              type="button"
+              onClick={() => setMethod(m.id)}
+              className={`flex flex-col items-center gap-2 rounded-2xl border-2 bg-card p-3 transition ${
+                method === m.id ? "border-primary shadow-glow" : "border-border"
               }`}
             >
-              {m === "bkash" ? "বিকাশ" : "নগদ"}
+              <img src={m.logo} alt={`${m.name} লোগো`} className="h-10 w-10 object-contain" loading="lazy" />
+              <span className={`text-xs font-bold ${method === m.id ? "text-primary" : "text-muted-foreground"}`}>
+                {m.name}
+              </span>
             </button>
           ))}
         </div>
+
+        <p className="mb-2 text-sm font-bold text-muted-foreground">দ্রুত পরিমাণ নির্বাচন</p>
+        <div className="mb-4 grid grid-cols-2 gap-2">
+          {quick.map((q) => (
+            <button
+              key={q}
+              type="button"
+              onClick={() => setAmount(String(q))}
+              className={`rounded-xl border px-2 py-2.5 text-xs font-bold ${
+                amount === String(q) ? "border-primary bg-primary/10 text-primary" : "border-border bg-card"
+              }`}
+            >
+              {bn(q.toLocaleString("en-US"))} টাকা
+            </button>
+          ))}
+        </div>
+
         <form onSubmit={submit} className="space-y-3">
-          <Field label="টাকার পরিমাণ" value={amount} onChange={setAmount} placeholder={`সর্বনিম্ন ${MIN}`} />
-          <Field label="একাউন্ট নাম্বার" value={acc} onChange={setAcc} placeholder="01XXXXXXXXX" />
+          <Field label="ফোন নম্বর" value={acc} onChange={setAcc} placeholder="01XXXXXXXXX" />
+          <Field label="উত্তোলনের পরিমাণ" value={amount} onChange={setAmount} placeholder={`সর্বনিম্ন ${MIN}`} />
           {err && <p className="text-sm text-destructive">{err}</p>}
           {msg && <p className="text-sm text-success">{msg}</p>}
           <button
             disabled={busy}
-            className="bg-brand flex w-full items-center justify-center gap-2 rounded-2xl py-3 text-sm font-bold text-primary-foreground disabled:opacity-60"
+            className="bg-brand flex w-full items-center justify-center gap-2 rounded-2xl py-3.5 text-sm font-bold text-primary-foreground shadow-glow disabled:opacity-60"
           >
-            {busy && <Loader2 className="h-4 w-4 animate-spin" />} উইথড্র অনুরোধ পাঠান
+            {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />} উত্তোলন প্রক্রিয়া করুন
           </button>
+          <p className="text-center text-xs text-muted-foreground">
+            উত্তোলনের অনুরোধ ২৪ ঘণ্টার মধ্যে প্রক্রিয়া করা হয়
+          </p>
         </form>
       </div>
+
 
       <div className="surface-card p-4">
         <h2 className="mb-3 font-display text-base font-bold">আপনার উইথড্র</h2>
