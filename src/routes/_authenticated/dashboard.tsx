@@ -2,6 +2,10 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth, taka, bn } from "@/lib/auth";
+import { useSettings } from "@/lib/settings";
+import partner1 from "@/assets/partner-1.asset.json";
+import partner2 from "@/assets/partner-2.asset.json";
+import partner3 from "@/assets/partner-3.asset.json";
 import {
   CheckCircle2,
   Clock,
@@ -12,6 +16,11 @@ import {
   AlertTriangle,
   Sparkles,
   Rocket,
+  Briefcase,
+  Package,
+  BanknoteArrowDown,
+  History,
+  Handshake,
 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
@@ -26,8 +35,25 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
   component: Dashboard,
 });
 
+const quickLinks = [
+  { to: "/jobs", label: "কাজ", icon: Briefcase },
+  { to: "/packages", label: "প্যাকেজ", icon: Package },
+  { to: "/deposit", label: "ডিপোজিট", icon: Wallet },
+  { to: "/withdraw", label: "উইথড্র", icon: BanknoteArrowDown },
+  { to: "/history", label: "হিস্টোরি", icon: History },
+] as const;
+
+const partners = [
+  { src: partner1.url, name: "AjkerDeal" },
+  { src: partner2.url, name: "Othoba" },
+  { src: partner3.url, name: "Daraz" },
+];
+
 function Dashboard() {
   const { profile, user } = useAuth();
+  const settings = useSettings();
+  const banner = settings.banner_image_url?.trim();
+
   const { data: subs } = useQuery({
     queryKey: ["my-subs", user?.id],
     enabled: !!user,
@@ -44,27 +70,53 @@ function Dashboard() {
 
   return (
     <div className="space-y-4">
-      <Link
-        to="/packages"
-        className="surface-card glow relative block overflow-hidden p-5"
-        style={{ backgroundImage: "var(--gradient-brand)" }}
-      >
-        <Sparkles className="absolute -top-4 -right-4 h-24 w-24 text-primary-foreground/15" />
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-foreground/20 px-2.5 py-1 text-[11px] font-bold text-primary-foreground">
-          <Rocket className="h-3.5 w-3.5" /> বিনিয়োগ প্যাকেজ
-        </span>
-        <h2 className="font-display mt-2 text-xl font-extrabold text-primary-foreground">
-          ৳৫০০ থেকে শুরু করে দৈনিক আয় করুন
-        </h2>
-        <p className="mt-1 text-xs text-primary-foreground/85">
-          প্যাকেজ কিনে প্রতিদিন বিজ্ঞাপন দেখুন — ৬০ দিনের বৈধতা। এখনই দেখুন →
-        </p>
-      </Link>
+      {banner ? (
+        <Link to="/packages" className="surface-card glow block overflow-hidden p-0">
+          <img
+            src={banner}
+            alt="Smartjobbd26 ব্যানার"
+            className="h-40 w-full object-cover sm:h-56 lg:h-64"
+            loading="lazy"
+          />
+        </Link>
+      ) : (
+        <Link
+          to="/packages"
+          className="surface-card glow relative block overflow-hidden p-5"
+          style={{ backgroundImage: "var(--gradient-brand)" }}
+        >
+          <Sparkles className="absolute -top-4 -right-4 h-24 w-24 text-primary-foreground/15" />
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-foreground/20 px-2.5 py-1 text-[11px] font-bold text-primary-foreground">
+            <Rocket className="h-3.5 w-3.5" /> বিনিয়োগ প্যাকেজ
+          </span>
+          <h2 className="font-display mt-2 text-xl font-extrabold text-primary-foreground">
+            ৳৫০০ থেকে শুরু করে দৈনিক আয় করুন
+          </h2>
+          <p className="mt-1 text-xs text-primary-foreground/85">
+            প্যাকেজ কিনে প্রতিদিন বিজ্ঞাপন দেখুন — ৬০ দিনের বৈধতা। এখনই দেখুন →
+          </p>
+        </Link>
+      )}
 
       <div className="surface-card glow p-5" style={{ backgroundImage: "var(--gradient-brand)" }}>
         <p className="text-sm font-medium text-primary-foreground/80">মোট ব্যালেন্স</p>
         <p className="font-display text-4xl font-extrabold text-primary-foreground">{taka(profile?.balance ?? 0)}</p>
         <p className="mt-1 text-xs text-primary-foreground/80">স্বাগতম, {profile?.username}</p>
+      </div>
+
+      <div className="grid grid-cols-3 gap-2.5 sm:grid-cols-5">
+        {quickLinks.map((l) => (
+          <Link
+            key={l.to}
+            to={l.to}
+            className="surface-card flex flex-col items-center justify-center gap-2 p-3 text-center"
+          >
+            <span className="grid h-11 w-11 place-items-center rounded-2xl bg-primary/10">
+              <l.icon className="h-5 w-5 text-primary" />
+            </span>
+            <span className="w-full truncate text-xs font-bold">{l.label}</span>
+          </Link>
+        ))}
       </div>
 
       {!profile?.has_deposited && (
@@ -113,6 +165,23 @@ function Dashboard() {
           )}
         </div>
       </div>
+
+      <section className="surface-card p-4">
+        <div className="mb-3 flex items-center gap-2">
+          <Handshake className="h-5 w-5 text-primary" />
+          <h2 className="font-display text-base font-bold">আমাদের অংশীদার</h2>
+        </div>
+        <div className="grid grid-cols-3 gap-3">
+          {partners.map((p) => (
+            <div
+              key={p.name}
+              className="grid aspect-square place-items-center rounded-2xl border border-border bg-secondary/40 p-2"
+            >
+              <img src={p.src} alt={`${p.name} লোগো`} loading="lazy" className="h-full w-full object-contain" />
+            </div>
+          ))}
+        </div>
+      </section>
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <Link to="/deposit" className="surface-card flex items-center gap-2 p-4 text-sm font-bold">
