@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth, taka, bn } from "@/lib/auth";
 import { usePackages } from "@/lib/packages";
-import { Zap, ShieldCheck, Gift, Tv, TrendingUp, CalendarClock, Sparkles, CheckCircle2 } from "lucide-react";
+import { Crown, Tag, Rocket, ShieldCheck, Gift, Play, Coins, CalendarDays, ShoppingCart, Sparkles, CheckCircle2 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/packages")({
   head: () => ({
@@ -49,74 +49,10 @@ function PackagesPage() {
         </p>
       </header>
 
-      <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-        {packages.map((p, i) => {
-          const popular = i === 1;
-          return (
-            <div
-              key={p.id}
-              className={`surface-card relative flex flex-col gap-4 overflow-hidden p-5 transition-transform duration-300 hover:-translate-y-1 ${
-                popular ? "glow ring-2 ring-primary/60" : "ring-1 ring-border"
-              }`}
-            >
-              <div
-                className="pointer-events-none absolute -top-16 -right-16 h-40 w-40 rounded-full opacity-20 blur-2xl"
-                style={{ backgroundImage: "var(--gradient-brand)" }}
-              />
-              {popular && (
-                <span className="bg-brand absolute top-4 right-4 rounded-full px-2.5 py-1 text-[10px] font-extrabold text-primary-foreground">
-                  জনপ্রিয়
-                </span>
-              )}
-
-              <div className="relative">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-1 text-[11px] font-bold text-primary">
-                  <Sparkles className="h-3.5 w-3.5" /> {p.name}
-                </span>
-                <p className="font-display mt-2 text-4xl font-extrabold text-primary">{taka(p.price)}</p>
-                <p className="text-xs text-muted-foreground">এককালীন বিনিয়োগ</p>
-              </div>
-
-              <div className="flex flex-wrap gap-1.5">
-                <Badge icon={Zap} text="দ্রুত আয়" />
-                <Badge icon={ShieldCheck} text="নিরাপদ" />
-                <Badge icon={Gift} text="বোনাস" />
-              </div>
-
-              <div
-                className="rounded-2xl p-4 text-primary-foreground"
-                style={{ backgroundImage: "var(--gradient-brand)" }}
-              >
-                <p className="text-[11px] font-semibold text-primary-foreground/80">
-                  {bn(p.validity_days)} দিনে সম্ভাব্য মোট আয়
-                </p>
-                <p className="font-display text-2xl font-extrabold">{taka(p.daily_income * p.validity_days)}</p>
-              </div>
-
-              <ul className="space-y-2.5">
-                <Row icon={Tv} title={`${bn(p.daily_ads)} দৈনিক বিজ্ঞাপন`} sub="টাকা আয় করতে বিজ্ঞাপন দেখুন" />
-                <Row
-                  icon={TrendingUp}
-                  title={`${taka(p.daily_income)} দৈনিক আয়`}
-                  sub={`${bn(p.validity_days)} দিনে মোট ${taka(p.daily_income * p.validity_days)}`}
-                />
-                <Row
-                  icon={CalendarClock}
-                  title={`${bn(p.validity_days)} দিনের বৈধতা`}
-                  sub={`${bn(p.validity_days)} দিন পর প্যাকেজ মেয়াদ শেষ`}
-                />
-              </ul>
-
-              <Link
-                to="/deposit"
-                search={{ pkg: p.id }}
-                className="bg-brand mt-auto grid place-items-center rounded-2xl py-3.5 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/25"
-              >
-                প্যাকেজ কিনুন
-              </Link>
-            </div>
-          );
-        })}
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+        {packages.map((p, i) => (
+          <PackageCard key={p.id} p={p} index={i} />
+        ))}
         {packages.length === 0 && (
           <p className="surface-card p-8 text-center text-sm text-muted-foreground">এখন কোনো প্যাকেজ নেই।</p>
         )}
@@ -144,20 +80,92 @@ function PackagesPage() {
   );
 }
 
-function Badge({ icon: Icon, text }: { icon: React.ElementType; text: string }) {
+function PackageCard({ p, index }: { p: import("@/lib/packages").Package; index: number }) {
+  const popular = index === 1;
   return (
-    <span className="flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-[11px] font-bold text-primary">
+    <div className="overflow-hidden rounded-[28px] bg-card shadow-[0_20px_50px_-20px_oklch(0.55_0.2_285/0.5)] ring-1 ring-border">
+      {/* Header */}
+      <div className="relative px-5 pt-6 pb-7" style={{ backgroundImage: "var(--gradient-brand)" }}>
+        <Crown className="absolute top-3 right-4 h-7 w-7 fill-warning text-warning" />
+        <p className="font-display text-center text-2xl font-extrabold text-primary-foreground">
+          package_{index + 1}
+        </p>
+        <p className="mt-1 text-center text-sm font-semibold text-primary-foreground/85">বিনিয়োগ প্যাকেজ</p>
+        {popular && (
+          <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-warning px-3 py-0.5 text-[11px] font-extrabold text-warning-foreground shadow">
+            জনপ্রিয়
+          </span>
+        )}
+      </div>
+
+      <div className="space-y-5 px-5 py-6">
+        {/* Price */}
+        <div className="text-center">
+          <p className="font-display text-4xl font-extrabold text-foreground drop-shadow-sm">{taka(p.price)}</p>
+          <span className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-warning px-4 py-1.5 text-xs font-extrabold text-warning-foreground shadow-md shadow-warning/40">
+            <Tag className="h-3.5 w-3.5" /> এককালীন বিনিয়োগ
+          </span>
+        </div>
+
+        {/* Feature pills */}
+        <div className="flex flex-wrap justify-center gap-2">
+          <Pill className="bg-success text-primary-foreground shadow-success/40" icon={Rocket} text="দ্রুত আয়" />
+          <Pill className="bg-info text-primary-foreground shadow-info/40" icon={ShieldCheck} text="নিরাপদ" />
+          <Pill className="bg-destructive text-primary-foreground shadow-destructive/40" icon={Gift} text="বোনাস" />
+        </div>
+
+        {/* Detail rows */}
+        <ul className="space-y-4">
+          <DetailRow
+            color="bg-success"
+            icon={Play}
+            title={`${bn(p.daily_ads)} দৈনিক বিজ্ঞাপন`}
+            sub="টাকা আয় করতে বিজ্ঞাপন দেখুন"
+          />
+          <DetailRow
+            color="bg-warning"
+            icon={Coins}
+            title={`${taka(p.daily_income)} দৈনিক আয়`}
+            sub={`${bn(p.validity_days)} দিনে মোট ${taka(p.daily_income * p.validity_days)}`}
+          />
+          <DetailRow
+            color="bg-destructive"
+            icon={CalendarDays}
+            title={`${bn(p.validity_days)} দিনের বৈধতা`}
+            sub={`${bn(p.validity_days)} দিন পর প্যাকেজ মেয়াদ শেষ`}
+          />
+        </ul>
+
+        {/* CTA */}
+        <Link
+          to="/deposit"
+          search={{ pkg: p.id }}
+          className="flex items-center justify-center gap-2 rounded-2xl py-4 text-base font-extrabold text-primary-foreground shadow-lg shadow-primary/30 transition-transform hover:scale-[1.02]"
+          style={{ backgroundImage: "var(--gradient-brand)" }}
+        >
+          <ShoppingCart className="h-5 w-5" /> প্যাকেজ কিনুন
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+function Pill({ icon: Icon, text, className }: { icon: React.ElementType; text: string; className: string }) {
+  return (
+    <span className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-extrabold shadow-md ${className}`}>
       <Icon className="h-3.5 w-3.5" /> {text}
     </span>
   );
 }
 
-function Row({ icon: Icon, title, sub }: { icon: React.ElementType; title: string; sub: string }) {
+function DetailRow({ color, icon: Icon, title, sub }: { color: string; icon: React.ElementType; title: string; sub: string }) {
   return (
-    <li className="flex items-start gap-2.5 rounded-xl bg-secondary/60 px-3 py-2.5">
-      <Icon className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+    <li className="flex items-center gap-3">
+      <span className={`grid h-11 w-11 shrink-0 place-items-center rounded-full text-primary-foreground shadow-md ${color}`}>
+        <Icon className="h-5 w-5" />
+      </span>
       <div className="min-w-0">
-        <p className="text-sm font-bold">{title}</p>
+        <p className="text-sm font-extrabold text-primary">{title}</p>
         <p className="text-xs text-muted-foreground">{sub}</p>
       </div>
     </li>
