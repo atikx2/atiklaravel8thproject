@@ -10,9 +10,8 @@ import { Field } from "../auth";
 import { Loader2, Smartphone, Copy, Check, Package as PackageIcon } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/deposit")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    pkg: typeof search["pkg"] === "string" ? (search["pkg"] as string) : undefined,
-  }),
+  validateSearch: (search: Record<string, unknown>): { pkg?: string } =>
+    typeof search["pkg"] === "string" ? { pkg: search["pkg"] } : {},
   head: () => ({
     meta: [
       { title: "ডিপোজিট | Smartjobbd26" },
