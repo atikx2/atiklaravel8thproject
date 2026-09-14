@@ -70,6 +70,22 @@ function Dashboard() {
 
   return (
     <div className="space-y-4">
+      <div className="surface-card glow overflow-hidden py-2.5">
+        <div className="animate-marquee flex">
+          <div className="flex shrink-0 min-w-full items-center justify-center gap-2 px-4">
+            <Megaphone className="h-4 w-4 shrink-0 text-primary" />
+            <span className="whitespace-nowrap text-sm font-bold text-primary">
+              নতুন একাউন্ট করে দুই হাজার টাকার উপরে ডিপোজিট করলে extra 30 পারসেন্ট বোনাস
+            </span>
+          </div>
+          <div className="flex shrink-0 min-w-full items-center justify-center gap-2 px-4">
+            <Megaphone className="h-4 w-4 shrink-0 text-primary" />
+            <span className="whitespace-nowrap text-sm font-bold text-primary">
+              নতুন একাউন্ট করে দুই হাজার টাকার উপরে ডিপোজিট করলে extra 30 পারসেন্ট বোনাস
+            </span>
+          </div>
+        </div>
+      </div>
       {banner ? (
         <Link to="/packages" className="surface-card glow block overflow-hidden p-0">
           <img
