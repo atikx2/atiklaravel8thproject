@@ -70,6 +70,22 @@ function Dashboard() {
 
   return (
     <div className="space-y-4">
+      <div className="surface-card glow overflow-hidden py-2.5">
+        <div className="animate-marquee flex">
+          <div className="flex shrink-0 min-w-full items-center justify-center gap-2 px-4">
+            <Megaphone className="h-4 w-4 shrink-0 text-primary" />
+            <span className="whitespace-nowrap text-sm font-bold text-primary">
+              নতুন একাউন্ট করে দুই হাজার টাকার উপরে ডিপোজিট করলে extra 30 পারসেন্ট বোনাস
+            </span>
+          </div>
+          <div className="flex shrink-0 min-w-full items-center justify-center gap-2 px-4">
+            <Megaphone className="h-4 w-4 shrink-0 text-primary" />
+            <span className="whitespace-nowrap text-sm font-bold text-primary">
+              নতুন একাউন্ট করে দুই হাজার টাকার উপরে ডিপোজিট করলে extra 30 পারসেন্ট বোনাস
+            </span>
+          </div>
+        </div>
+      </div>
       {banner ? (
         <Link to="/packages" className="surface-card glow block overflow-hidden p-0">
           <img
@@ -119,20 +135,6 @@ function Dashboard() {
         ))}
       </div>
 
-      {!profile?.has_deposited && (
-        <div className="flex items-start gap-3 rounded-2xl border border-warning/40 bg-warning/10 p-4 text-sm">
-          <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-warning" />
-          <div>
-            <p className="font-bold">প্রথম ডিপোজিট বাকি আছে</p>
-            <p className="text-muted-foreground">
-              বোনাস পেলেও কাজ শুরু করতে হলে অন্তত একবার ডিপোজিট করতে হবে।{" "}
-              <Link to="/deposit" className="text-primary underline">
-                এখনই ডিপোজিট করুন
-              </Link>
-            </p>
-          </div>
-        </div>
-      )}
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <Stat icon={TrendingUp} label="মোট আয়" value={taka(profile?.total_earned ?? 0)} />
