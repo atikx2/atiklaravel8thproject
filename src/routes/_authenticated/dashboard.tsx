@@ -135,20 +135,6 @@ function Dashboard() {
         ))}
       </div>
 
-      {!profile?.has_deposited && (
-        <div className="flex items-start gap-3 rounded-2xl border border-warning/40 bg-warning/10 p-4 text-sm">
-          <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-warning" />
-          <div>
-            <p className="font-bold">প্রথম ডিপোজিট বাকি আছে</p>
-            <p className="text-muted-foreground">
-              বোনাস পেলেও কাজ শুরু করতে হলে অন্তত একবার ডিপোজিট করতে হবে।{" "}
-              <Link to="/deposit" className="text-primary underline">
-                এখনই ডিপোজিট করুন
-              </Link>
-            </p>
-          </div>
-        </div>
-      )}
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <Stat icon={TrendingUp} label="মোট আয়" value={taka(profile?.total_earned ?? 0)} />
