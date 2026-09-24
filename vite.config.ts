@@ -7,7 +7,7 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 // Netlify sets NETLIFY=true during its builds; use the Netlify target there.
-const onNetlify = process.env.NETLIFY === "true";
+const onNetlify = process.env['NETLIFY'] === "true";
 
 export default defineConfig({
   tanstackStart: {

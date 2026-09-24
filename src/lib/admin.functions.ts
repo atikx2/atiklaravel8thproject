@@ -20,8 +20,8 @@ export const adminCreateUser = async ({ data }: { data: CreateUserInput }) => {
 
   // Separate client so the admin's own session is not replaced.
   const temp = createClient(
-    import.meta.env.VITE_SUPABASE_URL,
-    import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+    import.meta.env['VITE_SUPABASE_URL'],
+    import.meta.env['VITE_SUPABASE_PUBLISHABLE_KEY'],
     { auth: { persistSession: false, autoRefreshToken: false, storageKey: "sb-admin-temp" } },
   );
   const { data: created, error } = await temp.auth.signUp({
