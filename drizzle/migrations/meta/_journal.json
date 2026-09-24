@@ -15,6 +15,13 @@
       "when": 1789145232752,
       "tag": "0001_add_banner_image_url",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790274690944,
+      "tag": "0002_admin_user_rpcs",
+      "breakpoints": true
     }
   ]
 }
