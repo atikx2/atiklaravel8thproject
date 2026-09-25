@@ -82,15 +82,25 @@ function DepositPage() {
     e.preventDefault();
     setErr("");
     setMsg("");
-    if (!user) return;
-    const amt = pkg ? pkg.price : Number(amount);
+    const toEn = (s: string) => s.replace(/[০-৯]/g, (d) => String("০১২৩৪৫৬৭৮৯".indexOf(d))).trim();
+    const amt = pkg ? pkg.price : Number(toEn(amount));
     if (!amt || (!pkg && amt < settings.min_deposit))
       return setErr(`সর্বনিম্ন ডিপোজিট ${settings.min_deposit} টাকা`);
-    if (!/^01[0-9]{9}$/.test(sender.trim())) return setErr("সঠিক সেন্ডার নাম্বার দিন");
+    const senderNo = toEn(sender).replace(/[\s-]/g, "").replace(/^\+?88/, "");
+    if (!/^01[0-9]{9}$/.test(senderNo)) return setErr("সঠিক সেন্ডার নাম্বার দিন (01XXXXXXXXX)");
     if (trx.trim().length < 5) return setErr("সঠিক ট্রানজেকশন আইডি দিন");
     setBusy(true);
+    let uid = user?.id;
+    if (!uid) {
+      const { data: u } = await supabase.auth.getUser();
+      uid = u.user?.id;
+    }
+    if (!uid) {
+      setBusy(false);
+      return setErr("লগইন সেশন পাওয়া যায়নি, আবার লগইন করুন");
+    }
     const { error } = await supabase.from("deposits").insert({
-      user_id: user.id,
+      user_id: uid,
       method,
       amount: amt,
       sender_number: sender.trim(),
