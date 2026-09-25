@@ -171,6 +171,44 @@ export type Database = {
         }
         Relationships: []
       }
+      package_ad_views: {
+        Row: {
+          ad_index: number
+          created_at: string
+          id: string
+          purchase_id: string
+          reward: number
+          user_id: string
+          view_date: string
+        }
+        Insert: {
+          ad_index: number
+          created_at?: string
+          id?: string
+          purchase_id: string
+          reward?: number
+          user_id: string
+          view_date?: string
+        }
+        Update: {
+          ad_index?: number
+          created_at?: string
+          id?: string
+          purchase_id?: string
+          reward?: number
+          user_id?: string
+          view_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "package_ad_views_purchase_id_fkey"
+            columns: ["purchase_id"]
+            isOneToOne: false
+            referencedRelation: "package_purchases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       package_purchases: {
         Row: {
           created_at: string
@@ -214,6 +252,7 @@ export type Database = {
       }
       packages: {
         Row: {
+          ad_link: string
           created_at: string
           daily_ads: number
           daily_income: number
@@ -226,6 +265,7 @@ export type Database = {
           validity_days: number
         }
         Insert: {
+          ad_link?: string
           created_at?: string
           daily_ads?: number
           daily_income?: number
@@ -238,6 +278,7 @@ export type Database = {
           validity_days?: number
         }
         Update: {
+          ad_link?: string
           created_at?: string
           daily_ads?: number
           daily_income?: number
@@ -398,6 +439,10 @@ export type Database = {
       admin_reset_password: {
         Args: { _password: string; _user_id: string }
         Returns: undefined
+      }
+      complete_package_ad: {
+        Args: { _ad_index: number; _purchase_id: string }
+        Returns: number
       }
       has_role: {
         Args: {
