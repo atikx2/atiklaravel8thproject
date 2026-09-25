@@ -3,6 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth, taka, bn } from "@/lib/auth";
+import { PackageAds } from "@/components/PackageAds";
 import {
   MonitorPlay,
   Youtube,
@@ -143,6 +144,8 @@ function JobsPage() {
         </div>
       )}
 
+
+      <PackageAds />
 
       {(["ad", "video", "microtask"] as const).map((t) => {
         const list = (jobs ?? []).filter((j) => j.job_type === t);
