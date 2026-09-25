@@ -10,6 +10,7 @@ export type Package = {
   validity_days: number;
   sort_order: number;
   is_active: boolean;
+  ad_link: string;
 };
 
 export function usePackages(all = false) {

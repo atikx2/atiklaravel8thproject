@@ -20,7 +20,7 @@ export const Route = createFileRoute("/_admin/admin/packages")({
   component: PackagesAdmin,
 });
 
-const empty = { name: "", price: "", daily_ads: "3", daily_income: "", validity_days: "60", sort_order: "0" };
+const empty = { name: "", price: "", daily_ads: "3", daily_income: "", validity_days: "60", sort_order: "0", ad_link: "" };
 
 function PackagesAdmin() {
   const qc = useQueryClient();
@@ -38,6 +38,7 @@ function PackagesAdmin() {
       daily_income: Number(form.daily_income) || 0,
       validity_days: Number(form.validity_days) || 60,
       sort_order: Number(form.sort_order) || 0,
+      ad_link: form.ad_link.trim(),
     });
     setForm({ ...empty });
     void qc.invalidateQueries();
@@ -57,6 +58,7 @@ function PackagesAdmin() {
             <AdminField label="দৈনিক আয় (টাকা)" value={form.daily_income} onChange={set("daily_income")} />
             <AdminField label="মেয়াদ (দিন)" value={form.validity_days} onChange={set("validity_days")} />
           </div>
+          <AdminField label="ডিফল্ট বিজ্ঞাপন লিংক" value={form.ad_link} onChange={set("ad_link")} placeholder="https://..." />
           <AdminField label="ক্রম" value={form.sort_order} onChange={set("sort_order")} />
           <button className="bg-brand flex w-full items-center justify-center gap-2 rounded-2xl py-3 text-sm font-bold text-primary-foreground">
             <Plus className="h-4 w-4" /> প্যাকেজ যোগ করুন
@@ -84,6 +86,7 @@ function PackageRow({ p }: { p: Package }) {
     daily_income: String(p.daily_income),
     validity_days: String(p.validity_days),
     sort_order: String(p.sort_order),
+    ad_link: p.ad_link ?? "",
   });
   const set = (k: keyof typeof f) => (v: string) => setF((s) => ({ ...s, [k]: v }));
 
@@ -97,6 +100,7 @@ function PackageRow({ p }: { p: Package }) {
         daily_income: Number(f.daily_income) || 0,
         validity_days: Number(f.validity_days) || 60,
         sort_order: Number(f.sort_order) || 0,
+        ad_link: f.ad_link.trim(),
       })
       .eq("id", p.id);
     setEdit(false);
@@ -156,6 +160,7 @@ function PackageRow({ p }: { p: Package }) {
             <AdminField label="দৈনিক আয়" value={f.daily_income} onChange={set("daily_income")} />
             <AdminField label="মেয়াদ (দিন)" value={f.validity_days} onChange={set("validity_days")} />
           </div>
+          <AdminField label="ডিফল্ট বিজ্ঞাপন লিংক" value={f.ad_link} onChange={set("ad_link")} placeholder="https://..." />
           <AdminField label="ক্রম" value={f.sort_order} onChange={set("sort_order")} />
           <button
             onClick={save}
