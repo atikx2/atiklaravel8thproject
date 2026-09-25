@@ -103,12 +103,12 @@ function DepositPage() {
       user_id: uid,
       method,
       amount: amt,
-      sender_number: sender.trim(),
+      sender_number: senderNo,
       trx_id: trx.trim(),
       package_id: pkg?.id ?? null,
     });
     setBusy(false);
-    if (error) return setErr("অনুরোধ পাঠানো যায়নি");
+    if (error) return setErr("অনুরোধ পাঠানো যায়নি: " + error.message);
     if (!pkg) setAmount("");
     setSender("");
     setTrx("");
