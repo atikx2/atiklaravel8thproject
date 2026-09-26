@@ -105,7 +105,7 @@ function DepositPage() {
       amount: amt,
       sender_number: senderNo,
       trx_id: trx.trim(),
-      package_id: pkg?.id ?? null,
+      package_id: pkg?.id ?? pkgId ?? null,
     });
     setBusy(false);
     if (error) return setErr("অনুরোধ পাঠানো যায়নি: " + error.message);
