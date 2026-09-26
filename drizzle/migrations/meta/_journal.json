@@ -29,6 +29,13 @@
       "when": 1790296191471,
       "tag": "0003_package_daily_ads",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1790410464266,
+      "tag": "0004_grant_package_tables",
+      "breakpoints": true
     }
   ]
 }
