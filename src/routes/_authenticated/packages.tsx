@@ -154,14 +154,28 @@ function PackageCard({
         </ul>
 
         {/* CTA */}
-        <Link
-          to="/deposit"
-          search={{ pkg: p.id }}
-          className="flex items-center justify-center gap-2 rounded-2xl py-4 text-base font-extrabold text-primary-foreground shadow-lg shadow-primary/30 transition-transform hover:scale-[1.02]"
-          style={{ backgroundImage: "var(--gradient-brand)" }}
-        >
-          <ShoppingCart className="h-5 w-5" /> প্যাকেজ কিনুন
-        </Link>
+        {state === "buy" ? (
+          <Link
+            to="/deposit"
+            search={{ pkg: p.id }}
+            className="flex items-center justify-center gap-2 rounded-2xl py-4 text-base font-extrabold text-primary-foreground shadow-lg shadow-primary/30 transition-transform hover:scale-[1.02]"
+            style={{ backgroundImage: "var(--gradient-brand)" }}
+          >
+            <ShoppingCart className="h-5 w-5" /> প্যাকেজ কিনুন
+          </Link>
+        ) : (
+          <div
+            className={`flex items-center justify-center gap-2 rounded-2xl py-4 text-base font-extrabold ${
+              state === "active" ? "bg-success/15 text-success" : "bg-warning/15 text-warning"
+            }`}
+          >
+            {state === "active" ? (
+              <><CheckCircle2 className="h-5 w-5" /> সক্রিয় · মেয়াদ শেষে আবার কিনুন</>
+            ) : (
+              <><Clock className="h-5 w-5" /> অনুমোদনের অপেক্ষায়</>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
