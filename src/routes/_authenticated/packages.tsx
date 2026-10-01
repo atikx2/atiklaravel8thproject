@@ -1,9 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth, taka, bn } from "@/lib/auth";
-import { usePackages } from "@/lib/packages";
-import { Crown, Tag, Rocket, ShieldCheck, Gift, Play, Coins, CalendarDays, ShoppingCart, Sparkles, CheckCircle2 } from "lucide-react";
+import { taka, bn } from "@/lib/auth";
+import { usePackages, useMyPurchases, useMyPendingPackageIds, isActivePurchase } from "@/lib/packages";
+import { Crown, Tag, Rocket, ShieldCheck, Gift, Play, Coins, CalendarDays, ShoppingCart, Sparkles, CheckCircle2, Clock, History } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/packages")({
   head: () => ({
@@ -19,21 +17,13 @@ export const Route = createFileRoute("/_authenticated/packages")({
   component: PackagesPage,
 });
 
+const fmtDate = (d: string) => bn(new Date(d).toLocaleDateString("en-GB"));
+
 function PackagesPage() {
   const packages = usePackages();
-  const { user } = useAuth();
-
-  const { data: mine } = useQuery({
-    queryKey: ["my-packages", user?.id],
-    enabled: !!user,
-    queryFn: async () => {
-      const { data } = await supabase
-        .from("package_purchases")
-        .select("id,price,daily_income,expires_at,created_at")
-        .order("created_at", { ascending: false });
-      return data ?? [];
-    },
-  });
+  const { data: mine, isLoading } = useMyPurchases();
+  const pending = useMyPendingPackageIds();
+  const activeIds = new Set((mine ?? []).filter(isActivePurchase).map((m) => m.package_id));
 
   return (
     <div className="space-y-5">
@@ -51,36 +41,63 @@ function PackagesPage() {
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
         {packages.map((p, i) => (
-          <PackageCard key={p.id} p={p} index={i} />
+          <PackageCard
+            key={p.id}
+            p={p}
+            index={i}
+            state={activeIds.has(p.id) ? "active" : pending.includes(p.id) ? "pending" : "buy"}
+          />
         ))}
         {packages.length === 0 && (
           <p className="surface-card p-8 text-center text-sm text-muted-foreground">এখন কোনো প্যাকেজ নেই।</p>
         )}
       </div>
 
-      {(mine?.length ?? 0) > 0 && (
-        <div className="surface-card p-4">
-          <h2 className="mb-3 font-display text-base font-bold">আপনার প্যাকেজ</h2>
-          <div className="space-y-2">
-            {(mine ?? []).map((m) => (
+      <div className="surface-card p-4">
+        <h2 className="mb-3 flex items-center gap-2 font-display text-base font-bold">
+          <History className="h-4 w-4 text-primary" /> আপনার প্যাকেজ ইতিহাস
+        </h2>
+        <div className="space-y-2">
+          {(mine ?? []).map((m) => {
+            const active = isActivePurchase(m);
+            return (
               <div key={m.id} className="flex items-center justify-between gap-3 rounded-xl bg-secondary/60 px-3 py-2.5">
                 <div className="min-w-0">
-                  <p className="text-sm font-bold">{taka(m.price)}</p>
+                  <p className="text-sm font-bold">
+                    {m.packages?.name ?? "প্যাকেজ"} · {taka(m.price)}
+                  </p>
                   <p className="text-xs text-muted-foreground">
-                    দৈনিক {taka(m.daily_income)} · মেয়াদ {bn(new Date(m.expires_at).toLocaleDateString("en-GB"))}
+                    দৈনিক {bn(m.daily_ads)} বিজ্ঞাপন · {taka(m.daily_income)} · কেনা {fmtDate(m.created_at)} · মেয়াদ {fmtDate(m.expires_at)}
                   </p>
                 </div>
-                <CheckCircle2 className="h-5 w-5 shrink-0 text-success" />
+                <span
+                  className={`flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-bold ${
+                    active ? "bg-success/15 text-success" : "bg-muted text-muted-foreground"
+                  }`}
+                >
+                  <CheckCircle2 className="h-3.5 w-3.5" /> {active ? "সক্রিয়" : "মেয়াদ শেষ"}
+                </span>
               </div>
-            ))}
-          </div>
+            );
+          })}
+          {!isLoading && (mine?.length ?? 0) === 0 && (
+            <p className="py-4 text-center text-sm text-muted-foreground">এখনো কোনো প্যাকেজ কেনা হয়নি।</p>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 }
 
-function PackageCard({ p, index }: { p: import("@/lib/packages").Package; index: number }) {
+function PackageCard({
+  p,
+  index,
+  state,
+}: {
+  p: import("@/lib/packages").Package;
+  index: number;
+  state: "active" | "pending" | "buy";
+}) {
   const popular = index === 1;
   return (
     <div className="overflow-hidden rounded-[28px] bg-card shadow-[0_20px_50px_-20px_oklch(0.55_0.2_285/0.5)] ring-1 ring-border">

@@ -2,63 +2,76 @@ import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth, taka, bn } from "@/lib/auth";
-import { PlayCircle, CheckCircle2, Loader2, Eye } from "lucide-react";
+import { useMyPurchases, isActivePurchase, normalizeLink } from "@/lib/packages";
+import { PlayCircle, CheckCircle2, Loader2, Eye, AlertCircle } from "lucide-react";
 
 function dhakaToday() {
   return new Date(Date.now() + 6 * 3600 * 1000).toISOString().slice(0, 10);
 }
 
-type Purchase = {
-  id: string;
-  daily_ads: number;
-  daily_income: number;
-  expires_at: string;
-  packages: { name: string; ad_link: string } | null;
-};
-
 export function PackageAds() {
   const { user } = useAuth();
-  const { data } = useQuery({
-    queryKey: ["package-ads", user?.id],
+  const purchasesQ = useMyPurchases();
+  const viewsQ = useQuery({
+    queryKey: ["package-ad-views", user?.id, dhakaToday()],
     enabled: !!user,
     queryFn: async () => {
-      const { data: purchases } = await supabase
-        .from("package_purchases")
-        .select("id,daily_ads,daily_income,expires_at,packages(name,ad_link)")
-        .gt("expires_at", new Date().toISOString())
-        .order("created_at");
-      const { data: views } = await supabase
+      const { data, error } = await supabase
         .from("package_ad_views")
         .select("purchase_id,ad_index")
+        .eq("user_id", user!.id)
         .eq("view_date", dhakaToday());
-      return {
-        purchases: (purchases ?? []) as unknown as Purchase[],
-        done: new Set((views ?? []).map((v) => `${v.purchase_id}:${v.ad_index}`)),
-      };
+      if (error) throw error;
+      return new Set((data ?? []).map((v) => `${v.purchase_id}:${v.ad_index}`));
     },
   });
 
-  if (!data?.purchases.length) return null;
+  if (purchasesQ.isLoading) {
+    return (
+      <div className="surface-card flex items-center justify-center gap-2 p-4 text-sm text-muted-foreground">
+        <Loader2 className="h-4 w-4 animate-spin" /> প্যাকেজের বিজ্ঞাপন লোড হচ্ছে…
+      </div>
+    );
+  }
+  if (purchasesQ.error) {
+    return (
+      <div className="surface-card flex items-center gap-2 p-4 text-sm text-destructive">
+        <AlertCircle className="h-4 w-4" /> প্যাকেজের তথ্য লোড করা যায়নি, পেজটি রিফ্রেশ করুন।
+      </div>
+    );
+  }
+
+  const active = (purchasesQ.data ?? []).filter(isActivePurchase);
+  if (!active.length) return null;
+  const done = viewsQ.data ?? new Set<string>();
 
   return (
-    <section className="space-y-2">
+    <section className="space-y-3">
       <h2 className="flex items-center gap-2 text-sm font-bold text-muted-foreground">
         <PlayCircle className="h-4 w-4 text-primary" /> প্যাকেজের দৈনিক বিজ্ঞাপন
       </h2>
-      {data.purchases.map((p) => {
+      {active.map((p) => {
         const reward = p.daily_ads > 0 ? p.daily_income / p.daily_ads : 0;
+        const doneCount = Array.from({ length: p.daily_ads }, (_, i) => i + 1).filter((n) =>
+          done.has(`${p.id}:${n}`),
+        ).length;
         return (
-          <div key={p.id} className="grid grid-cols-1 gap-2 lg:grid-cols-2 xl:grid-cols-3">
-            {Array.from({ length: p.daily_ads }, (_, i) => i + 1).map((n) => (
-              <AdTask
-                key={n}
-                purchaseId={p.id}
-                index={n}
-                reward={reward}
-                link={p.packages?.ad_link ?? ""}
-                done={data.done.has(`${p.id}:${n}`)}
-              />
-            ))}
+          <div key={p.id} className="space-y-2">
+            <p className="text-xs font-semibold text-muted-foreground">
+              {p.packages?.name ?? "প্যাকেজ"} · আজ {bn(doneCount)}/{bn(p.daily_ads)} সম্পন্ন
+            </p>
+            <div className="grid grid-cols-1 gap-2 lg:grid-cols-2 xl:grid-cols-3">
+              {Array.from({ length: p.daily_ads }, (_, i) => i + 1).map((n) => (
+                <AdTask
+                  key={n}
+                  purchaseId={p.id}
+                  index={n}
+                  reward={reward}
+                  link={normalizeLink(p.packages?.ad_link ?? "")}
+                  done={done.has(`${p.id}:${n}`)}
+                />
+              ))}
+            </div>
           </div>
         );
       })}
@@ -80,6 +93,7 @@ function AdTask({
   done: boolean;
 }) {
   const qc = useQueryClient();
+  const { refresh } = useAuth();
   const [left, setLeft] = useState<number | null>(null);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
@@ -98,7 +112,10 @@ function AdTask({
       setBusy(false);
       setLeft(null);
       if (error) setErr(error.message);
-      else void qc.invalidateQueries();
+      else {
+        void refresh();
+        void qc.invalidateQueries();
+      }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [left]);
