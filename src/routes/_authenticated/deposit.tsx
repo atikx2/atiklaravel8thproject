@@ -4,7 +4,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth, taka, bn } from "@/lib/auth";
 import { useSettings, usePaymentNumbers } from "@/lib/settings";
-import { usePackages } from "@/lib/packages";
+import { usePackages, useMyPurchases, useMyPendingPackageIds, isActivePurchase } from "@/lib/packages";
 import { StatusChip } from "./dashboard";
 import { Field } from "../auth";
 import {
@@ -69,10 +69,18 @@ function DepositPage() {
     queryKey: ["deposits", user?.id],
     enabled: !!user,
     queryFn: async () => {
-      const { data } = await supabase.from("deposits").select("*").order("created_at", { ascending: false });
+      const { data } = await supabase
+        .from("deposits")
+        .select("*")
+        .eq("user_id", user!.id)
+        .order("created_at", { ascending: false });
       return data ?? [];
     },
   });
+  const { data: myPurchases } = useMyPurchases();
+  const pendingPkgs = useMyPendingPackageIds();
+  const pkgActive = !!pkgId && (myPurchases ?? []).some((m) => m.package_id === pkgId && isActivePurchase(m));
+  const pkgPending = !!pkgId && pendingPkgs.includes(pkgId);
 
   useEffect(() => {
     if (pkg) setAmount(String(pkg.price));
@@ -82,6 +90,9 @@ function DepositPage() {
     e.preventDefault();
     setErr("");
     setMsg("");
+    if (pkgId && pkgActive) return setErr("এই প্যাকেজটি আপনার একাউন্টে সক্রিয় আছে। মেয়াদ শেষ হলে আবার কিনতে পারবেন");
+    if (pkgId && pkgPending) return setErr("এই প্যাকেজের একটি অনুরোধ অনুমোদনের অপেক্ষায় আছে");
+    if (pkgId && !pkg) return setErr("প্যাকেজের তথ্য লোড হচ্ছে, একটু পর আবার চেষ্টা করুন");
     const toEn = (s: string) => s.replace(/[০-৯]/g, (d) => String("০১২৩৪৫৬৭৮৯".indexOf(d))).trim();
     const amt = pkg ? pkg.price : Number(toEn(amount));
     if (!amt || (!pkg && amt < settings.min_deposit))

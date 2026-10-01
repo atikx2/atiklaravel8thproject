@@ -36,6 +36,13 @@
       "when": 1790410464266,
       "tag": "0004_grant_package_tables",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1790860174926,
+      "tag": "0005_package_one_active_purchase",
+      "breakpoints": true
     }
   ]
 }
