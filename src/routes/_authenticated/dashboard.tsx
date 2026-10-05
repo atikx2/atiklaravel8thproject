@@ -3,9 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth, taka, bn } from "@/lib/auth";
 import { useSettings } from "@/lib/settings";
-import partner1 from "@/assets/partner-1.asset.json";
-import partner2 from "@/assets/partner-2.asset.json";
-import partner3 from "@/assets/partner-3.asset.json";
 import {
   CheckCircle2,
   Clock,
@@ -44,9 +41,9 @@ const quickLinks = [
 ] as const;
 
 const partners = [
-  { src: partner1.url, name: "AjkerDeal" },
-  { src: partner2.url, name: "Othoba" },
-  { src: partner3.url, name: "Daraz" },
+  { src: "/images/partner-ajkerdeal.jpeg", name: "AjkerDeal" },
+  { src: "/images/partner-othoba.jpeg", name: "Othoba" },
+  { src: "/images/partner-daraz.jpeg", name: "Daraz" },
 ];
 
 function Dashboard() {
