@@ -43,6 +43,13 @@
       "when": 1790860174926,
       "tag": "0005_package_one_active_purchase",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1791226919767,
+      "tag": "0006_package_deposit_no_balance",
+      "breakpoints": true
     }
   ]
 }
