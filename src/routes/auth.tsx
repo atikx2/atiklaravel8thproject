@@ -1,23 +1,32 @@
 import { useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
-import { emailForUsername } from "@/lib/auth";
+import { emailForUsername, taka } from "@/lib/auth";
+import { useSettings } from "@/lib/settings";
 import { Logo } from "@/components/Logo";
 import { Gift, Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "লগইন ও রেজিস্ট্রেশন | Smartjobbd26" },
-      { name: "description", content: "Smartjobbd26 এ ফ্রি একাউন্ট খুলুন, ২০০ টাকা বোনাস নিন এবং মাইক্রো জব করে আয় শুরু করুন।" },
-      { property: "og:title", content: "লগইন ও রেজিস্ট্রেশন | Smartjobbd26" },
-      { property: "og:description", content: "ইউজারনেম, ফোন ও পাসওয়ার্ড দিয়ে একাউন্ট খুলুন — সাথে ২০০ টাকা সাইনআপ বোনাস।" },
+      { title: "লগইন ও রেজিস্ট্রেশন | Smart Job BD 26" },
+      {
+        name: "description",
+        content:
+          "Smart Job BD 26 এ ফ্রি একাউন্ট খুলুন, ১০০ টাকা বোনাস নিন এবং মাইক্রো জব করে আয় শুরু করুন।",
+      },
+      { property: "og:title", content: "লগইন ও রেজিস্ট্রেশন | Smart Job BD 26" },
+      {
+        property: "og:description",
+        content: "ইউজারনেম, ফোন ও পাসওয়ার্ড দিয়ে একাউন্ট খুলুন — সাথে ১০০ টাকা সাইনআপ বোনাস।",
+      },
     ],
   }),
   component: AuthPage,
 });
 
 function AuthPage() {
+  const settings = useSettings();
   const [tab, setTab] = useState<"login" | "register">("login");
   const [username, setUsername] = useState("");
   const [phone, setPhone] = useState("");
@@ -34,7 +43,8 @@ function AuthPage() {
       const email = emailForUsername(username);
       if (tab === "register") {
         if (username.trim().length < 3) throw new Error("ইউজারনেম কমপক্ষে ৩ অক্ষরের হতে হবে");
-        if (!/^01[0-9]{9}$/.test(phone.trim())) throw new Error("সঠিক ১১ ডিজিটের মোবাইল নাম্বার দিন");
+        if (!/^01[0-9]{9}$/.test(phone.trim()))
+          throw new Error("সঠিক ১১ ডিজিটের মোবাইল নাম্বার দিন");
         if (password.length < 6) throw new Error("পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে");
         const { error } = await supabase.auth.signUp({
           email,
@@ -81,16 +91,32 @@ function AuthPage() {
           {tab === "register" && (
             <div className="mb-4 flex items-center gap-2 rounded-2xl border border-primary/30 bg-primary/10 p-3 text-sm">
               <Gift className="h-5 w-5 shrink-0 text-primary" />
-              <span>রেজিস্ট্রেশন করলেই সাথে সাথে ২০০ টাকা বোনাস!</span>
+              <span>রেজিস্ট্রেশন করলেই সাথে সাথে {taka(settings.signup_bonus)} বোনাস!</span>
             </div>
           )}
 
           <form onSubmit={submit} className="space-y-3">
-            <Field label="ইউজারনেম" value={username} onChange={setUsername} placeholder="আপনার ইউজারনেম" />
+            <Field
+              label="ইউজারনেম"
+              value={username}
+              onChange={setUsername}
+              placeholder="আপনার ইউজারনেম"
+            />
             {tab === "register" && (
-              <Field label="মোবাইল নাম্বার" value={phone} onChange={setPhone} placeholder="01XXXXXXXXX" />
+              <Field
+                label="মোবাইল নাম্বার"
+                value={phone}
+                onChange={setPhone}
+                placeholder="01XXXXXXXXX"
+              />
             )}
-            <Field label="পাসওয়ার্ড" value={password} onChange={setPassword} type="password" placeholder="••••••" />
+            <Field
+              label="পাসওয়ার্ড"
+              value={password}
+              onChange={setPassword}
+              type="password"
+              placeholder="••••••"
+            />
             {err && <p className="text-sm font-medium text-destructive">{err}</p>}
             <button
               type="submit"

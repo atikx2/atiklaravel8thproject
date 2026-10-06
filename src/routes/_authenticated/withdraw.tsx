@@ -12,9 +12,9 @@ import { Loader2, Send, HandCoins, Info, Wallet } from "lucide-react";
 export const Route = createFileRoute("/_authenticated/withdraw")({
   head: () => ({
     meta: [
-      { title: "উইথড্র | Smartjobbd26" },
+      { title: "উইথড্র | Smart Job BD 26" },
       { name: "description", content: "আয় করা টাকা বিকাশ বা নগদে দ্রুত উত্তোলন করুন।" },
-      { property: "og:title", content: "উইথড্র | Smartjobbd26" },
+      { property: "og:title", content: "উইথড্র | Smart Job BD 26" },
       { property: "og:description", content: "বিকাশ ও নগদে টাকা উত্তোলন।" },
     ],
   }),
@@ -37,7 +37,10 @@ function WithdrawPage() {
     queryKey: ["withdrawals", user?.id],
     enabled: !!user,
     queryFn: async () => {
-      const { data } = await supabase.from("withdrawals").select("*").order("created_at", { ascending: false });
+      const { data } = await supabase
+        .from("withdrawals")
+        .select("*")
+        .order("created_at", { ascending: false });
       return data ?? [];
     },
   });
@@ -73,7 +76,9 @@ function WithdrawPage() {
         <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-primary-foreground/20">
           <Send className="h-5 w-5 text-primary-foreground" />
         </span>
-        <h1 className="font-display text-lg font-extrabold text-primary-foreground">উত্তোলন করুন</h1>
+        <h1 className="font-display text-lg font-extrabold text-primary-foreground">
+          উত্তোলন করুন
+        </h1>
       </div>
 
       <div className="surface-card p-4">
@@ -85,7 +90,9 @@ function WithdrawPage() {
             <HandCoins className="h-9 w-9 text-primary-foreground" />
           </span>
           <h2 className="font-display text-gradient mt-3 text-xl font-extrabold">উত্তোলন করুন</h2>
-          <p className="mt-1 text-sm text-muted-foreground">আপনার অ্যাকাউন্ট থেকে টাকা উত্তোলন করুন</p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            আপনার অ্যাকাউন্ট থেকে টাকা উত্তোলন করুন
+          </p>
         </div>
 
         <div className="mt-4 flex items-start gap-2.5 rounded-2xl bg-gradient-to-r from-amber-400 to-orange-500 px-4 py-3 text-white shadow-glow">
@@ -108,7 +115,9 @@ function WithdrawPage() {
           </span>
         </div>
 
-        <p className="mt-4 mb-2 font-display text-base font-extrabold text-gradient">পেমেন্ট পদ্ধতি নির্বাচন করুন</p>
+        <p className="mt-4 mb-2 font-display text-base font-extrabold text-gradient">
+          পেমেন্ট পদ্ধতি নির্বাচন করুন
+        </p>
         <div className="mb-4 grid grid-cols-2 gap-3">
           {PAY_METHODS.map((m) => (
             <button
@@ -119,8 +128,15 @@ function WithdrawPage() {
                 method === m.id ? "border-primary shadow-glow" : "border-border"
               }`}
             >
-              <img src={m.logo} alt={`${m.name} লোগো`} className="h-10 w-10 object-contain" loading="lazy" />
-              <span className={`text-xs font-bold ${method === m.id ? "text-primary" : "text-muted-foreground"}`}>
+              <img
+                src={m.logo}
+                alt={`${m.name} লোগো`}
+                className="h-10 w-10 object-contain"
+                loading="lazy"
+              />
+              <span
+                className={`text-xs font-bold ${method === m.id ? "text-primary" : "text-muted-foreground"}`}
+              >
                 {m.name}
               </span>
             </button>
@@ -135,7 +151,9 @@ function WithdrawPage() {
               type="button"
               onClick={() => setAmount(String(q))}
               className={`rounded-xl border px-2 py-2.5 text-xs font-bold ${
-                amount === String(q) ? "border-primary bg-primary/10 text-primary" : "border-border bg-card"
+                amount === String(q)
+                  ? "border-primary bg-primary/10 text-primary"
+                  : "border-border bg-card"
               }`}
             >
               {bn(q.toLocaleString("en-US"))} টাকা
@@ -145,14 +163,20 @@ function WithdrawPage() {
 
         <form onSubmit={submit} className="space-y-3">
           <Field label="ফোন নম্বর" value={acc} onChange={setAcc} placeholder="01XXXXXXXXX" />
-          <Field label="উত্তোলনের পরিমাণ" value={amount} onChange={setAmount} placeholder={`সর্বনিম্ন ${MIN}`} />
+          <Field
+            label="উত্তোলনের পরিমাণ"
+            value={amount}
+            onChange={setAmount}
+            placeholder={`সর্বনিম্ন ${MIN}`}
+          />
           {err && <p className="text-sm text-destructive">{err}</p>}
           {msg && <p className="text-sm text-success">{msg}</p>}
           <button
             disabled={busy}
             className="bg-brand flex w-full items-center justify-center gap-2 rounded-2xl py-3.5 text-sm font-bold text-primary-foreground shadow-glow disabled:opacity-60"
           >
-            {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />} উত্তোলন প্রক্রিয়া করুন
+            {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}{" "}
+            উত্তোলন প্রক্রিয়া করুন
           </button>
           <p className="text-center text-xs text-muted-foreground">
             উত্তোলনের অনুরোধ ২৪ ঘণ্টার মধ্যে প্রক্রিয়া করা হয়
@@ -160,12 +184,14 @@ function WithdrawPage() {
         </form>
       </div>
 
-
       <div className="surface-card p-4">
         <h2 className="mb-3 font-display text-base font-bold">আপনার উইথড্র</h2>
         <div className="space-y-2">
           {(list ?? []).map((w) => (
-            <div key={w.id} className="flex items-center justify-between gap-3 rounded-xl bg-secondary/60 px-3 py-2.5">
+            <div
+              key={w.id}
+              className="flex items-center justify-between gap-3 rounded-xl bg-secondary/60 px-3 py-2.5"
+            >
               <div className="min-w-0">
                 <p className="text-sm font-bold">{taka(w.amount)}</p>
                 <p className="truncate text-xs text-muted-foreground">
@@ -175,7 +201,9 @@ function WithdrawPage() {
               <StatusChip status={w.status} />
             </div>
           ))}
-          {(list?.length ?? 0) === 0 && <p className="py-4 text-center text-sm text-muted-foreground">কোনো উইথড্র নেই।</p>}
+          {(list?.length ?? 0) === 0 && (
+            <p className="py-4 text-center text-sm text-muted-foreground">কোনো উইথড্র নেই।</p>
+          )}
         </div>
       </div>
     </div>

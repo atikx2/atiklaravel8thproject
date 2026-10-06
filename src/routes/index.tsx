@@ -36,16 +36,16 @@ import {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Smartjobbd26 — মোবাইলে কাজ করে ইনকাম" },
+      { title: "Smart Job BD 26 — মোবাইলে কাজ করে ইনকাম" },
       {
         name: "description",
         content:
-          "বিজ্ঞাপন দেখে, ভিডিও দেখে ও মাইক্রো টাস্ক করে প্রতিদিন ইনকাম করুন। রেজিস্ট্রেশনে ২০০ টাকা বোনাস, বিকাশ ও নগদে উইথড্র।",
+          "বিজ্ঞাপন দেখে, ভিডিও দেখে ও মাইক্রো টাস্ক করে প্রতিদিন ইনকাম করুন। রেজিস্ট্রেশনে ১০০ টাকা বোনাস, বিকাশ ও নগদে উইথড্র।",
       },
-      { property: "og:title", content: "Smartjobbd26 — মোবাইলে কাজ করে ইনকাম" },
+      { property: "og:title", content: "Smart Job BD 26 — মোবাইলে কাজ করে ইনকাম" },
       {
         property: "og:description",
-        content: "বিজ্ঞাপন ও ভিডিও দেখে ইনকাম করুন। ২০০ টাকা সাইনআপ বোনাস, বিকাশ/নগদে উইথড্র।",
+        content: "বিজ্ঞাপন ও ভিডিও দেখে ইনকাম করুন। ১০০ টাকা সাইনআপ বোনাস, বিকাশ/নগদে উইথড্র।",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -81,7 +81,7 @@ const STEPS = [
     t: "ফ্রি একাউন্ট খুলুন",
     d: "ইউজারনেম, ফোন নাম্বার ও পাসওয়ার্ড দিলেই একাউন্ট রেডি।",
   },
-  { icon: Gift, t: "২০০ টাকা বোনাস", d: "রেজিস্ট্রেশন করলেই সাথে সাথে ২০০ টাকা সাইনআপ বোনাস।" },
+  { icon: Gift, t: "১০০ টাকা বোনাস", d: "রেজিস্ট্রেশন করলেই সাথে সাথে ১০০ টাকা সাইনআপ বোনাস।" },
   { icon: CreditCard, t: "একাউন্ট চালু করুন", d: "বিকাশ/নগদে প্রথম ডিপোজিট দিয়ে কাজ আনলক করুন।" },
   { icon: Banknote, t: "ইনকাম ও উইথড্র", d: "প্রতিদিন কাজ করুন, যেকোনো সময় টাকা তুলে নিন।" },
 ];
@@ -183,7 +183,7 @@ const TRUST = [
 const FAQS = [
   {
     q: "রেজিস্ট্রেশন করতে কি টাকা লাগে?",
-    a: "না, রেজিস্ট্রেশন সম্পূর্ণ ফ্রি। বরং একাউন্ট খুললেই ২০০ টাকা বোনাস পাবেন।",
+    a: "না, রেজিস্ট্রেশন সম্পূর্ণ ফ্রি। বরং একাউন্ট খুললেই ১০০ টাকা বোনাস পাবেন।",
   },
   {
     q: "কাজ শুরু করতে ডিপোজিট কেন লাগে?",
@@ -226,13 +226,13 @@ function Landing() {
         >
           <div className="mx-auto max-w-3xl text-center">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/25 bg-card px-3.5 py-1.5 text-xs font-bold text-primary shadow-card">
-              <Zap className="h-3.5 w-3.5" /> নতুন রেজিস্ট্রেশনে {taka(200)} বোনাস
+              <Zap className="h-3.5 w-3.5" /> নতুন রেজিস্ট্রেশনে {taka(settings.signup_bonus)} বোনাস
             </span>
             <h1 className="font-display mt-5 text-3xl leading-tight font-extrabold sm:text-5xl">
               মোবাইল দিয়েই কাজ করে <span className="text-gradient">প্রতিদিন ইনকাম</span> করুন
             </h1>
             <p className="text-muted-foreground mx-auto mt-4 max-w-xl text-sm sm:text-base">
-              Smartjobbd26 বাংলাদেশের সহজ মাইক্রোজব প্ল্যাটফর্ম। বিজ্ঞাপন দেখুন, ভিডিও দেখুন, ছোট
+              Smart Job BD 26 বাংলাদেশের সহজ মাইক্রোজব প্ল্যাটফর্ম। বিজ্ঞাপন দেখুন, ভিডিও দেখুন, ছোট
               কাজ করুন — আর বিকাশ বা নগদে টাকা তুলে নিন।
             </p>
             <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
@@ -318,7 +318,7 @@ function Landing() {
         <section className="border-border/70 bg-secondary/50 border-y px-4 py-14">
           <div className="mx-auto max-w-6xl">
             <h2 className="font-display text-center text-2xl font-bold">
-              কেন <span className="text-gradient">SmartJobBD26</span>?
+              কেন <span className="text-gradient">Smart Job BD 26</span>?
             </h2>
             <p className="text-muted-foreground mt-2 text-center text-sm">
               হাজারো ব্যবহারকারীর আস্থার কারণগুলো
@@ -365,7 +365,7 @@ function Landing() {
           <div className="mx-auto max-w-6xl">
             <h2 className="font-display text-center text-2xl font-bold">ব্যবহারকারীদের অভিজ্ঞতা</h2>
             <p className="text-muted-foreground mt-2 text-center text-sm">
-              যারা প্রতিদিন Smartjobbd26 থেকে আয় করছেন
+              যারা প্রতিদিন Smart Job BD 26 থেকে আয় করছেন
             </p>
             <div className="mt-8 grid gap-4 sm:grid-cols-3">
               {REVIEWS.map((r) => (
@@ -457,7 +457,8 @@ function Landing() {
               আজই শুরু করুন
             </h2>
             <p className="mx-auto mt-2 max-w-md text-sm text-primary-foreground/85">
-              ফ্রি একাউন্ট খুলুন, {taka(200)} বোনাস নিন এবং আজ থেকেই ইনকাম শুরু করুন।
+              ফ্রি একাউন্ট খুলুন, {taka(settings.signup_bonus)} বোনাস নিন এবং আজ থেকেই ইনকাম শুরু
+              করুন।
             </p>
             <Link
               to="/auth"
@@ -474,7 +475,8 @@ function Landing() {
         <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 text-center">
           <Logo />
           <p className="text-muted-foreground max-w-md text-xs leading-relaxed">
-            Smartjobbd26 — বাংলাদেশের বিশ্বস্ত মাইক্রোজব প্ল্যাটফর্ম। ঘরে বসে মোবাইল দিয়ে আয় করুন।
+            Smart Job BD 26 — বাংলাদেশের বিশ্বস্ত মাইক্রোজব প্ল্যাটফর্ম। ঘরে বসে মোবাইল দিয়ে আয়
+            করুন।
           </p>
           <div className="text-muted-foreground flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs font-medium">
             <Link to="/auth" className="hover:text-primary">
@@ -491,7 +493,7 @@ function Landing() {
             </Link>
           </div>
           <p className="text-muted-foreground border-border/70 w-full border-t pt-4 text-[11px]">
-            © {bn(2026)} Smartjobbd26 — সকল অধিকার সংরক্ষিত।
+            © {bn(2026)} Smart Job BD 26 — সকল অধিকার সংরক্ষিত।
           </p>
         </div>
       </footer>

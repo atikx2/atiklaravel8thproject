@@ -43,7 +43,7 @@ export const ADMIN_LINKS = [
   { to: "/admin/tasks", label: "টাস্ক যাচাই", icon: ClipboardCheck },
   { to: "/admin/deposits", label: "ডিপোজিট", icon: Wallet },
   { to: "/admin/withdrawals", label: "উইথড্র", icon: BanknoteArrowDown },
-  { to: "/admin/payments", label: "পেমেন্ট নাম্বার", icon: Smartphone },
+  { to: "/admin/payments", label: "সেটিংস ও পেমেন্ট", icon: Smartphone },
   { to: "/admin/admins", label: "অ্যাডমিন", icon: ShieldCheck },
 ] as const;
 
@@ -138,7 +138,10 @@ function AdminLayout() {
       </div>
 
       {open && (
-        <div className="fixed inset-0 z-50 bg-foreground/40 backdrop-blur-sm lg:hidden" onClick={() => setOpen(false)}>
+        <div
+          className="fixed inset-0 z-50 bg-foreground/40 backdrop-blur-sm lg:hidden"
+          onClick={() => setOpen(false)}
+        >
           <div
             className="absolute inset-y-0 left-0 flex w-72 flex-col bg-background p-4"
             onClick={(e) => e.stopPropagation()}

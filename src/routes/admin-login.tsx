@@ -8,9 +8,9 @@ import { Loader2, ShieldCheck } from "lucide-react";
 export const Route = createFileRoute("/admin-login")({
   head: () => ({
     meta: [
-      { title: "অ্যাডমিন লগইন | Smartjobbd26" },
-      { name: "description", content: "Smartjobbd26 অ্যাডমিন কন্ট্রোল প্যানেলে প্রবেশ করুন।" },
-      { property: "og:title", content: "অ্যাডমিন লগইন | Smartjobbd26" },
+      { title: "অ্যাডমিন লগইন | Smart Job BD 26" },
+      { name: "description", content: "Smart Job BD 26 অ্যাডমিন কন্ট্রোল প্যানেলে প্রবেশ করুন।" },
+      { property: "og:title", content: "অ্যাডমিন লগইন | Smart Job BD 26" },
       { property: "og:description", content: "শুধুমাত্র অনুমোদিত অ্যাডমিনদের জন্য।" },
       { name: "robots", content: "noindex" },
     ],
@@ -51,7 +51,10 @@ function AdminLogin() {
   };
 
   return (
-    <div className="grid min-h-screen place-items-center px-4" style={{ backgroundImage: "var(--gradient-hero)" }}>
+    <div
+      className="grid min-h-screen place-items-center px-4"
+      style={{ backgroundImage: "var(--gradient-hero)" }}
+    >
       <div className="surface-card w-full max-w-sm p-6">
         <div className="mb-4 flex items-center gap-2">
           <ShieldCheck className="h-6 w-6 text-primary" />

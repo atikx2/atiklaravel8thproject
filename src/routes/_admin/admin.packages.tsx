@@ -20,7 +20,15 @@ export const Route = createFileRoute("/_admin/admin/packages")({
   component: PackagesAdmin,
 });
 
-const empty = { name: "", price: "", daily_ads: "3", daily_income: "", validity_days: "60", sort_order: "0", ad_link: "" };
+const empty = {
+  name: "",
+  price: "",
+  daily_ads: "3",
+  daily_income: "",
+  validity_days: "60",
+  sort_order: "0",
+  ad_link: "",
+};
 
 function PackagesAdmin() {
   const qc = useQueryClient();
@@ -45,20 +53,47 @@ function PackagesAdmin() {
   };
 
   return (
-    <AdminPage title="প্যাকেজ ম্যানেজমেন্ট" subtitle="বিনিয়োগ প্যাকেজ যোগ, সম্পাদনা ও মুছুন" icon={PackageIcon}>
+    <AdminPage
+      title="প্যাকেজ ম্যানেজমেন্ট"
+      subtitle="বিনিয়োগ প্যাকেজ যোগ, সম্পাদনা ও মুছুন"
+      icon={PackageIcon}
+    >
+      <p className="rounded-2xl border border-primary/30 bg-primary/5 p-3 text-xs text-muted-foreground">
+        টিপস: প্রতিটি প্যাকেজে আলাদা লিংক না দিয়ে <b>সেটিংস ও পেমেন্ট</b> পেজে একটি{" "}
+        <b>গ্লোবাল বিজ্ঞাপন লিংক</b> দিলে সেটিই সব প্ল্যান ও টাস্কে ব্যবহার হবে।
+      </p>
+
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-[380px_minmax(0,1fr)]">
         <form onSubmit={create} className="surface-card h-fit space-y-3 p-4">
           <h2 className="font-display text-base font-bold">নতুন প্যাকেজ</h2>
-          <AdminField label="প্যাকেজের নাম" value={form.name} onChange={set("name")} placeholder="প্যাকেজ ১" />
+          <AdminField
+            label="প্যাকেজের নাম"
+            value={form.name}
+            onChange={set("name")}
+            placeholder="প্যাকেজ ১"
+          />
           <div className="grid grid-cols-2 gap-2">
             <AdminField label="দাম (টাকা)" value={form.price} onChange={set("price")} />
             <AdminField label="দৈনিক বিজ্ঞাপন" value={form.daily_ads} onChange={set("daily_ads")} />
           </div>
           <div className="grid grid-cols-2 gap-2">
-            <AdminField label="দৈনিক আয় (টাকা)" value={form.daily_income} onChange={set("daily_income")} />
-            <AdminField label="মেয়াদ (দিন)" value={form.validity_days} onChange={set("validity_days")} />
+            <AdminField
+              label="দৈনিক আয় (টাকা)"
+              value={form.daily_income}
+              onChange={set("daily_income")}
+            />
+            <AdminField
+              label="মেয়াদ (দিন)"
+              value={form.validity_days}
+              onChange={set("validity_days")}
+            />
           </div>
-          <AdminField label="ডিফল্ট বিজ্ঞাপন লিংক" value={form.ad_link} onChange={set("ad_link")} placeholder="https://..." />
+          <AdminField
+            label="বিজ্ঞাপন লিংক (খালি রাখলে গ্লোবাল লিংক)"
+            value={form.ad_link}
+            onChange={set("ad_link")}
+            placeholder="খালি = গ্লোবাল লিংক"
+          />
           <AdminField label="ক্রম" value={form.sort_order} onChange={set("sort_order")} />
           <button className="bg-brand flex w-full items-center justify-center gap-2 rounded-2xl py-3 text-sm font-bold text-primary-foreground">
             <Plus className="h-4 w-4" /> প্যাকেজ যোগ করুন
@@ -158,9 +193,18 @@ function PackageRow({ p }: { p: Package }) {
           </div>
           <div className="grid grid-cols-2 gap-2">
             <AdminField label="দৈনিক আয়" value={f.daily_income} onChange={set("daily_income")} />
-            <AdminField label="মেয়াদ (দিন)" value={f.validity_days} onChange={set("validity_days")} />
+            <AdminField
+              label="মেয়াদ (দিন)"
+              value={f.validity_days}
+              onChange={set("validity_days")}
+            />
           </div>
-          <AdminField label="ডিফল্ট বিজ্ঞাপন লিংক" value={f.ad_link} onChange={set("ad_link")} placeholder="https://..." />
+          <AdminField
+            label="বিজ্ঞাপন লিংক (খালি রাখলে গ্লোবাল লিংক)"
+            value={f.ad_link}
+            onChange={set("ad_link")}
+            placeholder="খালি = গ্লোবাল লিংক"
+          />
           <AdminField label="ক্রম" value={f.sort_order} onChange={set("sort_order")} />
           <button
             onClick={save}

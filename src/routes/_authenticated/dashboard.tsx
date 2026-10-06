@@ -35,12 +35,12 @@ import {
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
     meta: [
-      { title: "ড্যাশবোর্ড | Smartjobbd26" },
+      { title: "ড্যাশবোর্ড | Smart Job BD 26" },
       {
         name: "description",
         content: "আপনার ব্যালেন্স, মোট আয় এবং সম্পন্ন কাজের হিসাব এক নজরে দেখুন।",
       },
-      { property: "og:title", content: "ড্যাশবোর্ড | Smartjobbd26" },
+      { property: "og:title", content: "ড্যাশবোর্ড | Smart Job BD 26" },
       { property: "og:description", content: "ব্যালেন্স, আয় ও কাজের অবস্থা এক নজরে।" },
     ],
   }),
@@ -173,12 +173,12 @@ function Dashboard() {
           </span>
           <div className="animate-marquee flex min-w-0">
             <span className="flex min-w-full shrink-0 items-center gap-2 pr-6 text-xs font-semibold whitespace-nowrap">
-              <Megaphone className="h-3.5 w-3.5 text-primary" /> Smart Job BD আপনাকে স্বাগতম — নতুন
-              একাউন্টে ২০০ টাকা বোনাস, ২০০০+ ডিপোজিটে এক্সট্রা ৩০% বোনাস।
+              <Megaphone className="h-3.5 w-3.5 text-primary" /> Smart Job BD 26 আপনাকে স্বাগতম —
+              নতুন একাউন্টে {taka(settings.signup_bonus)} বোনাস, ২০০০+ ডিপোজিটে এক্সট্রা ৩০% বোনাস।
             </span>
             <span className="flex min-w-full shrink-0 items-center gap-2 pr-6 text-xs font-semibold whitespace-nowrap">
-              <Megaphone className="h-3.5 w-3.5 text-primary" /> Smart Job BD আপনাকে স্বাগতম — নতুন
-              একাউন্টে ২০০ টাকা বোনাস, ২০০০+ ডিপোজিটে এক্সট্রা ৩০% বোনাস।
+              <Megaphone className="h-3.5 w-3.5 text-primary" /> Smart Job BD 26 আপনাকে স্বাগতম —
+              নতুন একাউন্টে {taka(settings.signup_bonus)} বোনাস, ২০০০+ ডিপোজিটে এক্সট্রা ৩০% বোনাস।
             </span>
           </div>
         </div>
@@ -208,7 +208,8 @@ function Dashboard() {
           <div>
             <p className="font-bold">কাজ শুরু করতে প্রথম ডিপোজিট দিন</p>
             <p className="text-muted-foreground">
-              ২০০ টাকা বোনাস আপনার একাউন্টে আছে, তবে প্রথম ডিপোজিট ছাড়া কাজ জমা দেওয়া যাবে না।{" "}
+              {taka(settings.signup_bonus)} বোনাস আপনার একাউন্টে আছে, তবে প্রথম ডিপোজিট ছাড়া কাজ
+              জমা দেওয়া যাবে না।{" "}
               <Link to="/deposit" className="font-bold text-primary underline">
                 এখনই ডিপোজিট করুন
               </Link>
@@ -221,7 +222,7 @@ function Dashboard() {
         <Link to="/packages" className="surface-card block overflow-hidden p-0">
           <img
             src={banner}
-            alt="Smartjobbd26 ব্যানার"
+            alt="Smart Job BD 26 ব্যানার"
             className="h-40 w-full object-cover sm:h-56"
             loading="lazy"
           />
@@ -240,7 +241,12 @@ function Dashboard() {
           tone="text-success"
         />
         <Stat icon={Clock} label="পেন্ডিং" value={bn(count("pending"))} tone="text-warning" />
-        <Stat icon={Gift} label="বোনাস" value={taka(200)} tone="text-primary" />
+        <Stat
+          icon={Gift}
+          label="সাইনআপ বোনাস"
+          value={taka(settings.signup_bonus)}
+          tone="text-primary"
+        />
       </div>
 
       {/* ─── সাম্প্রতিক লেনদেন ─── */}

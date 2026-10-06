@@ -20,9 +20,9 @@ import {
 export const Route = createFileRoute("/_authenticated/profile")({
   head: () => ({
     meta: [
-      { title: "প্রোফাইল | Smartjobbd26" },
+      { title: "প্রোফাইল | Smart Job BD 26" },
       { name: "description", content: "আপনার একাউন্টের তথ্য, ব্যালেন্স ও সব অপশন এক জায়গায়।" },
-      { property: "og:title", content: "প্রোফাইল | Smartjobbd26" },
+      { property: "og:title", content: "প্রোফাইল | Smart Job BD 26" },
       { property: "og:description", content: "একাউন্ট তথ্য ও সেটিংস।" },
     ],
   }),
@@ -150,7 +150,7 @@ function ProfilePage() {
       </section>
 
       <p className="pb-2 text-center text-[11px] text-muted-foreground">
-        Smart Job BD · সংস্করণ {bn(2.0)}
+        Smart Job BD 26 · সংস্করণ {bn(2.0)}
       </p>
     </div>
   );

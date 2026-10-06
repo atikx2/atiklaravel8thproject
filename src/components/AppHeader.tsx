@@ -46,7 +46,7 @@ export function AppHeader() {
   const notices = [
     {
       icon: Gift,
-      t: "নতুন রেজিস্ট্রেশনে ২০০ টাকা বোনাস",
+      t: `নতুন রেজিস্ট্রেশনে ${taka(settings.signup_bonus)} বোনাস`,
       d: "বন্ধুদের জানিয়ে দিন — একাউন্ট খুললেই বোনাস।",
     },
     {

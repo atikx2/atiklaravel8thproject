@@ -79,17 +79,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Smart Job BD — মোবাইলে কাজ করে ইনকাম" },
+      { title: "Smart Job BD 26 — মোবাইলে কাজ করে ইনকাম" },
       {
         name: "description",
         content:
           "বিজ্ঞাপন দেখে, ভিডিও দেখে ও মাইক্রো টাস্ক করে প্রতিদিন ইনকাম করুন। বিকাশ ও নগদে উইথড্র।",
       },
       { name: "theme-color", content: "#0B0710" },
-      { property: "og:title", content: "Smart Job BD — মোবাইলে কাজ করে ইনকাম" },
+      { property: "og:title", content: "Smart Job BD 26 — মোবাইলে কাজ করে ইনকাম" },
       {
         property: "og:description",
-        content: "রেজিস্ট্রেশনে ২০০ টাকা বোনাস, বিকাশ ও নগদে দ্রুত পেমেন্ট।",
+        content: "রেজিস্ট্রেশনে ১০০ টাকা বোনাস, বিকাশ ও নগদে দ্রুত পেমেন্ট।",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

@@ -8,6 +8,10 @@ export type AppSettings = {
   min_withdraw: number;
   min_deposit: number;
   banner_image_url: string;
+  /** নতুন রেজিস্ট্রেশন বোনাস (টাকা) — অ্যাডমিন প্যানেল থেকে বদলানো যায় */
+  signup_bonus: number;
+  /** একটি লিংক — প্যাকেজ/টাস্কে আলাদা লিংক না থাকলে এটাই ব্যবহার হয় */
+  global_ad_link: string;
 };
 
 export const DEFAULT_SETTINGS: AppSettings = {
@@ -17,14 +21,24 @@ export const DEFAULT_SETTINGS: AppSettings = {
   min_withdraw: 500,
   min_deposit: 100,
   banner_image_url: "",
+  signup_bonus: 100,
+  global_ad_link: "",
 };
 
 export function useSettings() {
   const { data } = useQuery({
     queryKey: ["app_settings"],
     queryFn: async () => {
-      const { data } = await supabase.from("app_settings").select("*").eq("id", "main").maybeSingle();
-      return (data as AppSettings | null) ?? DEFAULT_SETTINGS;
+      const { data } = await supabase
+        .from("app_settings")
+        .select("*")
+        .eq("id", "main")
+        .maybeSingle();
+      // ডিফল্টের সাথে মার্জ — কোনো কলাম এখনো মাইগ্রেট না হলেও UI ভাঙবে না
+      return {
+        ...DEFAULT_SETTINGS,
+        ...((data as Partial<AppSettings> | null) ?? {}),
+      } as AppSettings;
     },
   });
   return data ?? DEFAULT_SETTINGS;

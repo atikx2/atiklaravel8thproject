@@ -3,6 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth, taka, bn } from "@/lib/auth";
 import { useMyPurchases, isActivePurchase, normalizeLink } from "@/lib/packages";
+import { useSettings } from "@/lib/settings";
 import { PlayCircle, CheckCircle2, Loader2, Eye, AlertCircle } from "lucide-react";
 
 function dhakaToday() {
@@ -11,6 +12,7 @@ function dhakaToday() {
 
 export function PackageAds() {
   const { user } = useAuth();
+  const settings = useSettings();
   const purchasesQ = useMyPurchases();
   const viewsQ = useQuery({
     queryKey: ["package-ad-views", user?.id, dhakaToday()],
@@ -67,7 +69,7 @@ export function PackageAds() {
                   purchaseId={p.id}
                   index={n}
                   reward={reward}
-                  link={normalizeLink(p.packages?.ad_link ?? "")}
+                  link={normalizeLink(p.packages?.ad_link?.trim() || settings.global_ad_link)}
                   done={done.has(`${p.id}:${n}`)}
                 />
               ))}
@@ -108,7 +110,10 @@ function AdTask({
     if (left !== 0 || busy) return;
     setBusy(true);
     void (async () => {
-      const { error } = await supabase.rpc("complete_package_ad", { _purchase_id: purchaseId, _ad_index: index });
+      const { error } = await supabase.rpc("complete_package_ad", {
+        _purchase_id: purchaseId,
+        _ad_index: index,
+      });
       setBusy(false);
       setLeft(null);
       if (error) setErr(error.message);
@@ -142,11 +147,15 @@ function AdTask({
         className="bg-brand flex shrink-0 items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-bold text-primary-foreground disabled:opacity-40"
       >
         {done ? (
-          <><CheckCircle2 className="h-4 w-4" /> সম্পন্ন</>
+          <>
+            <CheckCircle2 className="h-4 w-4" /> সম্পন্ন
+          </>
         ) : busy || left !== null ? (
           <Loader2 className="h-4 w-4 animate-spin" />
         ) : (
-          <><Eye className="h-4 w-4" /> দেখুন</>
+          <>
+            <Eye className="h-4 w-4" /> দেখুন
+          </>
         )}
       </button>
     </div>

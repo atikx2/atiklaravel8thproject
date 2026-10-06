@@ -1,14 +1,36 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { taka, bn } from "@/lib/auth";
-import { usePackages, useMyPurchases, useMyPendingPackageIds, isActivePurchase } from "@/lib/packages";
-import { Crown, Tag, Rocket, ShieldCheck, Gift, Play, Coins, CalendarDays, ShoppingCart, Sparkles, CheckCircle2, Clock, History } from "lucide-react";
+import {
+  usePackages,
+  useMyPurchases,
+  useMyPendingPackageIds,
+  isActivePurchase,
+} from "@/lib/packages";
+import {
+  Crown,
+  Tag,
+  Rocket,
+  ShieldCheck,
+  Gift,
+  Play,
+  Coins,
+  CalendarDays,
+  ShoppingCart,
+  Sparkles,
+  CheckCircle2,
+  Clock,
+  History,
+} from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/packages")({
   head: () => ({
     meta: [
-      { title: "বিনিয়োগ প্যাকেজ | Smartjobbd26" },
-      { name: "description", content: "৳৫০০ থেকে শুরু বিনিয়োগ প্যাকেজ কিনে প্রতিদিন বিজ্ঞাপন দেখে আয় করুন।" },
-      { property: "og:title", content: "বিনিয়োগ প্যাকেজ | Smartjobbd26" },
+      { title: "বিনিয়োগ প্যাকেজ | Smart Job BD 26" },
+      {
+        name: "description",
+        content: "৳৫০০ থেকে শুরু বিনিয়োগ প্যাকেজ কিনে প্রতিদিন বিজ্ঞাপন দেখে আয় করুন।",
+      },
+      { property: "og:title", content: "বিনিয়োগ প্যাকেজ | Smart Job BD 26" },
       { property: "og:description", content: "৬০ দিনের বৈধতা, দৈনিক নির্দিষ্ট আয়।" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -27,7 +49,10 @@ function PackagesPage() {
 
   return (
     <div className="space-y-5">
-      <header className="surface-card glow p-5" style={{ backgroundImage: "var(--gradient-brand)" }}>
+      <header
+        className="surface-card glow p-5"
+        style={{ backgroundImage: "var(--gradient-brand)" }}
+      >
         <p className="flex items-center gap-2 text-sm font-semibold text-primary-foreground/85">
           <Sparkles className="h-4 w-4" /> বিনিয়োগ প্যাকেজ
         </p>
@@ -49,7 +74,9 @@ function PackagesPage() {
           />
         ))}
         {packages.length === 0 && (
-          <p className="surface-card p-8 text-center text-sm text-muted-foreground">এখন কোনো প্যাকেজ নেই।</p>
+          <p className="surface-card p-8 text-center text-sm text-muted-foreground">
+            এখন কোনো প্যাকেজ নেই।
+          </p>
         )}
       </div>
 
@@ -61,13 +88,17 @@ function PackagesPage() {
           {(mine ?? []).map((m) => {
             const active = isActivePurchase(m);
             return (
-              <div key={m.id} className="flex items-center justify-between gap-3 rounded-xl bg-secondary/60 px-3 py-2.5">
+              <div
+                key={m.id}
+                className="flex items-center justify-between gap-3 rounded-xl bg-secondary/60 px-3 py-2.5"
+              >
                 <div className="min-w-0">
                   <p className="text-sm font-bold">
                     {m.packages?.name ?? "প্যাকেজ"} · {taka(m.price)}
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    দৈনিক {bn(m.daily_ads)} বিজ্ঞাপন · {taka(m.daily_income)} · কেনা {fmtDate(m.created_at)} · মেয়াদ {fmtDate(m.expires_at)}
+                    দৈনিক {bn(m.daily_ads)} বিজ্ঞাপন · {taka(m.daily_income)} · কেনা{" "}
+                    {fmtDate(m.created_at)} · মেয়াদ {fmtDate(m.expires_at)}
                   </p>
                 </div>
                 <span
@@ -81,7 +112,9 @@ function PackagesPage() {
             );
           })}
           {!isLoading && (mine?.length ?? 0) === 0 && (
-            <p className="py-4 text-center text-sm text-muted-foreground">এখনো কোনো প্যাকেজ কেনা হয়নি।</p>
+            <p className="py-4 text-center text-sm text-muted-foreground">
+              এখনো কোনো প্যাকেজ কেনা হয়নি।
+            </p>
           )}
         </div>
       </div>
@@ -107,7 +140,9 @@ function PackageCard({
         <p className="font-display text-center text-2xl font-extrabold text-primary-foreground">
           package_{index + 1}
         </p>
-        <p className="mt-1 text-center text-sm font-semibold text-primary-foreground/85">বিনিয়োগ প্যাকেজ</p>
+        <p className="mt-1 text-center text-sm font-semibold text-primary-foreground/85">
+          বিনিয়োগ প্যাকেজ
+        </p>
         {popular && (
           <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-warning px-3 py-0.5 text-[11px] font-extrabold text-primary-foreground shadow">
             জনপ্রিয়
@@ -118,7 +153,9 @@ function PackageCard({
       <div className="space-y-5 px-5 py-6">
         {/* Price */}
         <div className="text-center">
-          <p className="font-display text-4xl font-extrabold text-foreground drop-shadow-sm">{taka(p.price)}</p>
+          <p className="font-display text-4xl font-extrabold text-foreground drop-shadow-sm">
+            {taka(p.price)}
+          </p>
           <span className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-warning px-4 py-1.5 text-xs font-extrabold text-primary-foreground shadow-md shadow-warning/40">
             <Tag className="h-3.5 w-3.5" /> এককালীন বিনিয়োগ
           </span>
@@ -126,9 +163,21 @@ function PackageCard({
 
         {/* Feature pills */}
         <div className="flex flex-wrap justify-center gap-2">
-          <Pill className="bg-success text-primary-foreground shadow-success/40" icon={Rocket} text="দ্রুত আয়" />
-          <Pill className="bg-info text-primary-foreground shadow-info/40" icon={ShieldCheck} text="নিরাপদ" />
-          <Pill className="bg-destructive text-primary-foreground shadow-destructive/40" icon={Gift} text="বোনাস" />
+          <Pill
+            className="bg-success text-primary-foreground shadow-success/40"
+            icon={Rocket}
+            text="দ্রুত আয়"
+          />
+          <Pill
+            className="bg-info text-primary-foreground shadow-info/40"
+            icon={ShieldCheck}
+            text="নিরাপদ"
+          />
+          <Pill
+            className="bg-destructive text-primary-foreground shadow-destructive/40"
+            icon={Gift}
+            text="বোনাস"
+          />
         </div>
 
         {/* Detail rows */}
@@ -170,9 +219,13 @@ function PackageCard({
             }`}
           >
             {state === "active" ? (
-              <><CheckCircle2 className="h-5 w-5" /> সক্রিয় · মেয়াদ শেষে আবার কিনুন</>
+              <>
+                <CheckCircle2 className="h-5 w-5" /> সক্রিয় · মেয়াদ শেষে আবার কিনুন
+              </>
             ) : (
-              <><Clock className="h-5 w-5" /> অনুমোদনের অপেক্ষায়</>
+              <>
+                <Clock className="h-5 w-5" /> অনুমোদনের অপেক্ষায়
+              </>
             )}
           </div>
         )}
@@ -181,18 +234,40 @@ function PackageCard({
   );
 }
 
-function Pill({ icon: Icon, text, className }: { icon: React.ElementType; text: string; className: string }) {
+function Pill({
+  icon: Icon,
+  text,
+  className,
+}: {
+  icon: React.ElementType;
+  text: string;
+  className: string;
+}) {
   return (
-    <span className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-extrabold shadow-md ${className}`}>
+    <span
+      className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-extrabold shadow-md ${className}`}
+    >
       <Icon className="h-3.5 w-3.5" /> {text}
     </span>
   );
 }
 
-function DetailRow({ color, icon: Icon, title, sub }: { color: string; icon: React.ElementType; title: string; sub: string }) {
+function DetailRow({
+  color,
+  icon: Icon,
+  title,
+  sub,
+}: {
+  color: string;
+  icon: React.ElementType;
+  title: string;
+  sub: string;
+}) {
   return (
     <li className="flex items-center gap-3">
-      <span className={`grid h-11 w-11 shrink-0 place-items-center rounded-full text-primary-foreground shadow-md ${color}`}>
+      <span
+        className={`grid h-11 w-11 shrink-0 place-items-center rounded-full text-primary-foreground shadow-md ${color}`}
+      >
         <Icon className="h-5 w-5" />
       </span>
       <div className="min-w-0">

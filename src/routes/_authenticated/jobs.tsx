@@ -4,6 +4,8 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth, taka, bn } from "@/lib/auth";
 import { PackageAds } from "@/components/PackageAds";
+import { useSettings } from "@/lib/settings";
+import { normalizeLink } from "@/lib/packages";
 import {
   MonitorPlay,
   Youtube,
@@ -18,17 +20,21 @@ import {
   ShoppingCart,
   Inbox,
   Lightbulb,
-
 } from "lucide-react";
-
 
 export const Route = createFileRoute("/_authenticated/jobs")({
   head: () => ({
     meta: [
-      { title: "কাজের তালিকা | Smartjobbd26" },
-      { name: "description", content: "বিজ্ঞাপন দেখে, ভিডিও দেখে ও মাইক্রো টাস্ক করে ঘরে বসে ইনকাম করুন।" },
-      { property: "og:title", content: "কাজের তালিকা | Smartjobbd26" },
-      { property: "og:description", content: "প্রতিদিন নতুন কাজ — বিজ্ঞাপন, ভিডিও ও মাইক্রো টাস্ক।" },
+      { title: "কাজের তালিকা | Smart Job BD 26" },
+      {
+        name: "description",
+        content: "বিজ্ঞাপন দেখে, ভিডিও দেখে ও মাইক্রো টাস্ক করে ঘরে বসে ইনকাম করুন।",
+      },
+      { property: "og:title", content: "কাজের তালিকা | Smart Job BD 26" },
+      {
+        property: "og:description",
+        content: "প্রতিদিন নতুন কাজ — বিজ্ঞাপন, ভিডিও ও মাইক্রো টাস্ক।",
+      },
     ],
   }),
   component: JobsPage,
@@ -53,6 +59,7 @@ const TYPE_META = {
 
 function JobsPage() {
   const { profile, user } = useAuth();
+  const settings = useSettings();
   const qc = useQueryClient();
   const [active, setActive] = useState<Job | null>(null);
 
@@ -97,14 +104,24 @@ function JobsPage() {
         >
           <Megaphone className="h-9 w-9 text-primary-foreground" />
         </span>
-        <h2 className="font-display text-gradient mt-4 text-xl font-extrabold">বিজ্ঞাপন দেখে ইনকাম করুন</h2>
-        <p className="mt-1.5 text-sm text-muted-foreground">নিচের কাজগুলো সম্পন্ন করুন এবং টাকা আয় করুন</p>
+        <h2 className="font-display text-gradient mt-4 text-xl font-extrabold">
+          বিজ্ঞাপন দেখে ইনকাম করুন
+        </h2>
+        <p className="mt-1.5 text-sm text-muted-foreground">
+          নিচের কাজগুলো সম্পন্ন করুন এবং টাকা আয় করুন
+        </p>
 
         <div className="mt-4 h-2 w-full overflow-hidden rounded-full bg-secondary">
-          <div className="h-full rounded-full transition-all" style={{ width: `${pct}%`, backgroundImage: "var(--gradient-brand)" }} />
+          <div
+            className="h-full rounded-full transition-all"
+            style={{ width: `${pct}%`, backgroundImage: "var(--gradient-brand)" }}
+          />
         </div>
         <p className="mt-2 text-sm text-muted-foreground">
-          আজকের কাজ: <span className="font-extrabold text-foreground">{bn(doneCount)} / {bn(total)}</span>
+          আজকের কাজ:{" "}
+          <span className="font-extrabold text-foreground">
+            {bn(doneCount)} / {bn(total)}
+          </span>
         </p>
 
         <div className="mt-4 grid grid-cols-3 gap-2.5">
@@ -135,7 +152,8 @@ function JobsPage() {
           <div>
             <p className="font-bold">কাজ করতে হলে প্রথমে ডিপোজিট করুন</p>
             <p className="text-muted-foreground">
-              ২০০ টাকা বোনাস আপনার একাউন্টে আছে, তবে প্রথম ডিপোজিট ছাড়া কাজ জমা দেওয়া যাবে না।{" "}
+              {taka(settings.signup_bonus)} বোনাস আপনার একাউন্টে আছে, তবে প্রথম ডিপোজিট ছাড়া কাজ
+              জমা দেওয়া যাবে না।{" "}
               <Link to="/deposit" className="text-primary underline">
                 ডিপোজিট করুন
               </Link>
@@ -143,7 +161,6 @@ function JobsPage() {
           </div>
         </div>
       )}
-
 
       <PackageAds />
 
@@ -157,25 +174,28 @@ function JobsPage() {
               <Icon className="h-4 w-4 text-primary" /> {label}
             </h2>
             <div className="grid grid-cols-1 gap-2 lg:grid-cols-2 xl:grid-cols-3">
-            {list.map((j) => {
-              const already = done?.includes(j.id);
-              return (
-                <div key={j.id} className="surface-card flex items-center justify-between gap-3 p-4">
-                  <div className="min-w-0">
-                    <p className="truncate text-sm font-bold">{j.title}</p>
-                    <p className="line-clamp-2 text-xs text-muted-foreground">{j.description}</p>
-                    <p className="mt-1 text-sm font-extrabold text-primary">{taka(j.reward)}</p>
-                  </div>
-                  <button
-                    disabled={!profile?.has_deposited || already}
-                    onClick={() => setActive(j)}
-                    className="bg-brand shrink-0 rounded-xl px-4 py-2 text-xs font-bold text-primary-foreground disabled:opacity-40"
+              {list.map((j) => {
+                const already = done?.includes(j.id);
+                return (
+                  <div
+                    key={j.id}
+                    className="surface-card flex items-center justify-between gap-3 p-4"
                   >
-                    {already ? "জমা হয়েছে" : "শুরু করুন"}
-                  </button>
-                </div>
-              );
-             })}
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-bold">{j.title}</p>
+                      <p className="line-clamp-2 text-xs text-muted-foreground">{j.description}</p>
+                      <p className="mt-1 text-sm font-extrabold text-primary">{taka(j.reward)}</p>
+                    </div>
+                    <button
+                      disabled={!profile?.has_deposited || already}
+                      onClick={() => setActive(j)}
+                      className="bg-brand shrink-0 rounded-xl px-4 py-2 text-xs font-bold text-primary-foreground disabled:opacity-40"
+                    >
+                      {already ? "জমা হয়েছে" : "শুরু করুন"}
+                    </button>
+                  </div>
+                );
+              })}
             </div>
           </section>
         );
@@ -210,7 +230,6 @@ function JobsPage() {
         </ul>
       </div>
 
-
       {active && (
         <JobModal
           job={active}
@@ -227,6 +246,8 @@ function JobsPage() {
 
 function JobModal({ job, onClose, onDone }: { job: Job; onClose: () => void; onDone: () => void }) {
   const { user } = useAuth();
+  const settings = useSettings();
+  const adLink = normalizeLink(job.link?.trim() || settings.global_ad_link);
   const [left, setLeft] = useState(job.duration_seconds);
   const [proof, setProof] = useState("");
   const [busy, setBusy] = useState(false);
@@ -266,9 +287,9 @@ function JobModal({ job, onClose, onDone }: { job: Job; onClose: () => void; onD
         </div>
         <p className="text-sm text-muted-foreground">{job.description}</p>
 
-        {job.link && (
+        {adLink && (
           <a
-            href={job.link}
+            href={adLink}
             target="_blank"
             rel="noopener noreferrer"
             className="mt-3 flex items-center justify-center gap-2 rounded-2xl border border-primary/40 bg-primary/10 py-3 text-sm font-bold text-primary"

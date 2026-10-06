@@ -19,12 +19,13 @@ import {
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "সম্পর্কে ও সাপোর্ট | Smartjobbd26" },
+      { title: "সম্পর্কে ও সাপোর্ট | Smart Job BD 26" },
       {
         name: "description",
-        content: "Smart Job BD কীভাবে কাজ করে, পেমেন্ট নিয়ম ও সাপোর্টে যোগাযোগের সব তথ্য এক পেজে।",
+        content:
+          "Smart Job BD 26 কীভাবে কাজ করে, পেমেন্ট নিয়ম ও সাপোর্টে যোগাযোগের সব তথ্য এক পেজে।",
       },
-      { property: "og:title", content: "সম্পর্কে ও সাপোর্ট | Smartjobbd26" },
+      { property: "og:title", content: "সম্পর্কে ও সাপোর্ট | Smart Job BD 26" },
       { property: "og:description", content: "প্ল্যাটফর্ম পরিচিতি, পেমেন্ট নিয়ম ও সাপোর্ট।" },
     ],
   }),
@@ -59,10 +60,10 @@ const RULES = [
   { icon: Sparkles, t: "কোনো হিডেন চার্জ নেই", d: "উইথড্রতে অতিরিক্ত কোনো ফি কাটা হয় না।" },
 ];
 
-const FAQ = [
+const faqList = (bonus: string) => [
   {
     q: "রেজিস্ট্রেশন করতে কি টাকা লাগে?",
-    a: "না। একাউন্ট খোলা সম্পূর্ণ ফ্রি এবং সাথে সাথে ২০০ টাকা বোনাস পাবেন।",
+    a: `না। একাউন্ট খোলা সম্পূর্ণ ফ্রি এবং সাথে সাথে ${bonus} বোনাস পাবেন।`,
   },
   {
     q: "বোনাস দিয়ে কি কাজ করা যায়?",
@@ -77,6 +78,7 @@ const FAQ = [
 
 function AboutPage() {
   const settings = useSettings();
+  const FAQ = faqList(taka(settings.signup_bonus));
 
   return (
     <div className="min-h-screen pb-16">
@@ -99,11 +101,11 @@ function AboutPage() {
         >
           <span className="absolute -top-12 -right-10 h-40 w-40 rounded-full bg-primary-foreground/10" />
           <h1 className="font-display relative text-2xl font-extrabold text-primary-foreground">
-            Smart Job BD সম্পর্কে
+            Smart Job BD 26 সম্পর্কে
           </h1>
           <p className="relative mt-2 text-sm text-primary-foreground/85">
-            Smart Job BD একটি বাংলাদেশি মাইক্রো-জব প্ল্যাটফর্ম। মোবাইল দিয়েই বিজ্ঞাপন দেখে, ভিডিও
-            দেখে ও ছোট টাস্ক করে ঘরে বসে ইনকাম করা যায়। পেমেন্ট হয় বিকাশ ও নগদে।
+            Smart Job BD 26 একটি বাংলাদেশি মাইক্রো-জব প্ল্যাটফর্ম। মোবাইল দিয়েই বিজ্ঞাপন দেখে,
+            ভিডিও দেখে ও ছোট টাস্ক করে ঘরে বসে ইনকাম করা যায়। পেমেন্ট হয় বিকাশ ও নগদে।
           </p>
         </section>
 

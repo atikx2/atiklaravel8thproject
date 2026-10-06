@@ -8,9 +8,9 @@ import { useState } from "react";
 export const Route = createFileRoute("/_authenticated/history")({
   head: () => ({
     meta: [
-      { title: "হিস্টোরি | Smartjobbd26" },
+      { title: "হিস্টোরি | Smart Job BD 26" },
       { name: "description", content: "আপনার সব কাজ, ডিপোজিট, উইথড্র ও লেনদেনের পূর্ণ ইতিহাস।" },
-      { property: "og:title", content: "হিস্টোরি | Smartjobbd26" },
+      { property: "og:title", content: "হিস্টোরি | Smart Job BD 26" },
       { property: "og:description", content: "কাজ ও লেনদেনের পূর্ণ ইতিহাস।" },
     ],
   }),
@@ -42,7 +42,10 @@ function HistoryPage() {
     queryKey: ["hist-tx", user?.id],
     enabled: !!user,
     queryFn: async () => {
-      const { data } = await supabase.from("transactions").select("*").order("created_at", { ascending: false });
+      const { data } = await supabase
+        .from("transactions")
+        .select("*")
+        .order("created_at", { ascending: false });
       return data ?? [];
     },
   });
@@ -88,7 +91,9 @@ function HistoryPage() {
                 <p className="truncate text-sm font-semibold">{t.note}</p>
                 <p className="text-xs text-muted-foreground">{date(t.created_at)}</p>
               </div>
-              <span className={`text-sm font-bold ${Number(t.amount) < 0 ? "text-destructive" : "text-success"}`}>
+              <span
+                className={`text-sm font-bold ${Number(t.amount) < 0 ? "text-destructive" : "text-success"}`}
+              >
                 {Number(t.amount) < 0 ? "-" : "+"}
                 {taka(Math.abs(Number(t.amount)))}
               </span>

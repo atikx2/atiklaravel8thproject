@@ -9,7 +9,7 @@ export function Logo({ to = "/", compact = false }: { to?: string; compact?: boo
       </span>
       {!compact && (
         <span className="font-display truncate text-lg leading-none font-extrabold tracking-tight">
-          Smart <span className="text-brand">Job BD</span>
+          Smart <span className="text-brand">Job BD 26</span>
         </span>
       )}
     </Link>
