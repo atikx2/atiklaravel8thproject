@@ -2,7 +2,7 @@ import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { useSettings } from "@/lib/settings";
+import { useSettings, EXTRA_ROW_ID } from "@/lib/settings";
 import { AdminPage, AdminField, Empty } from "@/components/admin/ui";
 import { Smartphone, Plus, Trash2, Loader2, Settings2, Link2 } from "lucide-react";
 
@@ -144,6 +144,19 @@ function PaymentsAdmin() {
 function LimitsForm() {
   const qc = useQueryClient();
   const settings = useSettings();
+  // কলামগুলো ডাটাবেসে যোগ হয়েছে কি না — না হলে অ্যাডমিনকে জানানো হয়
+  const rawQ = useQuery({
+    queryKey: ["app_settings_raw"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("app_settings")
+        .select("*")
+        .eq("id", "main")
+        .maybeSingle();
+      return (data ?? null) as Record<string, unknown> | null;
+    },
+  });
+  const needsMigration = !!rawQ.data && !("signup_bonus" in rawQ.data);
   const [minW, setMinW] = useState(String(settings.min_withdraw));
   const [minD, setMinD] = useState(String(settings.min_deposit));
   const [bonus, setBonus] = useState(String(settings.signup_bonus));
@@ -164,21 +177,39 @@ function LimitsForm() {
     setAdLink(settings.global_ad_link ?? "");
   }
 
+  /** নতুন কলাম না থাকলেও মান যেন থাকে — app_settings-এর `extra` সারিতে JSON করে রাখা হয়। */
+  const writeExtra = async (nextBonus: number, nextLink: string) => {
+    await supabase.from("app_settings").upsert(
+      {
+        id: EXTRA_ROW_ID,
+        banner_image_url: JSON.stringify({ signup_bonus: nextBonus, global_ad_link: nextLink }),
+      },
+      { onConflict: "id" },
+    );
+  };
+
   const save = async (e: React.FormEvent) => {
     e.preventDefault();
     setBusy(true);
     setMsg("");
     setErr("");
-    const { error } = await supabase
+    const nextBonus = Number(bonus) || 0;
+    const nextLink = adLink.trim();
+    const base = {
+      min_withdraw: Number(minW) || 500,
+      min_deposit: Number(minD) || 100,
+      banner_image_url: banner.trim(),
+    };
+
+    let { error } = await supabase
       .from("app_settings")
-      .update({
-        min_withdraw: Number(minW) || 500,
-        min_deposit: Number(minD) || 100,
-        signup_bonus: Number(bonus) || 0,
-        banner_image_url: banner.trim(),
-        global_ad_link: adLink.trim(),
-      })
+      .update({ ...base, signup_bonus: nextBonus, global_ad_link: nextLink })
       .eq("id", "main");
+    if (error) {
+      // কলাম দুটি এখনো ডাটাবেসে নেই — বাকিটা সেভ করে মান `extra` সারিতে রাখি
+      error = (await supabase.from("app_settings").update(base).eq("id", "main")).error;
+    }
+    await writeExtra(nextBonus, nextLink);
     setBusy(false);
     if (error) setErr("সেভ করা যায়নি: " + error.message);
     else setMsg("সেভ হয়েছে");
@@ -195,6 +226,7 @@ function LimitsForm() {
     // আগে ডাটাবেস ফাংশন (এক ট্রানজেকশনে সব), না থাকলে সরাসরি আপডেট
     const rpc = await supabase.rpc("admin_apply_ad_link", { _link: link });
     if (!rpc.error) {
+      await writeExtra(Number(bonus) || 0, link);
       setApplying(false);
       setMsg(`লিংকটি সব প্ল্যান ও টাস্কে বসানো হয়েছে (${rpc.data ?? 0} টি আপডেট)`);
       void qc.invalidateQueries();
@@ -204,6 +236,7 @@ function LimitsForm() {
     const pkg = await supabase.from("packages").update({ ad_link: link }).not("id", "is", null);
     const job = await supabase.from("jobs").update({ link }).not("id", "is", null);
     await supabase.from("app_settings").update({ global_ad_link: link }).eq("id", "main");
+    await writeExtra(Number(bonus) || 0, link);
     setApplying(false);
     if (pkg.error || job.error)
       setErr("সব জায়গায় বসানো যায়নি: " + (pkg.error?.message ?? job.error?.message));
@@ -216,6 +249,14 @@ function LimitsForm() {
       <h2 className="font-display flex items-center gap-2 text-base font-bold">
         <Settings2 className="h-4 w-4 text-primary" /> সাইট সেটিংস
       </h2>
+      {needsMigration && (
+        <p className="rounded-2xl border border-warning/40 bg-warning/10 p-3 text-[11px] leading-5 text-warning">
+          <b>ডাটাবেস আপডেট বাকি:</b> বিজ্ঞাপন লিংক ও বোনাসের লেখা এখনই কাজ করছে, তবে নতুন ইউজার এখনো
+          পুরোনো নিয়মে (২০০ টাকা) বোনাস পাচ্ছে। রিপোর্টের{" "}
+          <code>0007_signup_bonus_and_global_ad_link.sql</code> ফাইলটি একবার ডাটাবেসে চালালেই
+          বোনাসের পরিমাণ এখান থেকেই নিয়ন্ত্রণ হবে।
+        </p>
+      )}
       <div className="grid grid-cols-2 gap-2">
         <AdminField label="সর্বনিম্ন উইথড্র (টাকা)" value={minW} onChange={setMinW} />
         <AdminField label="সর্বনিম্ন ডিপোজিট (টাকা)" value={minD} onChange={setMinD} />
