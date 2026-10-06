@@ -14,6 +14,7 @@ import {
   Wallet,
   Gift,
   BadgeCheck,
+  Crown,
   Eye,
   EyeOff,
   ChevronRight,
@@ -116,20 +117,27 @@ function Dashboard() {
         <span className="absolute -bottom-12 left-10 h-28 w-28 rounded-full bg-primary-foreground/10" />
         <div className="relative flex items-center gap-3">
           <div className="relative shrink-0">
-            <span className="grid h-16 w-16 place-items-center rounded-3xl bg-background/25 ring-2 ring-primary-foreground/40 backdrop-blur-sm">
-              <span className="font-display text-2xl font-extrabold text-primary-foreground uppercase">
-                {(profile?.username ?? "স").slice(0, 1)}
+            {/* প্রিমিয়াম অ্যাভাটার: সোনালি রিং + গ্লাস ভেতর + গ্রেডিয়েন্ট অক্ষর */}
+            <span className="shadow-card grid h-[72px] w-[72px] place-items-center rounded-[26px] bg-primary-foreground/35 p-[2.5px]">
+              <span className="relative grid h-full w-full place-items-center overflow-hidden rounded-[23px] bg-background">
+                <span className="absolute inset-x-0 -top-6 h-12 rounded-b-[100%] bg-primary-foreground/10" />
+                <span className="text-gradient font-display relative text-[27px] leading-none font-extrabold uppercase">
+                  {(profile?.username ?? "স").slice(0, 1)}
+                </span>
               </span>
             </span>
-            <BadgeCheck className="absolute -right-1 -bottom-1 h-6 w-6 rounded-full bg-background text-success" />
+            <span className="absolute -top-1.5 -right-1.5 grid h-7 w-7 place-items-center rounded-full bg-background ring-2 ring-primary-foreground/50">
+              <Crown className="h-[15px] w-[15px] text-warning" />
+            </span>
+            <BadgeCheck className="absolute -bottom-1 -left-1.5 h-6 w-6 rounded-full bg-background text-success" />
           </div>
 
           <div className="min-w-0 flex-1">
-            <p className="text-xs font-semibold text-primary-foreground/80">স্বাগতম</p>
+            <p className="truncate text-xs font-semibold text-primary-foreground/80">
+              স্বাগতম, {profile?.username ?? "ইউজার"}
+            </p>
             <p className="font-display truncate text-2xl leading-tight font-extrabold text-primary-foreground">
-              {showBalance
-                ? taka(profile?.balance ?? 0)
-                : (profile?.phone ?? profile?.username ?? "")}
+              {showBalance ? taka(profile?.balance ?? 0) : `@${profile?.username ?? "ইউজার"}`}
             </p>
             <button
               onClick={() => setShowBalance((v) => !v)}
