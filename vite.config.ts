@@ -7,9 +7,16 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 // Netlify sets NETLIFY=true during its builds; use the Netlify target there.
-const onNetlify = process.env['NETLIFY'] === "true";
+const onNetlify = process.env["NETLIFY"] === "true";
 
 export default defineConfig({
+  // Dev-only: allow the sandbox/preview hostnames to reach the dev server.
+  // Has no effect on production builds (Netlify / Lovable).
+  vite: {
+    server: {
+      allowedHosts: [".e2b.app", ".lovable.app", ".lovableproject.com", "localhost"],
+    },
+  },
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this

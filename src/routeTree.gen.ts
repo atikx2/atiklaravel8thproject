@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteRouteImport } from './routes/_admin/route'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as AdminLoginRouteImport } from './routes/admin-login'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
@@ -19,6 +20,7 @@ import { Route as AuthenticatedDepositRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticated/history'
 import { Route as AuthenticatedJobsRouteImport } from './routes/_authenticated/jobs'
 import { Route as AuthenticatedPackagesRouteImport } from './routes/_authenticated/packages'
+import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedWithdrawRouteImport } from './routes/_authenticated/withdraw'
 import { Route as AdminAdminIndexRouteImport } from './routes/_admin/admin.index'
 import { Route as AdminAdminAdminsRouteImport } from './routes/_admin/admin.admins'
@@ -41,6 +43,11 @@ const AdminRouteRoute = AdminRouteRouteImport.update({
 } as any)
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
@@ -76,6 +83,11 @@ const AuthenticatedJobsRoute = AuthenticatedJobsRouteImport.update({
 const AuthenticatedPackagesRoute = AuthenticatedPackagesRouteImport.update({
   id: '/packages',
   path: '/packages',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedWithdrawRoute = AuthenticatedWithdrawRouteImport.update({
@@ -131,6 +143,7 @@ const AdminAdminWithdrawalsRoute = AdminAdminWithdrawalsRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/admin-login': typeof AdminLoginRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -138,6 +151,7 @@ export interface FileRoutesByFullPath {
   '/history': typeof AuthenticatedHistoryRoute
   '/jobs': typeof AuthenticatedJobsRoute
   '/packages': typeof AuthenticatedPackagesRoute
+  '/profile': typeof AuthenticatedProfileRoute
   '/withdraw': typeof AuthenticatedWithdrawRoute
   '/admin/admins': typeof AdminAdminAdminsRoute
   '/admin/deposits': typeof AdminAdminDepositsRoute
@@ -151,6 +165,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/admin-login': typeof AdminLoginRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -158,6 +173,7 @@ export interface FileRoutesByTo {
   '/history': typeof AuthenticatedHistoryRoute
   '/jobs': typeof AuthenticatedJobsRoute
   '/packages': typeof AuthenticatedPackagesRoute
+  '/profile': typeof AuthenticatedProfileRoute
   '/withdraw': typeof AuthenticatedWithdrawRoute
   '/admin/admins': typeof AdminAdminAdminsRoute
   '/admin/deposits': typeof AdminAdminDepositsRoute
@@ -174,6 +190,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_admin': typeof AdminRouteRouteWithChildren
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/about': typeof AboutRoute
   '/admin-login': typeof AdminLoginRoute
   '/auth': typeof AuthRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
@@ -181,6 +198,7 @@ export interface FileRoutesById {
   '/_authenticated/history': typeof AuthenticatedHistoryRoute
   '/_authenticated/jobs': typeof AuthenticatedJobsRoute
   '/_authenticated/packages': typeof AuthenticatedPackagesRoute
+  '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/withdraw': typeof AuthenticatedWithdrawRoute
   '/_admin/admin/admins': typeof AdminAdminAdminsRoute
   '/_admin/admin/deposits': typeof AdminAdminDepositsRoute
@@ -196,6 +214,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
     | '/admin-login'
     | '/auth'
     | '/dashboard'
@@ -203,6 +222,7 @@ export interface FileRouteTypes {
     | '/history'
     | '/jobs'
     | '/packages'
+    | '/profile'
     | '/withdraw'
     | '/admin/admins'
     | '/admin/deposits'
@@ -216,6 +236,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
     | '/admin-login'
     | '/auth'
     | '/dashboard'
@@ -223,6 +244,7 @@ export interface FileRouteTypes {
     | '/history'
     | '/jobs'
     | '/packages'
+    | '/profile'
     | '/withdraw'
     | '/admin/admins'
     | '/admin/deposits'
@@ -238,6 +260,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_admin'
     | '/_authenticated'
+    | '/about'
     | '/admin-login'
     | '/auth'
     | '/_authenticated/dashboard'
@@ -245,6 +268,7 @@ export interface FileRouteTypes {
     | '/_authenticated/history'
     | '/_authenticated/jobs'
     | '/_authenticated/packages'
+    | '/_authenticated/profile'
     | '/_authenticated/withdraw'
     | '/_admin/admin/admins'
     | '/_admin/admin/deposits'
@@ -261,6 +285,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AboutRoute: typeof AboutRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AuthRoute: typeof AuthRoute
 }
@@ -286,6 +311,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin-login': {
@@ -335,6 +367,13 @@ declare module '@tanstack/react-router' {
       path: '/packages'
       fullPath: '/packages'
       preLoaderRoute: typeof AuthenticatedPackagesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/profile': {
+      id: '/_authenticated/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthenticatedProfileRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/withdraw': {
@@ -444,6 +483,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedHistoryRoute: typeof AuthenticatedHistoryRoute
   AuthenticatedJobsRoute: typeof AuthenticatedJobsRoute
   AuthenticatedPackagesRoute: typeof AuthenticatedPackagesRoute
+  AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedWithdrawRoute: typeof AuthenticatedWithdrawRoute
 }
 
@@ -453,6 +493,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedHistoryRoute: AuthenticatedHistoryRoute,
   AuthenticatedJobsRoute: AuthenticatedJobsRoute,
   AuthenticatedPackagesRoute: AuthenticatedPackagesRoute,
+  AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedWithdrawRoute: AuthenticatedWithdrawRoute,
 }
 
@@ -463,6 +504,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRouteRoute: AdminRouteRouteWithChildren,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AboutRoute: AboutRoute,
   AdminLoginRoute: AdminLoginRoute,
   AuthRoute: AuthRoute,
 }

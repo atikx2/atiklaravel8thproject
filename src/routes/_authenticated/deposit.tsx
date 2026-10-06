@@ -4,7 +4,12 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth, taka, bn } from "@/lib/auth";
 import { useSettings, usePaymentNumbers } from "@/lib/settings";
-import { usePackages, useMyPurchases, useMyPendingPackageIds, isActivePurchase } from "@/lib/packages";
+import {
+  usePackages,
+  useMyPurchases,
+  useMyPendingPackageIds,
+  isActivePurchase,
+} from "@/lib/packages";
 import { StatusChip } from "./dashboard";
 import { Field } from "../auth";
 import {
@@ -18,15 +23,14 @@ import {
 } from "lucide-react";
 import { PAY_METHODS, payLogo } from "@/lib/pay-logos";
 
-
 export const Route = createFileRoute("/_authenticated/deposit")({
   validateSearch: (search: Record<string, unknown>): { pkg?: string } =>
     typeof search["pkg"] === "string" ? { pkg: search["pkg"] } : {},
   head: () => ({
     meta: [
-      { title: "ডিপোজিট | Smartjobbd26" },
+      { title: "ডিপোজিট | Smart Job BD 26" },
       { name: "description", content: "বিকাশ বা নগদের মাধ্যমে সহজে ডিপোজিট করে কাজ শুরু করুন।" },
-      { property: "og:title", content: "ডিপোজিট | Smartjobbd26" },
+      { property: "og:title", content: "ডিপোজিট | Smart Job BD 26" },
       { property: "og:description", content: "বিকাশ ও নগদে দ্রুত ডিপোজিট।" },
     ],
   }),
@@ -79,7 +83,8 @@ function DepositPage() {
   });
   const { data: myPurchases } = useMyPurchases();
   const pendingPkgs = useMyPendingPackageIds();
-  const pkgActive = !!pkgId && (myPurchases ?? []).some((m) => m.package_id === pkgId && isActivePurchase(m));
+  const pkgActive =
+    !!pkgId && (myPurchases ?? []).some((m) => m.package_id === pkgId && isActivePurchase(m));
   const pkgPending = !!pkgId && pendingPkgs.includes(pkgId);
 
   useEffect(() => {
@@ -90,14 +95,17 @@ function DepositPage() {
     e.preventDefault();
     setErr("");
     setMsg("");
-    if (pkgId && pkgActive) return setErr("এই প্যাকেজটি আপনার একাউন্টে সক্রিয় আছে। মেয়াদ শেষ হলে আবার কিনতে পারবেন");
+    if (pkgId && pkgActive)
+      return setErr("এই প্যাকেজটি আপনার একাউন্টে সক্রিয় আছে। মেয়াদ শেষ হলে আবার কিনতে পারবেন");
     if (pkgId && pkgPending) return setErr("এই প্যাকেজের একটি অনুরোধ অনুমোদনের অপেক্ষায় আছে");
     if (pkgId && !pkg) return setErr("প্যাকেজের তথ্য লোড হচ্ছে, একটু পর আবার চেষ্টা করুন");
     const toEn = (s: string) => s.replace(/[০-৯]/g, (d) => String("০১২৩৪৫৬৭৮৯".indexOf(d))).trim();
     const amt = pkg ? pkg.price : Number(toEn(amount));
     if (!amt || (!pkg && amt < settings.min_deposit))
       return setErr(`সর্বনিম্ন ডিপোজিট ${settings.min_deposit} টাকা`);
-    const senderNo = toEn(sender).replace(/[\s-]/g, "").replace(/^\+?88/, "");
+    const senderNo = toEn(sender)
+      .replace(/[\s-]/g, "")
+      .replace(/^\+?88/, "");
     if (!/^01[0-9]{9}$/.test(senderNo)) return setErr("সঠিক সেন্ডার নাম্বার দিন (01XXXXXXXXX)");
     if (trx.trim().length < 5) return setErr("সঠিক ট্রানজেকশন আইডি দিন");
     setBusy(true);
@@ -170,8 +178,15 @@ function DepositPage() {
                 method === m.id ? "border-primary shadow-glow" : "border-border"
               }`}
             >
-              <img src={m.logo} alt={`${m.name} লোগো`} className="h-10 w-10 object-contain" loading="lazy" />
-              <span className={`text-xs font-bold ${method === m.id ? "text-primary" : "text-muted-foreground"}`}>
+              <img
+                src={m.logo}
+                alt={`${m.name} লোগো`}
+                className="h-10 w-10 object-contain"
+                loading="lazy"
+              />
+              <span
+                className={`text-xs font-bold ${method === m.id ? "text-primary" : "text-muted-foreground"}`}
+              >
                 {m.name}
               </span>
             </button>
@@ -209,13 +224,19 @@ function DepositPage() {
                   aria-label="নাম্বার কপি করুন"
                   className="flex shrink-0 items-center gap-1.5 rounded-xl bg-primary/10 px-3 py-2 text-xs font-bold text-primary"
                 >
-                  {copied === n.number ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                  {copied === n.number ? (
+                    <Check className="h-4 w-4" />
+                  ) : (
+                    <Copy className="h-4 w-4" />
+                  )}
                   {copied === n.number ? "কপি হয়েছে" : "কপি"}
                 </button>
               </div>
             </div>
           ))}
-          <p className="text-xs text-muted-foreground">উপরের নাম্বারে সেন্ড মানি করে নিচের ফর্মটি পূরণ করুন।</p>
+          <p className="text-xs text-muted-foreground">
+            উপরের নাম্বারে সেন্ড মানি করে নিচের ফর্মটি পূরণ করুন।
+          </p>
         </div>
 
         <form onSubmit={submit} className="space-y-3">
@@ -235,7 +256,9 @@ function DepositPage() {
                     type="button"
                     onClick={() => setAmount(String(q))}
                     className={`rounded-xl border px-2 py-2.5 text-xs font-bold ${
-                      amount === String(q) ? "border-primary bg-primary/10 text-primary" : "border-border bg-card"
+                      amount === String(q)
+                        ? "border-primary bg-primary/10 text-primary"
+                        : "border-border bg-card"
                     }`}
                   >
                     {bn(q.toLocaleString("en-US"))}
@@ -244,7 +267,12 @@ function DepositPage() {
               </div>
             </div>
           )}
-          <Field label="যে নাম্বার থেকে পাঠিয়েছেন" value={sender} onChange={setSender} placeholder="01XXXXXXXXX" />
+          <Field
+            label="যে নাম্বার থেকে পাঠিয়েছেন"
+            value={sender}
+            onChange={setSender}
+            placeholder="01XXXXXXXXX"
+          />
           <Field label="ট্রানজেকশন আইডি" value={trx} onChange={setTrx} placeholder="TRX ID" />
           {err && <p className="text-sm text-destructive">{err}</p>}
           {msg && <p className="text-sm text-success">{msg}</p>}
@@ -252,17 +280,24 @@ function DepositPage() {
             disabled={busy}
             className="bg-brand flex w-full items-center justify-center gap-2 rounded-2xl py-3.5 text-sm font-bold text-primary-foreground shadow-glow disabled:opacity-60"
           >
-            {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <CreditCard className="h-4 w-4" />} জমা করুন
+            {busy ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <CreditCard className="h-4 w-4" />
+            )}{" "}
+            জমা করুন
           </button>
         </form>
       </div>
-
 
       <div className="surface-card p-4">
         <h2 className="mb-3 font-display text-base font-bold">আপনার ডিপোজিট</h2>
         <div className="space-y-2">
           {(list ?? []).map((d) => (
-            <div key={d.id} className="flex items-center justify-between gap-3 rounded-xl bg-secondary/60 px-3 py-2.5">
+            <div
+              key={d.id}
+              className="flex items-center justify-between gap-3 rounded-xl bg-secondary/60 px-3 py-2.5"
+            >
               <div className="min-w-0">
                 <p className="text-sm font-bold">{taka(d.amount)}</p>
                 <p className="truncate text-xs text-muted-foreground">

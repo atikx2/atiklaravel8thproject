@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Logo } from "@/components/Logo";
 import { LiveNotifications } from "@/components/LiveNotifications";
+import { LiveWithdraw } from "@/components/LiveWithdraw";
 import { CountUp } from "@/components/CountUp";
 
 import { taka, bn } from "@/lib/auth";
@@ -35,16 +36,16 @@ import {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Smartjobbd26 — মোবাইলে কাজ করে ইনকাম" },
+      { title: "Smart Job BD 26 — মোবাইলে কাজ করে ইনকাম" },
       {
         name: "description",
         content:
-          "বিজ্ঞাপন দেখে, ভিডিও দেখে ও মাইক্রো টাস্ক করে প্রতিদিন ইনকাম করুন। রেজিস্ট্রেশনে ২০০ টাকা বোনাস, বিকাশ ও নগদে উইথড্র।",
+          "বিজ্ঞাপন দেখে, ভিডিও দেখে ও মাইক্রো টাস্ক করে প্রতিদিন ইনকাম করুন। রেজিস্ট্রেশনে ১০০ টাকা বোনাস, বিকাশ ও নগদে উইথড্র।",
       },
-      { property: "og:title", content: "Smartjobbd26 — মোবাইলে কাজ করে ইনকাম" },
+      { property: "og:title", content: "Smart Job BD 26 — মোবাইলে কাজ করে ইনকাম" },
       {
         property: "og:description",
-        content: "বিজ্ঞাপন ও ভিডিও দেখে ইনকাম করুন। ২০০ টাকা সাইনআপ বোনাস, বিকাশ/নগদে উইথড্র।",
+        content: "বিজ্ঞাপন ও ভিডিও দেখে ইনকাম করুন। ১০০ টাকা সাইনআপ বোনাস, বিকাশ/নগদে উইথড্র।",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -58,25 +59,29 @@ const WORKS = [
     icon: MonitorPlay,
     t: "বিজ্ঞাপন দেখে ইনকাম",
     d: "প্রতিটি বিজ্ঞাপন ১৫–৩০ সেকেন্ড দেখলেই সাথে সাথে ব্যালেন্স যোগ হবে।",
-    tone: "from-violet-500 to-indigo-500",
+    tone: "from-[#FF3D77] to-[#FF7A00]",
   },
   {
     icon: Youtube,
     t: "ভিডিও দেখে ইনকাম",
     d: "ছোট ছোট ভিডিও দেখুন, প্রতিটি ভিডিওতে নির্দিষ্ট টাকা পাবেন।",
-    tone: "from-rose-500 to-orange-500",
+    tone: "from-[#FF3D77] to-[#FF9A3C]",
   },
   {
     icon: ClipboardCheck,
     t: "মাইক্রো টাস্ক",
     d: "সহজ কাজ করে প্রমাণ জমা দিন, অ্যাডমিন যাচাই করে টাকা দিয়ে দেবে।",
-    tone: "from-emerald-500 to-teal-500",
+    tone: "from-[#FF6A4D] to-[#FF7A00]",
   },
 ];
 
 const STEPS = [
-  { icon: UserPlus, t: "ফ্রি একাউন্ট খুলুন", d: "ইউজারনেম, ফোন নাম্বার ও পাসওয়ার্ড দিলেই একাউন্ট রেডি।" },
-  { icon: Gift, t: "২০০ টাকা বোনাস", d: "রেজিস্ট্রেশন করলেই সাথে সাথে ২০০ টাকা সাইনআপ বোনাস।" },
+  {
+    icon: UserPlus,
+    t: "ফ্রি একাউন্ট খুলুন",
+    d: "ইউজারনেম, ফোন নাম্বার ও পাসওয়ার্ড দিলেই একাউন্ট রেডি।",
+  },
+  { icon: Gift, t: "১০০ টাকা বোনাস", d: "রেজিস্ট্রেশন করলেই সাথে সাথে ১০০ টাকা সাইনআপ বোনাস।" },
   { icon: CreditCard, t: "একাউন্ট চালু করুন", d: "বিকাশ/নগদে প্রথম ডিপোজিট দিয়ে কাজ আনলক করুন।" },
   { icon: Banknote, t: "ইনকাম ও উইথড্র", d: "প্রতিদিন কাজ করুন, যেকোনো সময় টাকা তুলে নিন।" },
 ];
@@ -104,7 +109,13 @@ const REVIEWS = [
 
 const STATS = [
   { icon: Users, to: 15000, suffix: "+", l: "নিবন্ধিত সদস্য", tone: "text-primary bg-primary/10" },
-  { icon: CheckCircle2, to: 120000, suffix: "+", l: "সফল টাস্ক", tone: "text-success bg-success/10" },
+  {
+    icon: CheckCircle2,
+    to: 120000,
+    suffix: "+",
+    l: "সফল টাস্ক",
+    tone: "text-success bg-success/10",
+  },
   {
     icon: BadgeDollarSign,
     to: 1250000,
@@ -113,17 +124,53 @@ const STATS = [
     l: "মোট পেমেন্ট",
     tone: "text-info bg-info/10",
   },
-  { icon: Star, to: 4.9, decimals: 1, suffix: "/৫", l: "ব্যবহারকারী রেটিং", tone: "text-warning bg-warning/10" },
+  {
+    icon: Star,
+    to: 4.9,
+    decimals: 1,
+    suffix: "/৫",
+    l: "ব্যবহারকারী রেটিং",
+    tone: "text-warning bg-warning/10",
+  },
 ];
 
-
 const WHY = [
-  { icon: ShieldCheck, t: "নিরাপদ প্ল্যাটফর্ম", d: "প্রতিটি একাউন্ট ও পেমেন্ট সুরক্ষিত ও যাচাইকৃত।", tone: "from-emerald-500 to-green-500" },
-  { icon: Rocket, t: "দ্রুত Approval", d: "কাজ ও ডিপোজিট দ্রুত যাচাই করে অনুমোদন দেওয়া হয়।", tone: "from-violet-500 to-fuchsia-500" },
-  { icon: MousePointerClick, t: "সহজে আয়", d: "শুধু ক্লিক, দেখা আর ছোট টাস্ক — কোনো স্কিল লাগে না।", tone: "from-amber-500 to-orange-500" },
-  { icon: Smartphone, t: "মোবাইল ফ্রেন্ডলি", d: "অ্যাপের মতো ইন্টারফেস, যেকোনো ফোনে চলবে।", tone: "from-sky-500 to-cyan-500" },
-  { icon: ClipboardCheck, t: "সহজ টাস্ক", d: "প্রতিদিন নতুন সহজ কাজ, ঘরে বসেই করা যায়।", tone: "from-rose-500 to-pink-500" },
-  { icon: Landmark, t: "বাংলাদেশি Payment", d: "বিকাশ ও নগদে সরাসরি টাকা উত্তোলন।", tone: "from-indigo-500 to-blue-500" },
+  {
+    icon: ShieldCheck,
+    t: "নিরাপদ প্ল্যাটফর্ম",
+    d: "প্রতিটি একাউন্ট ও পেমেন্ট সুরক্ষিত ও যাচাইকৃত।",
+    tone: "from-[#FF3D77] to-[#FF5E57]",
+  },
+  {
+    icon: Rocket,
+    t: "দ্রুত Approval",
+    d: "কাজ ও ডিপোজিট দ্রুত যাচাই করে অনুমোদন দেওয়া হয়।",
+    tone: "from-[#FF2E86] to-[#FF7A00]",
+  },
+  {
+    icon: MousePointerClick,
+    t: "সহজে আয়",
+    d: "শুধু ক্লিক, দেখা আর ছোট টাস্ক — কোনো স্কিল লাগে না।",
+    tone: "from-[#FF9A3C] to-[#FF5E00]",
+  },
+  {
+    icon: Smartphone,
+    t: "মোবাইল ফ্রেন্ডলি",
+    d: "অ্যাপের মতো ইন্টারফেস, যেকোনো ফোনে চলবে।",
+    tone: "from-[#FF4D6D] to-[#FFA62B]",
+  },
+  {
+    icon: ClipboardCheck,
+    t: "সহজ টাস্ক",
+    d: "প্রতিদিন নতুন সহজ কাজ, ঘরে বসেই করা যায়।",
+    tone: "from-[#FF3D77] to-[#FF6FB5]",
+  },
+  {
+    icon: Landmark,
+    t: "বাংলাদেশি Payment",
+    d: "বিকাশ ও নগদে সরাসরি টাকা উত্তোলন।",
+    tone: "from-[#FF5E57] to-[#FF7A00]",
+  },
 ];
 
 const TRUST = [
@@ -134,10 +181,22 @@ const TRUST = [
 ];
 
 const FAQS = [
-  { q: "রেজিস্ট্রেশন করতে কি টাকা লাগে?", a: "না, রেজিস্ট্রেশন সম্পূর্ণ ফ্রি। বরং একাউন্ট খুললেই ২০০ টাকা বোনাস পাবেন।" },
-  { q: "কাজ শুরু করতে ডিপোজিট কেন লাগে?", a: "ফেক একাউন্ট বন্ধ রাখতে ও পেমেন্ট নিশ্চিত করতে প্রথমবার একটি ছোট ডিপোজিট দিয়ে একাউন্ট ভেরিফাই করতে হয়।" },
-  { q: "টাকা কত দিনে পাবো?", a: "উইথড্র রিকোয়েস্ট দেওয়ার সর্বোচ্চ ২৪ ঘণ্টার মধ্যে বিকাশ বা নগদে টাকা পাঠানো হয়।" },
-  { q: "প্রতিদিন কত ইনকাম করা যায়?", a: "কাজের পরিমাণের উপর নির্ভর করে সাধারণত প্রতিদিন ২০০–৫০০ টাকা পর্যন্ত ইনকাম করা সম্ভব।" },
+  {
+    q: "রেজিস্ট্রেশন করতে কি টাকা লাগে?",
+    a: "না, রেজিস্ট্রেশন সম্পূর্ণ ফ্রি। বরং একাউন্ট খুললেই ১০০ টাকা বোনাস পাবেন।",
+  },
+  {
+    q: "কাজ শুরু করতে ডিপোজিট কেন লাগে?",
+    a: "ফেক একাউন্ট বন্ধ রাখতে ও পেমেন্ট নিশ্চিত করতে প্রথমবার একটি ছোট ডিপোজিট দিয়ে একাউন্ট ভেরিফাই করতে হয়।",
+  },
+  {
+    q: "টাকা কত দিনে পাবো?",
+    a: "উইথড্র রিকোয়েস্ট দেওয়ার সর্বোচ্চ ২৪ ঘণ্টার মধ্যে বিকাশ বা নগদে টাকা পাঠানো হয়।",
+  },
+  {
+    q: "প্রতিদিন কত ইনকাম করা যায়?",
+    a: "কাজের পরিমাণের উপর নির্ভর করে সাধারণত প্রতিদিন ২০০–৫০০ টাকা পর্যন্ত ইনকাম করা সম্ভব।",
+  },
 ];
 
 function Landing() {
@@ -161,17 +220,20 @@ function Landing() {
 
       <main>
         {/* Hero */}
-        <section className="relative overflow-hidden px-4 py-16" style={{ backgroundImage: "var(--gradient-hero)" }}>
+        <section
+          className="relative overflow-hidden px-4 py-16"
+          style={{ backgroundImage: "var(--gradient-hero)" }}
+        >
           <div className="mx-auto max-w-3xl text-center">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/25 bg-card px-3.5 py-1.5 text-xs font-bold text-primary shadow-card">
-              <Zap className="h-3.5 w-3.5" /> নতুন রেজিস্ট্রেশনে {taka(200)} বোনাস
+              <Zap className="h-3.5 w-3.5" /> নতুন রেজিস্ট্রেশনে {taka(settings.signup_bonus)} বোনাস
             </span>
             <h1 className="font-display mt-5 text-3xl leading-tight font-extrabold sm:text-5xl">
               মোবাইল দিয়েই কাজ করে <span className="text-gradient">প্রতিদিন ইনকাম</span> করুন
             </h1>
             <p className="text-muted-foreground mx-auto mt-4 max-w-xl text-sm sm:text-base">
-              Smartjobbd26 বাংলাদেশের সহজ মাইক্রোজব প্ল্যাটফর্ম। বিজ্ঞাপন দেখুন, ভিডিও দেখুন, ছোট কাজ করুন — আর
-              বিকাশ বা নগদে টাকা তুলে নিন।
+              Smart Job BD 26 বাংলাদেশের সহজ মাইক্রোজব প্ল্যাটফর্ম। বিজ্ঞাপন দেখুন, ভিডিও দেখুন, ছোট
+              কাজ করুন — আর বিকাশ বা নগদে টাকা তুলে নিন।
             </p>
             <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
               <Link
@@ -215,21 +277,34 @@ function Landing() {
                     suffix={s.suffix ?? ""}
                   />
                 </p>
-                <p className="text-muted-foreground -mt-1.5 text-[11px] font-medium sm:text-xs">{s.l}</p>
+                <p className="text-muted-foreground -mt-1.5 text-[11px] font-medium sm:text-xs">
+                  {s.l}
+                </p>
               </div>
             ))}
           </div>
+        </section>
 
+        {/* Live withdraw — social proof */}
+        <section className="mx-auto mt-6 max-w-3xl px-4">
+          <LiveWithdraw limit={5} title="লাইভ উইথড্র" />
+          <p className="mt-2 text-center text-[11px] text-muted-foreground">
+            প্রতিদিন শত শত সদস্য বিকাশ ও নগদে টাকা তুলে নিচ্ছেন
+          </p>
         </section>
 
         {/* How to earn */}
         <section className="mx-auto max-w-6xl px-4 py-14">
           <h2 className="font-display text-center text-2xl font-bold">কীভাবে ইনকাম করবেন?</h2>
-          <p className="text-muted-foreground mt-2 text-center text-sm">তিনটি সহজ উপায়ে আজই আয় শুরু করুন</p>
+          <p className="text-muted-foreground mt-2 text-center text-sm">
+            তিনটি সহজ উপায়ে আজই আয় শুরু করুন
+          </p>
           <div className="mt-8 grid gap-4 sm:grid-cols-3">
             {WORKS.map((w) => (
               <div key={w.t} className="surface-card p-5 transition-shadow hover:shadow-glow">
-                <div className={`grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br ${w.tone} text-white`}>
+                <div
+                  className={`grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br ${w.tone} text-white`}
+                >
                   <w.icon className="h-5 w-5" />
                 </div>
                 <h3 className="font-display mt-4 text-base font-bold">{w.t}</h3>
@@ -243,13 +318,17 @@ function Landing() {
         <section className="border-border/70 bg-secondary/50 border-y px-4 py-14">
           <div className="mx-auto max-w-6xl">
             <h2 className="font-display text-center text-2xl font-bold">
-              কেন <span className="text-gradient">SmartJobBD26</span>?
+              কেন <span className="text-gradient">Smart Job BD 26</span>?
             </h2>
-            <p className="text-muted-foreground mt-2 text-center text-sm">হাজারো ব্যবহারকারীর আস্থার কারণগুলো</p>
+            <p className="text-muted-foreground mt-2 text-center text-sm">
+              হাজারো ব্যবহারকারীর আস্থার কারণগুলো
+            </p>
             <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {WHY.map((w) => (
                 <div key={w.t} className="surface-card flex items-start gap-3 p-5">
-                  <span className={`grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-gradient-to-br ${w.tone} text-white`}>
+                  <span
+                    className={`grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-gradient-to-br ${w.tone} text-white`}
+                  >
                     <w.icon className="h-5 w-5" />
                   </span>
                   <div className="min-w-0">
@@ -285,7 +364,9 @@ function Landing() {
         <section className="border-border/70 bg-secondary/50 border-y px-4 py-14">
           <div className="mx-auto max-w-6xl">
             <h2 className="font-display text-center text-2xl font-bold">ব্যবহারকারীদের অভিজ্ঞতা</h2>
-            <p className="text-muted-foreground mt-2 text-center text-sm">যারা প্রতিদিন Smartjobbd26 থেকে আয় করছেন</p>
+            <p className="text-muted-foreground mt-2 text-center text-sm">
+              যারা প্রতিদিন Smart Job BD 26 থেকে আয় করছেন
+            </p>
             <div className="mt-8 grid gap-4 sm:grid-cols-3">
               {REVIEWS.map((r) => (
                 <figure key={r.n} className="surface-card flex flex-col p-5">
@@ -297,7 +378,9 @@ function Landing() {
                     </div>
                     <Quote className="h-5 w-5 text-primary/40" />
                   </div>
-                  <blockquote className="text-muted-foreground mt-3 grow text-sm leading-relaxed">{r.r}</blockquote>
+                  <blockquote className="text-muted-foreground mt-3 grow text-sm leading-relaxed">
+                    {r.r}
+                  </blockquote>
                   <figcaption className="border-border/70 mt-4 flex items-center gap-3 border-t pt-3">
                     <span className="bg-brand font-display grid h-10 w-10 shrink-0 place-items-center rounded-full text-sm font-bold text-primary-foreground">
                       {r.n.charAt(0)}
@@ -336,7 +419,8 @@ function Landing() {
               </div>
               <ul className="mt-4 space-y-2 text-sm">
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 shrink-0 text-success" /> সর্বনিম্ন উইথড্র {taka(settings.min_withdraw)}
+                  <CheckCircle2 className="h-4 w-4 shrink-0 text-success" /> সর্বনিম্ন উইথড্র{" "}
+                  {taka(settings.min_withdraw)}
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="h-4 w-4 shrink-0 text-success" /> ২৪ ঘণ্টার মধ্যে পেমেন্ট
@@ -353,7 +437,10 @@ function Landing() {
               </h2>
               <div className="mt-4 space-y-3">
                 {FAQS.map((f) => (
-                  <details key={f.q} className="border-border/70 bg-secondary/60 rounded-xl border p-3">
+                  <details
+                    key={f.q}
+                    className="border-border/70 bg-secondary/60 rounded-xl border p-3"
+                  >
                     <summary className="cursor-pointer list-none text-sm font-bold">{f.q}</summary>
                     <p className="text-muted-foreground mt-2 text-xs leading-relaxed">{f.a}</p>
                   </details>
@@ -366,9 +453,12 @@ function Landing() {
         {/* CTA */}
         <section className="mx-auto max-w-6xl px-4 pb-16">
           <div className="bg-brand shadow-glow rounded-3xl px-6 py-10 text-center">
-            <h2 className="font-display text-2xl font-extrabold text-primary-foreground">আজই শুরু করুন</h2>
+            <h2 className="font-display text-2xl font-extrabold text-primary-foreground">
+              আজই শুরু করুন
+            </h2>
             <p className="mx-auto mt-2 max-w-md text-sm text-primary-foreground/85">
-              ফ্রি একাউন্ট খুলুন, {taka(200)} বোনাস নিন এবং আজ থেকেই ইনকাম শুরু করুন।
+              ফ্রি একাউন্ট খুলুন, {taka(settings.signup_bonus)} বোনাস নিন এবং আজ থেকেই ইনকাম শুরু
+              করুন।
             </p>
             <Link
               to="/auth"
@@ -385,15 +475,25 @@ function Landing() {
         <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 text-center">
           <Logo />
           <p className="text-muted-foreground max-w-md text-xs leading-relaxed">
-            Smartjobbd26 — বাংলাদেশের বিশ্বস্ত মাইক্রোজব প্ল্যাটফর্ম। ঘরে বসে মোবাইল দিয়ে আয় করুন।
+            Smart Job BD 26 — বাংলাদেশের বিশ্বস্ত মাইক্রোজব প্ল্যাটফর্ম। ঘরে বসে মোবাইল দিয়ে আয়
+            করুন।
           </p>
           <div className="text-muted-foreground flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs font-medium">
-            <Link to="/auth" className="hover:text-primary">লগইন</Link>
-            <Link to="/auth" search={{ mode: "register" }} className="hover:text-primary">রেজিস্ট্রেশন</Link>
-            <Link to="/admin-login" className="hover:text-primary">অ্যাডমিন</Link>
+            <Link to="/auth" className="hover:text-primary">
+              লগইন
+            </Link>
+            <Link to="/auth" search={{ mode: "register" }} className="hover:text-primary">
+              রেজিস্ট্রেশন
+            </Link>
+            <Link to="/about" className="hover:text-primary">
+              সম্পর্কে
+            </Link>
+            <Link to="/admin-login" className="hover:text-primary">
+              অ্যাডমিন
+            </Link>
           </div>
           <p className="text-muted-foreground border-border/70 w-full border-t pt-4 text-[11px]">
-            © {bn(2026)} Smartjobbd26 — সকল অধিকার সংরক্ষিত।
+            © {bn(2026)} Smart Job BD 26 — সকল অধিকার সংরক্ষিত।
           </p>
         </div>
       </footer>
