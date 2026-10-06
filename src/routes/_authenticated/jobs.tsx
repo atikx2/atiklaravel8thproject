@@ -110,7 +110,7 @@ function JobsPage() {
         <div className="mt-4 grid grid-cols-3 gap-2.5">
           <button
             onClick={() => void qc.invalidateQueries()}
-            className="flex items-center justify-center gap-1.5 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-600 px-2 py-3 text-xs font-bold text-white shadow-glow"
+            className="bg-brand flex items-center justify-center gap-1.5 rounded-2xl px-2 py-3 text-xs font-bold text-primary-foreground shadow-glow"
           >
             <RefreshCw className="h-4 w-4" /> রিফ্রেশ
           </button>

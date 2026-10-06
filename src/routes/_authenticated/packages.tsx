@@ -100,7 +100,7 @@ function PackageCard({
 }) {
   const popular = index === 1;
   return (
-    <div className="overflow-hidden rounded-[28px] bg-card shadow-[0_20px_50px_-20px_oklch(0.55_0.2_285/0.5)] ring-1 ring-border">
+    <div className="overflow-hidden rounded-[28px] bg-card shadow-[0_22px_55px_-24px_oklch(0.6672_0.2289_8.84/0.45)] ring-1 ring-border">
       {/* Header */}
       <div className="relative px-5 pt-6 pb-7" style={{ backgroundImage: "var(--gradient-brand)" }}>
         <Crown className="absolute top-3 right-4 h-7 w-7 fill-warning text-warning" />

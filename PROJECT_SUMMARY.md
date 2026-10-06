@@ -23,7 +23,10 @@ micro tasks) and earn Taka (৳). Users sign up with **username + phone number +
   enforced **in the database** (RLS + SECURITY DEFINER functions), not in secret server keys.
   This is intentional so the site can also run as a static-ish deploy on Netlify.
 - State: TanStack Query. Auth state: custom `AuthProvider` in `src/lib/auth.tsx`.
-- Design: white SaaS look, indigo/violet brand (`--primary`), Bengali digits everywhere.
+- Design: **dark premium (app-like) look** — near-black plum background with the brand
+  gradient **#FF3D77 → #FF7A00** (`--brand-1` / `--brand-2`, exposed as `--gradient-brand`,
+  utilities `bg-brand`, `text-gradient`, `glow`, `surface-card`, `tile`). Bengali digits
+  everywhere. The site is dark-only: `:root` already holds the dark values.
 
 ## 3. Route map
 
@@ -38,6 +41,8 @@ micro tasks) and earn Taka (৳). Users sign up with **username + phone number +
 | `/_authenticated/deposit` | deposit.tsx | Deposit request (bKash/Nagad, sender number, optional `?pkg=` checkout) |
 | `/_authenticated/withdraw` | withdraw.tsx | Withdraw request (min ৳৫০০) |
 | `/_authenticated/history` | history.tsx | Transactions / job results (success vs failed) |
+| `/_authenticated/profile` | profile.tsx | Account card, balance/earnings, all menu links, logout |
+| `/about` | `src/routes/about.tsx` | Public "সম্পর্কে ও সাপোর্ট" page (how it works, rules, payment, FAQ) |
 | `/_admin/*` | `src/routes/_admin/*` | Full admin panel (sidebar on desktop, drawer on mobile) |
 
 `/_authenticated/route.tsx` gates on `supabase.auth.getUser()` and redirects to `/auth`.
@@ -103,6 +108,13 @@ each package's **default ad link**), payment numbers & limits editing, dashboard
 ## 7. Conventions an agent must follow
 
 - All UI text in Bengali; digits via `bn(n)` and money via `taka(n)` from `src/lib/auth.tsx`.
+- `src/components/LiveWithdraw.tsx` is **demo social-proof data** (seeded PRNG for the first
+  render so SSR hydration matches, then random rows on a timer). Never wire real withdrawal
+  rows into it.
+- `src/components/EarningsChart.tsx` is a dependency-free SVG area chart built from the
+  user's `transactions` rows (`earning` + `bonus`, cumulative) — no recharts, no SSR risk.
+- Mobile nav = 4 bottom tabs (হোম / টাস্ক / প্যাকেজ / প্রোফাইল) in `AppHeader.tsx`; everything
+  else is reachable from the dashboard tile grid and the profile page.
 - Design tokens from `src/styles.css` (semantic classes like `surface-card`, `bg-brand`,
   `text-primary`) — never hardcode colors; keep the white indigo/violet SaaS style.
 - Mobile-first: sticky bottom icon nav on phones; desktop responsive with sidebar.
