@@ -19,30 +19,36 @@ export type Database = {
           banner_image_url: string
           bkash_number: string
           created_at: string
+          global_ad_link: string
           id: string
           min_deposit: number
           min_withdraw: number
           nagad_number: string
+          signup_bonus: number
           updated_at: string
         }
         Insert: {
           banner_image_url?: string
           bkash_number?: string
           created_at?: string
+          global_ad_link?: string
           id: string
           min_deposit?: number
           min_withdraw?: number
           nagad_number?: string
+          signup_bonus?: number
           updated_at?: string
         }
         Update: {
           banner_image_url?: string
           bkash_number?: string
           created_at?: string
+          global_ad_link?: string
           id?: string
           min_deposit?: number
           min_withdraw?: number
           nagad_number?: string
+          signup_bonus?: number
           updated_at?: string
         }
         Relationships: []
@@ -435,6 +441,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_apply_ad_link: { Args: { _link: string }; Returns: number }
       admin_delete_user: { Args: { _user_id: string }; Returns: undefined }
       admin_reset_password: {
         Args: { _password: string; _user_id: string }
